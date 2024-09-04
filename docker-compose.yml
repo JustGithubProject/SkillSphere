@@ -13,7 +13,7 @@ services:
     env_file:
       - ./.env
     command: >
-      sh -c "uvicorn main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /backend"
+      sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /backend"
   
   frontend:
     container_name: frontend
