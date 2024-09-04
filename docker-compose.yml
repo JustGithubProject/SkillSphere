@@ -1,0 +1,61 @@
+services:
+  skillsphere_app:
+    container_name: skillsphere_app
+    build: 
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend:/backend
+    depends_on:
+      - skillsphere_database
+    env_file:
+      - ./.env
+    command: >
+      sh -c "uvicorn main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /backend"
+
+  skillsphere_database:
+    image: postgres:latest
+    container_name: skillsphere_database
+    env_file:
+      - ./.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_database:/var/lib/postgresql/data/
+      
+  # test_database:
+  #   image: postgres:latest
+  #   container_name: test_database
+  #   environment:
+  #     - POSTGRES_DB=skillsphere_test_db
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=1234
+  #   ports:
+  #     - "5433:5432"
+  #   volumes:
+  #     - postgres_test_database:/var/lib/postgresql/data/
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - skillsphere_database
+    #  - test_database
+
+  # redis:
+  #   container_name: redis
+  #   image: redis:7.0.5-alpine
+  #   hostname: redis
+  #   ports:
+  #     - "6379:6379"
+
+volumes:
+  postgres_database:
+  # postgres_test_database:
