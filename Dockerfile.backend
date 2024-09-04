@@ -1,0 +1,17 @@
+FROM python:3.10-alpine
+
+# Create directory for the application and set the working directory
+RUN mkdir /backend
+WORKDIR /backend
+
+# Copy dependency files
+COPY requirements.txt ./
+
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application code
+COPY backend/ .
+
+# Expose ports
+EXPOSE 8000
