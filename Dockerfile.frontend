@@ -1,17 +1,11 @@
-FROM node:18-alpine
+FROM node:16-alpine
 
 WORKDIR /frontend
 
-COPY frontend/ ./frontend/
-
-WORKDIR /frontend/frontend
+COPY ./frontend/package*.json ./
 
 RUN npm install
 
-RUN npm run build
+COPY ./frontend /frontend
 
-ENV PORT=5173
-
-EXPOSE 5173
-
-CMD ["npx", "vite", "dev"]
+CMD ["npm", "start"]
