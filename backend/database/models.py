@@ -40,7 +40,13 @@ class User(Base):
     active: Mapped[bool] = mapped_column(Boolean, default=True, server_default='true')
 
     courses_created = relationship('Course', back_populates='creator')
-    courses_instructed = relationship('Course', secondary='course_instructors', back_populates='instructors')
+    courses_instructed = relationship(
+        'Course',
+        secondary='course_instructors',
+        back_populates='instructors',
+        primaryjoin='User.id == course_instructors.c.instructor_id',
+        secondaryjoin='Course.id == course_instructors.c.course_id'
+    )
 
     __table_args__ = (
         UniqueConstraint("first_name", "last_name"),
@@ -56,7 +62,13 @@ class Course(Base):
 
     creator_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     creator = relationship('User', back_populates='courses_created')
-    instructors = relationship('User', secondary='course_instructors', back_populates='courses_instructed')
+    instructors = relationship(
+        'User',
+        secondary='course_instructors',
+        back_populates='courses_instructed',
+        primaryjoin='Course.id == course_instructors.c.course_id',
+        secondaryjoin='User.id == course_instructors.c.instructor_id'
+    )
 
 
 # Таблица связи курсов и инструкторов
