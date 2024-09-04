@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from repositories.course_repository import CourseRepository
 from database.models import Course
-from course.schemas import CourseOutput
+from course.schemas import CourseInput, CourseOutput
 
 
 class CourseService:
@@ -13,23 +13,34 @@ class CourseService:
         self.course_repository = course_repository
         
     async def get_all_courses(
-            self, 
-            session: AsyncSession, 
-            skip: int,
-            limit: int,
+        self, 
+        session: AsyncSession, 
+        skip: int,
+        limit: int,
+        **kwargs,
+    ) -> list[CourseOutput]:
+        courses: list[Course] = await self.course_repository.get_all_courses(
             **kwargs,
-        ) -> list[CourseOutput]:
-            courses: list[Course] = await self.course_repository.get_all_courses(
-                **kwargs,
-                session=session, 
-                skip=skip,
-                limit=limit,
-            )
-            return [
-                CourseOutput.model_validate(course, from_attributes=True) 
-                for course in courses
-            ]
+            session=session, 
+            skip=skip,
+            limit=limit,
+        )
+        return [
+            CourseOutput.model_validate(course, from_attributes=True) 
+            for course in courses
+        ]
     
+    async def create_course(
+        self,
+        course_input: CourseInput,
+        session: AsyncSession
+    ) -> CourseOutput:
+        course: Course = await self.course_repository.create_course(
+            session=session,
+            course_input=course_input
+        )
+        return CourseOutput.model_validate(course, from_attributes=True)
+         
 
 def get_course_service():
     return CourseService(CourseRepository()) 
