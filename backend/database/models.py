@@ -1,7 +1,8 @@
 from datetime import datetime
 from sqlalchemy import (
     TIMESTAMP, 
-    Boolean, 
+    Boolean,
+    CheckConstraint, 
     ForeignKey, 
     LargeBinary, 
     String, 
@@ -70,13 +71,17 @@ class Course(Base):
         secondaryjoin='User.id == course_instructors.c.instructor_id'
     )
 
+    __table_args__ = (
+        CheckConstraint("price >= 0", name="check_positive_price"),
+    )
+
 
 # Таблица связи курсов и инструкторов
 class CourseInstructor(Base):
     __tablename__ = 'course_instructors'
     
-    course_id: Mapped[int] = ForeignKey('courses.id')
-    instructor_id: Mapped[int] = ForeignKey('users.id')
+    course_id: Mapped[int] = ForeignKey('course.id')
+    instructor_id: Mapped[int] = ForeignKey('user.id')
     
     # Указываем обратные связи (не обязательно, но полезно)
     course = relationship('Course', back_populates='instructors')
