@@ -1,8 +1,8 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, status
 from services.course_service import CourseService, get_course_service
 from enums import CourseLevel
-from course.schemas import CourseOutput
+from course.schemas import CourseInput, CourseOutput
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import session_getter
 
@@ -30,4 +30,15 @@ async def get_all_courses(
         title=title,
         level=level,
         price=price,
+    )
+
+@router.post("/", response_model=CourseOutput, status_code=status.HTTP_201_CREATED)
+async def create_course(
+    course_service: Annotated[CourseService, Depends(get_course_service)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    course_input: CourseInput
+) -> CourseOutput:
+    return await course_service.create_course(
+        session=session,
+        course_input=course_input
     )
