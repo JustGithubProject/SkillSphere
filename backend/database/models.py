@@ -36,7 +36,7 @@ class User(Base):
     last_name: Mapped[str]
     role: Mapped["Role"] = mapped_column(default=Role.GUEST)
     date_joined: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
-    last_login: Mapped[datetime]
+    last_login: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
     active: Mapped[bool] = mapped_column(Boolean, default=True, server_default='true')
 
     courses_created = relationship('Course', back_populates='creator')
