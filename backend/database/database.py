@@ -1,10 +1,16 @@
 from typing import AsyncGenerator
+
 from sqlalchemy.ext.asyncio import (
     create_async_engine, 
-    AsyncEngine, async_sessionmaker, AsyncSession)
+    AsyncEngine,
+    async_sessionmaker,
+    AsyncSession
+)
+
 from config import SQLALCHEMY_DATABASE_URL
 
 
+# Create an asynchronous engine for the database connection
 engine: AsyncEngine = create_async_engine(
     url=SQLALCHEMY_DATABASE_URL,
     echo=False,
@@ -13,6 +19,8 @@ engine: AsyncEngine = create_async_engine(
     max_overflow=10
 )
 
+
+# Create a session factory for generating asynchronous sessions
 session_factory: async_sessionmaker[AsyncSession] = async_sessionmaker(
     bind=engine,
     autoflush=False,
@@ -21,6 +29,10 @@ session_factory: async_sessionmaker[AsyncSession] = async_sessionmaker(
 )
 
 async def session_getter() -> AsyncGenerator[AsyncSession, None]:
+    """
+        Asynchronous generator function that provides
+        a session from the session factory.
+    """
     async with session_factory() as session:
         try:
             yield session
