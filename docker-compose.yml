@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   skillsphere_app:
     container_name: skillsphere_app
@@ -14,6 +16,19 @@ services:
       - ./.env
     command: >
       sh -c "uvicorn main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /backend"
+  
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - 5173:5173
+    volumes:
+      - ./frontend:/frontend
+    environment:
+      - PORT=5173
+    command: ["npm", "run", "dev"]
 
   skillsphere_database:
     image: postgres:latest
