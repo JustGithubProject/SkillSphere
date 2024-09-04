@@ -2,7 +2,9 @@ from fastapi import FastAPI
 
 
 # Initialize FastAPI application
-app = FastAPI()
+app = FastAPI(
+    title="SkillSphere API"
+)
 
 if __name__ == "__main__":
     import uvicorn
