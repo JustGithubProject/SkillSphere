@@ -6,7 +6,7 @@ const Header = () => {
       <header className="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
         <div className="container-fluid">
           <div className="d-flex align-items-center">
-            <div className="site-logo mr-auto w-25"><a href="index.html">SkillSphere</a></div>
+            <div className="site-logo mr-auto w-25"><a href="/">SkillSphere</a></div>
   
             <div className="mx-auto text-center">
               <nav className="site-navigation position-relative text-right" role="navigation">
