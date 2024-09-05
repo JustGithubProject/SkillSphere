@@ -21,7 +21,7 @@ async def get_all_courses(
     limit: int = Query(default=10, ge=1),
     title: str = Query(default=None),
     level: "CourseLevel" = Query(default=None),
-    price: str = Query(default=None),
+    price: int = Query(default=None),
 ) -> list[CourseOutput]:
     return await course_service.get_all_courses(
         session=session,
@@ -41,4 +41,15 @@ async def create_course(
     return await course_service.create_course(
         session=session,
         course_input=course_input
+    )
+
+@router.get("/{course_id}/", response_model=CourseOutput)
+async def get_course_by_id(
+    course_service: Annotated[CourseService, Depends(get_course_service)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    course_id: int
+) -> CourseOutput:
+    return await course_service.get_course_by_id(
+        session=session,
+        course_id=course_id
     )
