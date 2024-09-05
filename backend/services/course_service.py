@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from repositories.course_repository import CourseRepository
 from database.models import Course
-from course.schemas import CourseInput, CourseOutput
+from course.schemas import CourseInput, CourseOutput, CourseUpdate
 
 
 class CourseService:
@@ -51,7 +51,30 @@ class CourseService:
             course_id=course_id
         )
         return CourseOutput.model_validate(course, from_attributes=True)
+    
+    async def update_course(
+        self,
+        session: AsyncSession,
+        course_update: CourseUpdate,
+        course_id: int
+    ) -> CourseOutput:
+        course: Course = await self.course_repository.update_course(
+            session=session,
+            course_update=course_update,
+            course_id=course_id,
+        )
+        return CourseOutput.model_validate(course, from_attributes=True)
 
-         
+    async def delete_course(
+        self,
+        session: AsyncSession,
+        course_id: int
+    ) -> None:
+        return await self.course_repository.delete_course(
+            session=session,
+            course_id=course_id
+        )
+
+
 def get_course_service():
     return CourseService(CourseRepository()) 
