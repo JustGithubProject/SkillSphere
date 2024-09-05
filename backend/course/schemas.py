@@ -20,6 +20,7 @@ class CourseInput(CourseBase):
 
 
 class CourseOutput(CourseInput):
+    id: int
     created_at: datetime
     updated_at: datetime
     creator: "UserBase"
