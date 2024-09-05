@@ -13,7 +13,13 @@ class CourseRepository:
         session: AsyncSession,
         course_id: int
     ) -> Course:
-        course = await session.get(Course, course_id)
+        course = await session.scalar(
+            select(Course).where(Course.id == course_id) 
+            .options(
+                joinedload(Course.creator),
+                selectinload(Course.instructors)
+            )
+        )
         if course:
             return course
         raise HTTPException(
