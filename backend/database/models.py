@@ -1,7 +1,8 @@
 from datetime import datetime
 from sqlalchemy import (
     TIMESTAMP, 
-    Boolean, 
+    Boolean,
+    CheckConstraint, 
     ForeignKey, 
     LargeBinary, 
     String, 
@@ -36,11 +37,17 @@ class User(Base):
     last_name: Mapped[str]
     role: Mapped["Role"] = mapped_column(default=Role.GUEST)
     date_joined: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
-    last_login: Mapped[datetime]
+    last_login: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
     active: Mapped[bool] = mapped_column(Boolean, default=True, server_default='true')
 
     courses_created = relationship('Course', back_populates='creator')
-    courses_instructed = relationship('Course', secondary='course_instructors', back_populates='instructors')
+    courses_instructed = relationship(
+        'Course',
+        secondary='course_instructors',
+        back_populates='instructors',
+        primaryjoin='User.id == course_instructors.c.instructor_id',
+        secondaryjoin='Course.id == course_instructors.c.course_id'
+    )
 
     __table_args__ = (
         UniqueConstraint("first_name", "last_name"),
@@ -56,15 +63,25 @@ class Course(Base):
 
     creator_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     creator = relationship('User', back_populates='courses_created')
-    instructors = relationship('User', secondary='course_instructors', back_populates='courses_instructed')
+    instructors = relationship(
+        'User',
+        secondary='course_instructors',
+        back_populates='courses_instructed',
+        primaryjoin='Course.id == course_instructors.c.course_id',
+        secondaryjoin='User.id == course_instructors.c.instructor_id'
+    )
+
+    __table_args__ = (
+        CheckConstraint("price >= 0", name="check_positive_price"),
+    )
 
 
 # Таблица связи курсов и инструкторов
 class CourseInstructor(Base):
     __tablename__ = 'course_instructors'
     
-    course_id: Mapped[int] = ForeignKey('courses.id')
-    instructor_id: Mapped[int] = ForeignKey('users.id')
+    course_id: Mapped[int] = ForeignKey('course.id')
+    instructor_id: Mapped[int] = ForeignKey('user.id')
     
     # Указываем обратные связи (не обязательно, но полезно)
     course = relationship('Course', back_populates='instructors')
