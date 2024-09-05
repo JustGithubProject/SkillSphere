@@ -40,7 +40,18 @@ class CourseService:
             course_input=course_input
         )
         return CourseOutput.model_validate(course, from_attributes=True)
-         
+    
+    async def get_course_by_id(
+        self,
+        session: AsyncSession,
+        course_id: int
+    ) -> CourseOutput:
+        course: Course = await self.course_repository.get_course_by_id(
+            session=session,
+            course_id=course_id
+        )
+        return CourseOutput.model_validate(course, from_attributes=True)
 
+         
 def get_course_service():
     return CourseService(CourseRepository()) 
