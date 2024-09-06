@@ -6,7 +6,7 @@ from course.schemas import CourseInput, CourseOutput, CourseUpdate
 
 
 class CourseService:
-    def __init__(self, course_repository: CourseRepository):
+    def __init__(self, course_repository: CourseRepository) -> None:
         """
         Initialize the course service with a course repository.
         """
