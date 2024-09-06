@@ -12,8 +12,11 @@ from authentication.enums import UserAction
 
 class UserRepository:
     async def create_user(
+        self,
         session: AsyncSession,
         username: str,
+        first_name: str,
+        last_name: str,
         email: str,
         password_hash: str
     ) -> int:
@@ -21,18 +24,21 @@ class UserRepository:
             new_user: User = User(
                 username=username,
                 email=email,
+                first_name=first_name,
+                last_name=last_name,
                 password_hash=hash_password(password_hash)
             )
             session.add(new_user)
-            session.commit()
+            await session.commit()
             return new_user.id
         except Exception:
+            await session.rollback()
             raise UserCreateException()
         
-    async def get_user_by_email(session: AsyncSession, email: str) -> User | None:
+    async def get_user_by_email(self, session: AsyncSession, email: str) -> User:
         stmt = select(User).where(User.email==email)
-        user: User = session.scalars(stmt).one_or_none()
-        return user
+        user: User = await session.scalars(stmt)
+        return user.one_or_none()
     
     
     async def get_all_users(
@@ -46,11 +52,12 @@ class UserRepository:
             .limit(limit)
             .order_by(User.id)
         )
-        users: list[User] = session.scalars(stmt).all()
+        users: list[User] = await session.scalars(stmt).all()
         return users
 
 
     async def update_user_ban_status(
+        self,
         session: AsyncSession,  
         user: UserOut,
         action: UserAction
@@ -58,21 +65,19 @@ class UserRepository:
         new_active_status = action == UserAction.UNBAN
         try:
             stmt = (
-                    update(User)
-                    .values(active=new_active_status)
-                    .where(User.email==user.email)
-                    .execution_options(synchronize_session="fetch")
-                )
-            session.scalars(stmt)
-            session.commit()
+                update(User)
+                .values(active=new_active_status)
+                .where(User.email==user.email)
+                .execution_options(synchronize_session="fetch")
+            )
+            await session.scalars(stmt)
+            await session.commit()
             # Получение обновленного объекта
-            updated_user = session.query(User).filter_by(email=user.email).one()
+            updated_user = await session.query(User).filter_by(email=user.email).one()
             return updated_user
         except Exception:
             session.rollback()
             raise update_ban_status_exception
-
-        
 
 
 # Зависимость для получения репозитория

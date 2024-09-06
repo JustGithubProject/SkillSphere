@@ -7,8 +7,8 @@ from fastapi import (
     Depends,
     status
 )
-from sqlalchemy.orm import Session
-from database import db_helper
+from sqlalchemy.ext.asyncio import AsyncSession
+from database import session_getter
 from services.user_service import UserService, get_user_service
 from authentication.schemas import TokenInfo, UserIn, UserOut
 
@@ -46,13 +46,13 @@ router = APIRouter(
     summary="Create new user",
     status_code=status.HTTP_201_CREATED,
 )
-def create_user_handler(
-    session: Annotated[Session, Depends(db_helper.session_getter)],
+async def create_user_handler(
+    session: Annotated[AsyncSession, Depends(session_getter)],
     user_service: Annotated[UserService, Depends(get_user_service)],
     user_in: UserIn
 ):
     # Get user by email
-    user: UserOut = user_service.get_user_by_email(
+    user: UserOut = await user_service.get_user_by_email(
         session=session,
         email=user_in.email
     )
@@ -63,7 +63,7 @@ def create_user_handler(
         raise user_already_exists_exception
     try:
         # Create user using repository for user
-        user_id = user_service.register_user(
+        user_id = await user_service.register_user(
             session=session,
             user_in=user_in
         )
@@ -84,20 +84,18 @@ def create_user_handler(
     summary="Create access and refresh tokens for user", 
     response_model=TokenInfo
 )
-def login_handler(
+async def login_handler(
     user: Annotated[UserOut, Depends(validate_auth_user)],
-    session: Annotated[Session, Depends(db_helper.session_getter)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
     user_service: Annotated[UserService, Depends(get_user_service)]
 ) -> TokenInfo:
-    is_admin: bool = user_service.check_user_is_admin(
+    is_admin: bool = await user_service.check_user_is_admin(
         session=session, 
         user_in=user
     )
     # Create access and refresh token using email
     access_token = create_access_token(user, is_admin=is_admin)
     refresh_token = create_refresh_token(user)
-    # with ProducerAuthorization() as producer_auth:
-    #     producer_auth.send_user_object_and_token_to_services(access_token, user)
 
     logger.info(f"User '{user.username}' successfully logged in.")
 
@@ -115,11 +113,18 @@ def login_handler(
     status_code=status.HTTP_201_CREATED,
     summary="Create new access token"
 )
-def auth_refresh_jwt(
-    user: Annotated[UserOut, Depends(get_current_auth_user_for_refresh)]
-) -> TokenInfo: 
+async def auth_refresh_jwt(
+    user: Annotated[UserOut, Depends(get_current_auth_user_for_refresh)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    user_service: Annotated[UserService, Depends(get_user_service)]
+
+) -> TokenInfo:
+    is_admin: bool = await user_service.check_user_is_admin(
+        session=session, 
+        user_in=user
+    )
     # можно выпускать еще refresh токен при обновлении access (некоторые так делают)
-    access_token = create_access_token(user)
+    access_token = create_access_token(user, is_admin=is_admin)
     return TokenInfo(
         access_token=access_token
     )

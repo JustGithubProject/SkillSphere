@@ -39,7 +39,7 @@ class UserService:
         session: AsyncSession, 
         email: str,
     ) -> UserOut:
-        user: User | None = await self.user_repository.get_user_by_email(
+        user: User = await self.user_repository.get_user_by_email(
             session=session, 
             email=email
         )
@@ -100,12 +100,12 @@ class UserService:
             }
         }
 
-    
     async def check_user_is_admin(
+        self,
         user_in: UserIn,
         session: AsyncSession,
     ) -> bool:
-        user = UserService.get_user_by_email(
+        user: UserOut = await self.get_user_by_email(
             session=session, 
             email=user_in.email
         )

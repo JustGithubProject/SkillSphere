@@ -2,15 +2,20 @@ from datetime import datetime, timedelta
 import uuid
 import bcrypt
 import jwt
-from config import settings
+from config import (
+    auth_jwt_private_key, 
+    auth_jwt_algorithm, 
+    auth_jwt_access_token_expire_minutes,
+    auth_jwt_public_key
+)
 
 
 # создание(шифрование) токена
 def encode_jwt(
     payload: dict,
-    private_key: str = settings.auth_jwt.private_key,
-    algorithm: str = settings.auth_jwt.algorithm,
-    expire_minutes: int = settings.auth_jwt.access_token_expire_minutes,
+    private_key: str = auth_jwt_private_key,
+    algorithm: str = auth_jwt_algorithm,
+    expire_minutes: int = auth_jwt_access_token_expire_minutes,
     expire_timedelta: timedelta | None = None,
 ) -> str:
     to_encode = payload.copy()
@@ -36,8 +41,8 @@ def encode_jwt(
 # расшифрование токена
 def decode_jwt(
     token: str | bytes,
-    public_key: str = settings.auth_jwt.public_key,
-    algorithm: str = settings.auth_jwt.algorithm,
+    public_key: str = auth_jwt_public_key,
+    algorithm: str = auth_jwt_algorithm,
 ) -> dict:
     decoded = jwt.decode(
         token,

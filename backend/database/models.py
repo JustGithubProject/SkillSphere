@@ -17,7 +17,7 @@ from sqlalchemy.orm import (
     relationship,
 )
 
-from enums import CourseLevel, Role
+from enums import CourseLevel
 
 class Base(DeclarativeBase):
     abstract = True
@@ -37,7 +37,7 @@ class User(Base):
     last_name: Mapped[str]
     admin: Mapped[bool] = mapped_column(Boolean, default=False, server_default='false')
     date_joined: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
-    last_login: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
+    last_login: Mapped[datetime] = mapped_column(TIMESTAMP, default=func.now(), server_default=func.now())
     active: Mapped[bool] = mapped_column(Boolean, default=True, server_default='true')
 
     courses_created = relationship('Course', back_populates='creator')
@@ -48,7 +48,7 @@ class User(Base):
     )
 
     table_args = (
-        UniqueConstraint("first_name", "last_name", name="idx_unique_first_last_names"),
+        UniqueConstraint("username", "first_name", "last_name", name="idx_unique_user_first_last_names"),
     )
 
 class Course(Base):

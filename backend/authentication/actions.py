@@ -1,7 +1,10 @@
 from datetime import timedelta
-from auth.schemas import UserIn
-from auth.utils import encode_jwt
-from config import settings
+from authentication.schemas import UserIn
+from authentication.utils import encode_jwt
+from config import (
+    auth_jwt_access_token_expire_minutes,
+    auth_jwt_refresh_token_expire_minutes
+)
 
 
 TOKEN_TYPE_FIELD = "type"
@@ -12,7 +15,7 @@ REFRESH_TOKEN_TYPE = "refresh"
 def create_jwt(
     token_type: str,
     token_data: dict,
-    expire_minutes: int = settings.auth_jwt.access_token_expire_minutes,
+    expire_minutes: int = auth_jwt_access_token_expire_minutes,
     expire_timedelta: timedelta | None = None,
 ) -> str:
     jwt_payload = {TOKEN_TYPE_FIELD: token_type}
@@ -36,7 +39,7 @@ def create_access_token(user: UserIn, is_admin: bool) -> str:
     return create_jwt(
         token_type=ACCESS_TOKEN_TYPE,
         token_data=jwt_payload,
-        expire_minutes=settings.auth_jwt.access_token_expire_minutes,
+        expire_minutes=auth_jwt_access_token_expire_minutes,
     )
 
 
@@ -48,5 +51,5 @@ def create_refresh_token(user: UserIn) -> str:
     return create_jwt(
         token_type=REFRESH_TOKEN_TYPE,
         token_data=jwt_payload,
-        expire_timedelta=timedelta(days=settings.auth_jwt.refresh_token_expire_days),
+        expire_timedelta=timedelta(days=auth_jwt_refresh_token_expire_minutes),
     )

@@ -8,19 +8,19 @@ from fastapi import (
     Query, 
     status
 )
-from sqlalchemy.orm import Session
-from database import db_helper
-from service.user_service import UserService, get_user_service
-from auth.schemas import UserIn, UserOut
+from sqlalchemy.ext.asyncio import AsyncSession
+from database import session_getter
+from services.user_service import UserService, get_user_service
+from authentication.schemas import UserIn, UserOut
 
 
-from auth.validation import (
+from authentication.validation import (
     get_current_token_payload,
     get_current_active_auth_user,
     get_current_active_auth_user_admin
 )
 
-from auth.enums import UserAction
+from authentication.enums import UserAction
 
 
 # Logger setup
@@ -39,7 +39,7 @@ router = APIRouter(
     "/me/", 
     summary="Get user info",
 )
-def auth_user_check_self_info(
+async def auth_user_check_self_info(
     payload: Annotated[dict, Depends(get_current_token_payload)],
     user: Annotated[UserOut, Depends(get_current_active_auth_user)]
 ):
@@ -55,15 +55,15 @@ def auth_user_check_self_info(
     response_model=list[UserOut],
     summary="Get all users info"
 )
-def get_all_users(
+async def get_all_users(
     user_service: Annotated[UserService, Depends(get_user_service)],
-    session: Annotated[Session, Depends(db_helper.session_getter)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
     admin: Annotated[UserIn, Depends(get_current_active_auth_user_admin)],
     skip: int = Query(0, ge=0), 
     limit: int = Query(10, ge=1),
 ) -> list[UserOut]:
     if admin:
-        return user_service.list_users(
+        return await user_service.list_users(
             session=session,
             skip=skip,
             limit=limit
@@ -75,9 +75,9 @@ def get_all_users(
     status_code=status.HTTP_202_ACCEPTED,
     summary="Ban user by email (only for admin)",
 )
-def ban_user(
+async def ban_user(
     user_service: Annotated[UserService, Depends(get_user_service)],
-    session: Annotated[Session, Depends(db_helper.session_getter)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
     admin: Annotated[UserOut, Depends(get_current_active_auth_user_admin)],
     email: str
 ):
@@ -93,9 +93,9 @@ def ban_user(
     status_code=status.HTTP_202_ACCEPTED,
     summary="Unban user by email (only for admin)",
 )
-def unban_user(
+async def unban_user(
     user_service: Annotated[UserService, Depends(get_user_service)],
-    session: Annotated[Session, Depends(db_helper.session_getter)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
     admin: Annotated[UserOut, Depends(get_current_active_auth_user_admin)],
     email: str
 ):

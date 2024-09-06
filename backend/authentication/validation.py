@@ -1,17 +1,17 @@
 import logging
 from typing import Annotated
-
+from database.database import session_factory
 from fastapi import Depends, Form
 from fastapi.security import OAuth2PasswordBearer #, OAuth2PasswordRequestForm
 from jwt import InvalidTokenError
-from auth.utils import (
+from authentication.utils import (
     validate_password,
     decode_jwt
 )
-from database import db_helper
-from auth.schemas import UserOut
-from sqlalchemy.orm import Session
-from auth.custom_exceptions import (
+from database import session_getter
+from authentication.schemas import UserOut
+from sqlalchemy.ext.asyncio import AsyncSession
+from authentication.custom_exceptions import (
     unactive_user_exception,
     unauthed_user_exception,
     invalid_token_type_exception,
@@ -20,13 +20,13 @@ from auth.custom_exceptions import (
     not_enough_rights_exception
 )
 
-from auth.actions import (
+from authentication.actions import (
     REFRESH_TOKEN_TYPE,
     TOKEN_TYPE_FIELD,
     ACCESS_TOKEN_TYPE,
 )
 
-from service.user_service import UserService, get_user_service
+from services.user_service import UserService, get_user_service
 
 # Logger setup
 logging.basicConfig(
@@ -40,20 +40,20 @@ logger = logging.getLogger(__name__)
 
 # интерфейс для введения имени и пароля, а затем автоматическое получение токена и отправка его в заголовки
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="/jwt/auth/login/",
+    tokenUrl="/api/v1/jwt/auth/login/",
 )
 
 
 # Проверка, что юзер зарегистрирован
-def validate_auth_user(
-    session: Annotated[Session, Depends(db_helper.session_getter)],
+async def validate_auth_user(
+    session: Annotated[AsyncSession, Depends(session_getter)],
     user_service: Annotated[UserService, Depends(get_user_service)],
     username: str = Form(),
     password: str = Form(),
 ):
     # Get user by username
     if not (
-        user := user_service.get_user_by_email(
+        user := await user_service.get_user_by_email(
             session=session, email=username
         )
     ):
@@ -97,13 +97,13 @@ def get_current_token_payload(
 
 
 # Получение пользователя по полю sub из токена
-def get_user_by_token_sub(
+async def get_user_by_token_sub(
     payload: dict,
     user_service: UserService = get_user_service(),
 ) -> UserOut:
     email: str | None = payload.get("sub")
-    user: UserOut = user_service.get_user_by_email(
-        session=db_helper.session_factory(), 
+    user: UserOut = await user_service.get_user_by_email(
+        session=session_factory(), 
         email=email
     )
     if user and user.active:
@@ -114,14 +114,14 @@ def get_user_by_token_sub(
 # фабрика для создания функций (вводится тип токена, который ожидается)
 def get_auth_user_from_token_of_type(token_type: str):
     # Функция для получения информации с токена 
-    def get_auth_user_from_token(
+    async def get_auth_user_from_token(
         # получаем токен с заголовков
         payload: Annotated[dict, Depends(get_current_token_payload)]
     ) -> UserOut:
         # проверяем, совпадает ли введенный токен с токеном в заголовке
         validate_token_type(payload=payload, token_type=token_type)
         # получаем данные по токену
-        return get_user_by_token_sub(payload)
+        return await get_user_by_token_sub(payload)
     return get_auth_user_from_token
 
 

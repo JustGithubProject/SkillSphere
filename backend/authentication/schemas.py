@@ -1,5 +1,5 @@
 from pydantic import BaseModel, ConfigDict, EmailStr
-
+from datetime import datetime
 
 class UserBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -7,6 +7,8 @@ class UserBase(BaseModel):
     username: str
     email: EmailStr
     password_hash: str
+    first_name: str
+    last_name: str
 
 
 class UserIn(UserBase):
@@ -18,6 +20,8 @@ class UserOut(UserBase):
     active: bool = True
     admin: bool = False
     password_hash: bytes
+    date_joined: datetime
+    last_login: datetime
 
 
 class TokenInfo(BaseModel):
