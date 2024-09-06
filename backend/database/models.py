@@ -35,7 +35,7 @@ class User(Base):
     password_hash: Mapped[bytes] = mapped_column(LargeBinary)
     first_name: Mapped[str]
     last_name: Mapped[str]
-    role: Mapped["Role"] = mapped_column(default=Role.GUEST)
+    admin: Mapped[bool] = mapped_column(Boolean, default=False, server_default='false')
     date_joined: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
     last_login: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
     active: Mapped[bool] = mapped_column(Boolean, default=True, server_default='true')
@@ -58,6 +58,7 @@ class Course(Base):
     level: Mapped["CourseLevel"] = mapped_column(default=CourseLevel.BEGINNER)
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
+    is_published = mapped_column(Boolean, default=False, server_default='false')
 
     creator_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
     creator = relationship('User', back_populates='courses_created')
