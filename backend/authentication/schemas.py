@@ -2,26 +2,25 @@ from pydantic import BaseModel, ConfigDict, EmailStr
 
 
 class UserBase(BaseModel):
-    model_config = ConfigDict(from_attributes=True, strict=True)
+    model_config = ConfigDict(from_attributes=True)
 
     username: str
     email: EmailStr
-    # password_hash: str
-    first_name: str
-    last_name: str
-    
+    password_hash: str
 
-class TokenSchema(BaseModel):
+
+class UserIn(UserBase):
+    pass
+
+
+class UserOut(UserBase):
+    id: int
+    active: bool = True
+    admin: bool = False
+    password_hash: bytes
+
+
+class TokenInfo(BaseModel):
     access_token: str
-    refresh_token: str
-
-
-class TokenPayload(BaseModel):
-    sub: str = None
-    exp: int = None
-    username: str
-    
-    
-class Token(BaseModel):
-    access_token: str
-    token_type: str
+    refresh_token: str | None = None
+    token_type: str = "Bearer"
