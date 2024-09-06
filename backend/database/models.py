@@ -2,10 +2,10 @@ from datetime import datetime
 from sqlalchemy import (
     TIMESTAMP, 
     Boolean,
-    CheckConstraint, 
-    ForeignKey, 
+    CheckConstraint,
+    ForeignKey,
     LargeBinary, 
-    String, 
+    String,
     UniqueConstraint, 
     func
 )
@@ -20,7 +20,7 @@ from sqlalchemy.orm import (
 from enums import CourseLevel, Role
 
 class Base(DeclarativeBase):
-    __abstract__ = True
+    abstract = True
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
@@ -45,12 +45,10 @@ class User(Base):
         'Course',
         secondary='course_instructors',
         back_populates='instructors',
-        primaryjoin='User.id == course_instructors.c.instructor_id',
-        secondaryjoin='Course.id == course_instructors.c.course_id'
     )
 
-    __table_args__ = (
-        UniqueConstraint("first_name", "last_name"),
+    table_args = (
+        UniqueConstraint("first_name", "last_name", name="idx_unique_first_last_names"),
     )
 
 class Course(Base):
@@ -67,11 +65,9 @@ class Course(Base):
         'User',
         secondary='course_instructors',
         back_populates='courses_instructed',
-        primaryjoin='Course.id == course_instructors.c.course_id',
-        secondaryjoin='User.id == course_instructors.c.instructor_id'
     )
 
-    __table_args__ = (
+    table_args = (
         CheckConstraint("price >= 0", name="check_positive_price"),
     )
 
@@ -80,9 +76,9 @@ class Course(Base):
 class CourseInstructor(Base):
     __tablename__ = 'course_instructors'
     
-    course_id: Mapped[int] = ForeignKey('course.id')
-    instructor_id: Mapped[int] = ForeignKey('user.id')
+    course_id: Mapped[int] = mapped_column(ForeignKey('course.id'))
+    instructor_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     
     # Указываем обратные связи (не обязательно, но полезно)
-    course = relationship('Course', back_populates='instructors')
-    instructor = relationship('User', back_populates='courses_instructed')
+    # course = relationship('Course', back_populates='course_instructors')
+    # instructor = relationship('User', back_populates='course_instructors')

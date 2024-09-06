@@ -7,7 +7,10 @@ app = FastAPI(
     title="SkillSphere API"
 )
 
-app.include_router(course_router)
+app.include_router(
+    router=course_router,
+    prefix="/api/v1"
+)
 
 if __name__ == "__main__":
     import uvicorn

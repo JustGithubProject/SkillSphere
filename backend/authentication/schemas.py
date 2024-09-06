@@ -6,7 +6,7 @@ class UserBase(BaseModel):
 
     username: str
     email: EmailStr
-    password_hash: str
+    # password_hash: str
     first_name: str
     last_name: str
     
