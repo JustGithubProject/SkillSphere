@@ -32,3 +32,4 @@ class CourseUpdate(BaseModel):
     description: str | None = None
     price: int | None = None
     level: CourseLevel | None = None
+    is_published: bool | None = None
