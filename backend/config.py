@@ -1,5 +1,5 @@
 import os
-
+from pathlib import Path
 from dotenv import load_dotenv
 
 
@@ -28,10 +28,15 @@ DB_HOST_TEST = os.getenv("POSTGRES_TEST_HOST")      #
 SQLALCHEMY_DATABASE_TEST_URL = f'postgresql+asyncpg://{DB_USER_TEST}:{DB_PASS_TEST}@{DB_HOST_TEST}:{DB_PORT_TEST}/{DB_NAME_TEST}'
 
 
-################################################################
-JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')                   #
-JWT_REFRESH_SECRET_KEY = os.getenv('JWT_REFRESH_SECRET_KEY')   # 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30  # 30 minutes                 #
-REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7 # 7 days            #
-ALGORITHM = "HS256"                                            #
-################################################################
+BASE_DIR = Path(__file__).parent
+
+private_key_path: Path = BASE_DIR / "certs" / "jwt-private.pem"
+public_key_path: Path = BASE_DIR / "certs" / "jwt-public.pem"
+
+
+auth_jwt_private_key: str = private_key_path.read_text()
+auth_jwt_public_key: str = public_key_path.read_text()
+auth_jwt_algorithm: str = "RS256"
+auth_jwt_access_token_expire_minutes: int = 30  # 30 minutes
+auth_jwt_refresh_token_expire_minutes: int = 60 * 24 * 30  # 30 days
+# auth_jwt_refresh_token_expire_days: int = 60 * 24 * 30
