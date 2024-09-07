@@ -1,5 +1,7 @@
 import React from 'react';
 
+import SignUpForm from '../SignUpForm/SignUpForm';
+
 const IntroSection = () => {
   return (
     <div className="intro-section" id="home-section">
@@ -15,21 +17,7 @@ const IntroSection = () => {
                 </div>
 
                 <div className="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="500">
-                  <form action="" method="post" className="form-box">
-                    <h3 className="h4 text-black mb-4">Sign Up</h3>
-                    <div className="form-group">
-                      <input type="text" className="form-control" placeholder="Email Address" />
-                    </div>
-                    <div className="form-group">
-                      <input type="password" className="form-control" placeholder="Password" />
-                    </div>
-                    <div className="form-group mb-4">
-                      <input type="password" className="form-control" placeholder="Re-type Password" />
-                    </div>
-                    <div className="form-group">
-                      <input type="submit" className="btn btn-primary btn-pill" value="Sign up" />
-                    </div>
-                  </form>
+                  <SignUpForm/>
                 </div>
               </div>
             </div>
