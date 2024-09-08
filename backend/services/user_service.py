@@ -4,7 +4,7 @@ from repositories.user_repository import UserRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 from authentication.schemas import UserIn, UserOut
 from authentication.custom_exceptions import (
-    UserCreateException, 
+    failted_to_created_user_exception, 
     user_not_found_exception,
     not_enough_rights_exception
 )
@@ -30,8 +30,8 @@ class UserService:
                 **user_in.model_dump()
             )
             return new_user_id
-        except UserCreateException as ex:
-            return f"{ex}: failure to create new user"
+        except Exception:
+            raise failted_to_created_user_exception
 
     
     async def get_user_by_email(

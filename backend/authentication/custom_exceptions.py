@@ -2,10 +2,10 @@ from fastapi import HTTPException, status
 from jwt import InvalidTokenError
 
 
-class UserCreateException(Exception):
-    def init(self, message="Failed to create user"):
-        self.message = message
-        super().init(self.message)
+failted_to_created_user_exception = HTTPException(
+    status_code=status.HTTP_400_BAD_REQUEST,
+    detail="Failed to create user"
+)
 
 
 unauthed_user_exception = HTTPException(

@@ -12,8 +12,7 @@ class CourseBase(BaseModel):
     description: str
     price: int
     level: "CourseLevel"
-    creator_id: int
-
+    
 
 class CourseInput(CourseBase):
     pass
