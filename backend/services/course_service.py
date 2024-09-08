@@ -121,8 +121,7 @@ class CourseService:
                 instructor=instructor
             )
             return updated_course
-        else:
-            raise not_enough_rights_exception
+        raise not_enough_rights_exception
 
 def get_course_service():
     return CourseService(CourseRepository(), UserRepository()) 
