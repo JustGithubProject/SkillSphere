@@ -53,8 +53,9 @@ async def validate_auth_user(
 ):
     # Get user by username
     if not (
-        user := await user_service.get_user_by_email(
-            session=session, email=username
+        user := await user_service.get_user_by_username(
+            session=session,
+            username=username
         )
     ):
         raise unauthed_user_exception

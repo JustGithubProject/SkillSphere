@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import SignUpForm from '../SignUpForm/SignUpForm';
+import LoginForm from '../LoginForm/LoginForm';
 
 const IntroSection = () => {
+  const [isSignUp, setIsSignUp] = useState(true);
+
+  const toggleForm = () => {
+    setIsSignUp(prevState => !prevState);
+  };
+
   return (
     <div className="intro-section" id="home-section">
       <div className="slide-1" style={{ backgroundImage: "url('images/hero_1.jpg')" }} data-stellar-background-ratio="0.5">
@@ -17,7 +24,10 @@ const IntroSection = () => {
                 </div>
 
                 <div className="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="500">
-                  <SignUpForm/>
+                  <button onClick={toggleForm} className="btn btn-secondary">
+                    {isSignUp ? 'Switch to Login' : 'Switch to Sign Up'}
+                  </button>
+                  {isSignUp ? <SignUpForm /> : <LoginForm />}
                 </div>
               </div>
             </div>
