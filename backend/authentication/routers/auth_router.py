@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 
 from typing import Annotated
@@ -93,10 +94,15 @@ async def login_handler(
         session=session, 
         user_in=user
     )
+    user.last_login = datetime.now()
     # Create access and refresh token using email
     access_token = create_access_token(user, is_admin=is_admin)
     refresh_token = create_refresh_token(user)
-
+    await user_service.update_last_login(
+        session=session,
+        user_id=user.id,
+        new_login_time=user.last_login
+    )
     logger.info(f"User '{user.username}' successfully logged in.")
 
     # Return access and refresh token
