@@ -1,18 +1,36 @@
 import React, { useState } from 'react';
 
+import axios from 'axios';
+
 const LoginForm = () => {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();     
+        try {
+          const response = await axios.post('http://127.0.0.1:8000/api/v1/jwt/auth/login/', {
+            username: username,
+            password: password
+          },
+          {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json',
+            },
+           }
+          );
+    
+          console.log('User login successfully:', response.data);
+        } catch (error) {
+          console.error('Error login user:', error);
+        }
+      };
+
+
     return (
     <form onSubmit={handleSubmit} className="form-box">
-      <h3 className="h4 text-black mb-4">Sign Up</h3>
-      <div className="form-group">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Email Address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-      </div>
+      <h3 className="h4 text-black mb-4">Sign In</h3>
       <div className="form-group">
         <input
           type="text"
@@ -35,7 +53,7 @@ const LoginForm = () => {
         <input
           type="submit"
           className="btn btn-primary btn-pill"
-          value="Sign up"
+          value="Sign in"
         />
       </div>
     </form>
