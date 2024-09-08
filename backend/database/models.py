@@ -67,6 +67,7 @@ class Course(Base):
         secondary='course_instructors',
         back_populates='courses_instructed',
     )
+    modules = relationship('Module', back_populates="course")
 
     table_args = (
         CheckConstraint("price >= 0", name="check_positive_price"),
@@ -80,6 +81,13 @@ class CourseInstructor(Base):
     course_id: Mapped[int] = mapped_column(ForeignKey('course.id'))
     instructor_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     
-    # Указываем обратные связи (не обязательно, но полезно)
-    # course = relationship('Course', back_populates='course_instructors')
-    # instructor = relationship('User', back_populates='course_instructors')
+
+class Module(Base):
+    title: Mapped[str] = mapped_column(String(50), unique=True)
+    description: Mapped[str]
+    total_points: Mapped[int] = mapped_column(default=0, server_default="0")
+    course_id: Mapped[int] = mapped_column(ForeignKey('course.id'))
+
+    course = relationship('Course', back_populates="modules")
+    # lessons: Mapped[list["Lesson"]] = relationship("Lesson", back_populates="module")
+
