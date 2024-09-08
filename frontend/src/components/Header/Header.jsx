@@ -22,7 +22,7 @@ const Header = () => {
             <div className="ml-auto w-25">
               <nav className="site-navigation position-relative text-right" role="navigation">
                 <ul className="site-menu main-menu site-menu-dark js-clone-nav mr-auto d-none d-lg-block m-0 p-0">
-                  <li className="cta"><a href="#contact-section" className="nav-link"><span>Contact Us</span></a></li>
+                  <li className="cta"><a href="/contact-us" className="nav-link"><span>Contact Us</span></a></li>
                 </ul>
               </nav>
               <a href="#" className="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right"><span className="icon-menu h3"></span></a>
