@@ -17,7 +17,8 @@ class CourseRepository:
             select(Course).where(Course.id == course_id) 
             .options(
                 joinedload(Course.creator),
-                selectinload(Course.instructors)
+                selectinload(Course.instructors),
+                selectinload(Course.modules)
             )
         )
         if course:
@@ -39,7 +40,8 @@ class CourseRepository:
             select(Course)
             .options(
                 joinedload(Course.creator),
-                selectinload(Course.instructors)
+                selectinload(Course.instructors),
+                selectinload(Course.modules)
             )
             .offset(skip)
             .limit(limit)
@@ -66,7 +68,7 @@ class CourseRepository:
             course: Course = Course(**course_dict)
             session.add(course)
             await session.commit()
-            await session.refresh(course, attribute_names=["creator", "instructors"])
+            await session.refresh(course, attribute_names=["creator", "instructors", "modules"])
             return course
         except Exception as e:
             await session.rollback()
@@ -118,9 +120,8 @@ class CourseRepository:
         try:
             course.instructors.append(instructor)
             await session.commit()
-            # Обновите и верните объект курса
             await session.refresh(course)
-            return course  # Вернуть обновленный курс
+            return course
         except Exception as e:
             await session.rollback()
             raise HTTPException(
