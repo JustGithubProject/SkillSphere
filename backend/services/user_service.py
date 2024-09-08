@@ -123,6 +123,18 @@ class UserService:
             email=user_in.email
         )
         return user.admin
+    
+    async def update_last_login(
+        self,
+        user_id: int,
+        session: AsyncSession,
+        new_login_time: datetime
+    ) -> None:
+        return await self.user_repository.update_last_login(
+            user_id=user_id,
+            session=session,
+            new_login_time=new_login_time,
+        )
         
 
 # Зависимость для получения сервиса
