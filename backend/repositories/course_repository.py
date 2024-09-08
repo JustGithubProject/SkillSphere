@@ -37,7 +37,6 @@ class CourseRepository:
     ) -> list[Course]:
         stmt = (
             select(Course)
-            .filter_by(is_published=is_admin)
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors)
@@ -46,6 +45,8 @@ class CourseRepository:
             .limit(limit)
             .order_by(Course.id)
         )
+        if not is_admin:
+            stmt = stmt.filter_by(is_published=False)            
         for field, value in kwargs.items():
             if value is not None:
                 stmt = stmt.filter(getattr(Course, field) == value)
