@@ -47,6 +47,19 @@ class UserService:
             return UserOut.model_validate(obj=user, from_attributes=True)
         return None
     
+    async def get_user_by_username(
+        self,
+        session: AsyncSession,
+        username: str
+    ) -> UserOut:
+        user: User = await self.user_repository.get_user_by_username(
+            session=session,
+            username=username
+        )
+        if user:
+            return UserOut.model_validate(obj=user, from_attributes=True)
+        return None
+    
 
     async def list_users(
         self,

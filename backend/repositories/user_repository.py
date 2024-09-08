@@ -40,6 +40,10 @@ class UserRepository:
         user: User = await session.scalars(stmt)
         return user.one_or_none()
     
+    async def get_user_by_username(self, session: AsyncSession, username: str) -> User:
+        stmt = select(User).where(User.username==username)
+        user: User = await session.scalars(stmt)
+        return user.one_or_none()
     
     async def get_all_users(
         session: AsyncSession,
@@ -54,7 +58,6 @@ class UserRepository:
         )
         users: list[User] = await session.scalars(stmt).all()
         return users
-
 
     async def update_user_ban_status(
         self,
