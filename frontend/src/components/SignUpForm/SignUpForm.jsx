@@ -18,7 +18,7 @@ const SignUpForm = () => {
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1/api/v1/jwt/auth/signup/', {
+      const response = await axios.post('http://127.0.0.1:8000/api/v1/jwt/auth/signup/', {
         email: email,
         username: username,
         password_hash: password,
