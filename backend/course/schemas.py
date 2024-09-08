@@ -2,6 +2,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
 from authentication.schemas import UserBase
+from module.schemas import ModuleOutput
 from enums import CourseLevel
 
 
@@ -24,6 +25,7 @@ class CourseOutput(CourseInput):
     updated_at: datetime
     creator: "UserBase"
     instructors: list["UserBase"] = []
+    modules: list["ModuleOutput"] = []
 
 
 class CourseUpdate(BaseModel):
