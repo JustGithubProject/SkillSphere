@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 
 from typing import Annotated
@@ -12,7 +13,7 @@ from database import session_getter
 from services.user_service import UserService, get_user_service
 from authentication.schemas import TokenInfo, UserIn, UserOut
 
-from authentication.custom_exceptions import UserCreateException, user_already_exists_exception
+from authentication.custom_exceptions import failted_to_created_user_exception, user_already_exists_exception
 
 from authentication.validation import (
     validate_auth_user,
@@ -74,9 +75,9 @@ async def create_user_handler(
                 **user_in.model_dump(exclude_defaults=True)
                 }
             }
-    except UserCreateException as ex:
-        logger.error(f"Failed to create a new user: {ex}", exc_info=True)
-        return f"{ex}: failure to create new user"
+    except Exception as e:
+        logger.error(f"Failed to create a new user: {e}", exc_info=True)
+        raise failted_to_created_user_exception
     
 
 @router.post(
@@ -93,10 +94,15 @@ async def login_handler(
         session=session, 
         user_in=user
     )
+    user.last_login = datetime.now()
     # Create access and refresh token using email
     access_token = create_access_token(user, is_admin=is_admin)
     refresh_token = create_refresh_token(user)
-
+    await user_service.update_last_login(
+        session=session,
+        user_id=user.id,
+        new_login_time=user.last_login
+    )
     logger.info(f"User '{user.username}' successfully logged in.")
 
     # Return access and refresh token

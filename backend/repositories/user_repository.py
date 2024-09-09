@@ -1,9 +1,12 @@
+from datetime import datetime
+from fastapi import HTTPException, status
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 from authentication.schemas import UserOut
 from authentication.utils import hash_password
 from authentication.custom_exceptions import (
-    UserCreateException,
+    failted_to_created_user_exception,
     update_ban_status_exception
 )
 from database.models import User
@@ -33,7 +36,7 @@ class UserRepository:
             return new_user.id
         except Exception:
             await session.rollback()
-            raise UserCreateException()
+            raise failted_to_created_user_exception
         
     async def get_user_by_email(self, session: AsyncSession, email: str) -> User:
         stmt = select(User).where(User.email==email)
@@ -71,13 +74,50 @@ class UserRepository:
                 update(User)
                 .values(active=new_active_status)
                 .where(User.email==user.email)
-                .execution_options(synchronize_session="fetch")
             )
-            await session.scalars(stmt)
+            await session.execute(stmt)
             await session.commit()
             # Получение обновленного объекта
             updated_user = await session.query(User).filter_by(email=user.email).one()
             return updated_user
+        except Exception:
+            session.rollback()
+            raise update_ban_status_exception
+
+    async def get_instructor_by_id(
+        self,
+        session: AsyncSession,
+        user_id: int
+    ) -> User:
+        user = await session.scalar(
+            select(User).where(User.id == user_id) 
+            .options(
+                selectinload(User.courses_created),
+                selectinload(User.courses_instructed)
+            )
+        )
+        if user:
+            return user
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    async def update_last_login(
+        self,
+        user_id: int,
+        session: AsyncSession,
+        new_login_time: datetime
+    ) -> None:
+        try:
+            stmt = (
+                update(User)
+                .values(last_login=new_login_time)
+                .where(User.id==user_id)
+            )
+            await session.execute(stmt)
+            await session.commit()
+            return None
         except Exception:
             session.rollback()
             raise update_ban_status_exception
