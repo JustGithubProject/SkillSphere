@@ -1,4 +1,3 @@
-from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from authentication.custom_exceptions import not_enough_rights_exception
 from authentication.schemas import UserOut
@@ -11,7 +10,7 @@ from course.schemas import CourseInput, CourseOutput, CourseUpdate
 class CourseService:
     def __init__(self, course_repository: CourseRepository, user_repository: UserRepository):
         """
-        Initialize the course service with a course repository.
+        Initialize the course service with a course and user repository.
         """
         self.course_repository = course_repository
         self.user_repository = user_repository

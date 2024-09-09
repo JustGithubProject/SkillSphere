@@ -84,7 +84,7 @@ class CourseInstructor(Base):
 
 class Module(Base):
     title: Mapped[str] = mapped_column(String(50), unique=True)
-    description: Mapped[str]
+    description: Mapped[str | None]
     total_points: Mapped[int] = mapped_column(default=0, server_default="0")
     course_id: Mapped[int] = mapped_column(ForeignKey('course.id'))
 
