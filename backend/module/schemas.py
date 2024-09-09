@@ -14,11 +14,12 @@ class ModuleInput(ModuleBase):
 
 
 class ModuleOutput(ModuleInput):
+    id: int
     total_points: int
 
     # lessons: list["LessonBase"]
 
 
 class ModuleUpdate(BaseModel):
-    title: str | None
-    description: str | None
+    title: str | None = None
+    description: str | None = None
