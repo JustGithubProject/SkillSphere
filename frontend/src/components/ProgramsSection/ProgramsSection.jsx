@@ -7,7 +7,12 @@ const ProgramsSection = () => {
         <div className="row mb-5 justify-content-center">
           <div className="col-lg-7 text-center" data-aos="fade-up">
             <h2 className="section-title">Our Programs</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam repellat aut neque! Doloribus sunt non aut reiciendis, vel recusandae obcaecati hic dicta repudiandae in quas quibusdam ullam, illum sed veniam!</p>
+            <p>
+              Our programs are designed to offer comprehensive learning experiences tailored to meet your needs.
+              From foundational courses to advanced training, we provide a range of options to help you achieve your goals.
+              Our curriculum is crafted by experts and continuously updated to reflect the latest industry trends.
+              Whether you're looking to start a new career or enhance your skills, our programs are here to support your journey.
+            </p>
           </div>
         </div>
         <div className="row mb-5 align-items-center">
@@ -16,8 +21,14 @@ const ProgramsSection = () => {
           </div>
           <div className="col-lg-4 ml-auto" data-aos="fade-up" data-aos-delay="200">
             <h2 className="text-black mb-4">We Are Excellent In Education</h2>
-            <p className="mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem maxime nam porro possimus fugiat quo molestiae illo.</p>
-
+            <p className="mb-4">
+              Our commitment to education excellence sets us apart.
+              We strive to deliver exceptional learning experiences through innovative teaching
+              methods and a deep understanding of educational principles. 
+              Our dedicated team of educators is focused on providing high-quality
+              instruction that meets the highest standards, ensuring that every student
+              receives the support and knowledge they need to excel.
+            </p>
             <div className="d-flex align-items-center custom-icon-wrap mb-3">
               <span className="custom-icon-inner mr-3"><span className="icon icon-graduation-cap"></span></span>
               <div><h3 className="m-0">22,931 Yearly Graduates</h3></div>
