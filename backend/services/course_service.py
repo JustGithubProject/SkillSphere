@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from authentication.custom_exceptions import not_enough_rights_exception
 from authentication.schemas import UserOut
+from utils import check_is_user_a_course_staff
 from repositories.user_repository import UserRepository
 from repositories.course_repository import CourseRepository
 from database.models import Course, User
@@ -14,7 +15,21 @@ class CourseService:
         """
         self.course_repository = course_repository
         self.user_repository = user_repository
-        
+
+    async def check_is_course_exists(
+        self,
+        session: AsyncSession,
+        course_id: int,
+        user: UserOut
+    ) -> bool:
+        course: Course | None = await self.course_repository.check_is_course_exists(
+            session=session,
+            course_id=course_id
+        )
+        if await check_is_user_a_course_staff(user=user, course=course):
+            return True
+        return False
+
     async def get_all_courses(
         self, 
         session: AsyncSession, 
@@ -60,8 +75,10 @@ class CourseService:
             course_id=course_id
         )
         if not course.is_published:
-            if not (user.admin or user.id == course.creator_id or user.id in [instructor.id for instructor in course.instructors]):
-                raise not_enough_rights_exception
+            await self.check_is_user_a_course_staff(
+                course=course,
+                user=user
+            )
         return CourseOutput.model_validate(course, from_attributes=True)
         
     async def update_course(

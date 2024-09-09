@@ -4,17 +4,17 @@ from repositories.module_repository import ModuleRepository
 from database.models import Course, Module
 from course.schemas import CourseOutput
 from services.course_service import CourseService, get_course_service
-from module.schemas import ModuleInput, ModuleOutput
+from module.schemas import ModuleInput, ModuleOutput, ModuleUpdate
 from repositories.course_repository import CourseRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 
 class ModuleService:
     def __init__(
-            self, 
-            module_repository: ModuleRepository, 
-            course_repository: CourseRepository,
-            course_service: CourseService = get_course_service()
-        ):
+        self, 
+        module_repository: ModuleRepository, 
+        course_repository: CourseRepository,
+        course_service: CourseService = get_course_service()
+    ):
         """
         Initialize the course service with a module and course repository.
         """
@@ -28,21 +28,33 @@ class ModuleService:
         user: UserOut,
         course_id: int,
     ) -> list[ModuleOutput]:
-        course: CourseOutput = await self.course_service.get_course_by_id(
+        if await self.course_service.check_is_course_exists(
             session=session,
             course_id=course_id,
             user=user
-        )
-        if not course:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Course not found"
+        ):
+            modules: list[Module] = await self.module_repository.get_all_modules_by_course_id(
+                session=session,
+                course_id=course_id,
             )
-        modules: list[Module] = await self.module_repository.get_all_modules_by_course_id(
+            return [ModuleOutput.model_validate(module, from_attributes=True) for module in modules]
+    
+    async def get_module_by_id(
+        self,
+        session: AsyncSession,
+        user: UserOut,
+        module_id: int,
+    ) -> ModuleOutput:
+        module: Module = await self.module_repository.get_module_by_id(
             session=session,
-            course_id=course_id,
+            module_id=module_id
         )
-        return [ModuleOutput.model_validate(module, from_attributes=True) for module in modules]
+        if await self.course_service.check_is_course_exists(
+            session=session,
+            course_id=module.course_id,
+            user=user
+        ):
+            return ModuleOutput.model_validate(module, from_attributes=True)
 
     async def create_module(
         self,
@@ -50,21 +62,53 @@ class ModuleService:
         user: UserOut,
         module_input: ModuleInput
     ) -> ModuleOutput:
-        course: CourseOutput = await self.course_service.get_course_by_id(
+        if await self.course_service.check_is_course_exists(
             session=session,
             course_id=module_input.course_id,
             user=user
-        )
-        if not course:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Course not found"
+        ):
+            module: Module = await self.module_repository.create_module(
+                session=session,
+                module_input=module_input
             )
-        module: Module = await self.module_repository.create_module(
+            return ModuleOutput.model_validate(module, from_attributes=True)
+
+    async def update_module(
+        self,
+        session: AsyncSession,
+        user: UserOut,
+        module_update: ModuleUpdate,
+        module_id: int
+    ) -> ModuleOutput:
+        module: ModuleOutput = await self.module_repository.update_module(
             session=session,
-            module_input=module_input
+            module_update=module_update,
+            module_id=module_id
         )
-        return ModuleOutput.model_validate(module, from_attributes=True)
+        if await self.course_service.check_is_course_exists(
+            session=session,
+            course_id=module.course_id,
+            user=user
+        ):
+            return ModuleOutput.model_validate(module, from_attributes=True)
+
+    async def delete_module(
+        self,
+        session: AsyncSession,
+        module_id: int,
+        user: UserOut,
+    ) -> None:
+        module: ModuleOutput = await self.get_module_by_id(
+            session=session,
+            module_id=module_id,
+            user=user
+        )
+        if module:
+            return await self.module_repository.delete_module(
+                session=session,
+                module_id=module_id
+            )
+
 
 def get_module_service():
     return ModuleService(ModuleRepository(), CourseRepository(),) 

@@ -1,5 +1,5 @@
 from fastapi import HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import exists, select
 from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -8,6 +8,20 @@ from database.models import Course, User
 
 
 class CourseRepository:
+    async def check_is_course_exists(
+        self,
+        session: AsyncSession,
+        course_id: int,
+    ) -> Course:
+        stmt = select(exists().where(Course.id == course_id))
+        course = await session.execute(stmt)
+        if course:
+            return course
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Course not found"
+        )
+        
     async def get_course_by_id(
         self,
         session: AsyncSession,
