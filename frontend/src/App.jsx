@@ -1,6 +1,6 @@
 import Home from "./pages/Home"
 import ContactUs from "./pages/ContactUs";
-
+import CourseSingle from "./pages/CourseSingle";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -9,6 +9,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact-us" element={<ContactUs/>}/>
+          <Route path="/course-single" element={<CourseSingle/>} />
         </Routes>
     </Router>
   );
