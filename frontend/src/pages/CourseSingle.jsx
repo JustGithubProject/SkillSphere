@@ -3,6 +3,7 @@ import React from 'react';
 import Header from '../components/Header/Header';
 import CourseIntroSection from '../components/CourseIntroSection/CourseIntroSection';
 import CourseSiteSection from '../components/CourseSiteSection/CourseSiteSection';
+import CourseMoreSection from '../components/CourseMoreSection/CourseMoreSection';
 import Footer from '../components/Footer/Footer';
 
 const CourseSingle = () => {
@@ -19,6 +20,7 @@ const CourseSingle = () => {
             <Header/>
             <CourseIntroSection/>
             <CourseSiteSection/>
+            <CourseMoreSection/>
             <Footer/>
         </div>
     );

@@ -7,7 +7,10 @@ const Footer = () => {
         <div className="row">
           <div className="col-md-3">
             <h3>About</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora, neque!</p>
+            <p>
+              At our institution, we are dedicated to providing exceptional education 
+              and fostering a supportive learning environment.  
+            </p>
           </div>
           <div className="col-md-3">
             <h3>Links</h3>

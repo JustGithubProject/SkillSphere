@@ -18,7 +18,10 @@ const TeachersSection = () => {
         <div className="row mb-5 justify-content-center">
           <div className="col-lg-7 text-center" data-aos="fade-up">
             <h2 className="section-title">Meet Our Teachers</h2>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam repellat aut neque! Doloribus sunt non aut reiciendis, vel recusandae obcaecati hic dicta repudiandae in quas quibusdam ullam, illum sed veniam!</p>
+            <p>Our instructors are experienced professionals who are dedicated to helping you unlock your potential.
+               With deep expertise in their respective fields, they are committed to imparting their knowledge and skills
+                to ensure your success. We take pride in our team and are confident they will be a valuable partner in your learning and development journey.
+            </p>
           </div>
         </div>
         <div className="row">

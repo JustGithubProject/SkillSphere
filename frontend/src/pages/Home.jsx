@@ -7,6 +7,8 @@ import IntroSection from '../components/IntroSection/IntroSection';
 import CoursesSection from '../components/CoursesSection/CoursesSection';
 import ProgramsSection from '../components/ProgramsSection/ProgramsSection';
 import TeachersSection from '../components/TeachersSection/TeachersSection';
+import BeforeWhyChooseUsSection from '../components/BeforeWhyChooseUsSection/BeforeWhyChooseUsSection';
+import WhyChooseUsSection from '../components/WhyChooseUsSection/WhyChooseUsSection';
 
 
 const Home = () => {
@@ -25,6 +27,8 @@ const Home = () => {
             <CoursesSection/>
             <ProgramsSection/>
             <TeachersSection/>
+            <BeforeWhyChooseUsSection/>
+            <WhyChooseUsSection/>
             <Footer/>
         </div>
     );
