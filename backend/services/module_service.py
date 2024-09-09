@@ -4,7 +4,7 @@ from repositories.module_repository import ModuleRepository
 from database.models import Course, Module
 from course.schemas import CourseOutput
 from services.course_service import CourseService, get_course_service
-from module.schemas import ModuleOutput
+from module.schemas import ModuleInput, ModuleOutput
 from repositories.course_repository import CourseRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -27,8 +27,8 @@ class ModuleService:
         session: AsyncSession,
         user: UserOut,
         course_id: int,
-    ) -> ModuleOutput:
-        course: Course = await self.course_service.get_course_by_id(
+    ) -> list[ModuleOutput]:
+        course: CourseOutput = await self.course_service.get_course_by_id(
             session=session,
             course_id=course_id,
             user=user
@@ -44,6 +44,27 @@ class ModuleService:
         )
         return [ModuleOutput.model_validate(module, from_attributes=True) for module in modules]
 
+    async def create_module(
+        self,
+        session: AsyncSession,
+        user: UserOut,
+        module_input: ModuleInput
+    ) -> ModuleOutput:
+        course: CourseOutput = await self.course_service.get_course_by_id(
+            session=session,
+            course_id=module_input.course_id,
+            user=user
+        )
+        if not course:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Course not found"
+            )
+        module: Module = await self.module_repository.create_module(
+            session=session,
+            module_input=module_input
+        )
+        return ModuleOutput.model_validate(module, from_attributes=True)
 
 def get_module_service():
     return ModuleService(ModuleRepository(), CourseRepository(),) 
