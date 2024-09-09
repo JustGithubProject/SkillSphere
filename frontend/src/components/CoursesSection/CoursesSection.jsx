@@ -28,7 +28,7 @@ const CoursesSection = () => {
               {courses.map((course, index) => (
                 <div className="course bg-white h-100 align-self-stretch" key={index}>
                   <figure className="m-0">
-                    <a href="course-single.html"><img src={course.image} alt="Image" className="img-fluid" /></a>
+                    <a href="/course-single"><img src={course.image} alt="Image" className="img-fluid" /></a>
                   </figure>
                   <div className="course-inner-text py-4 px-4">
                     <span className="course-price">{course.price}</span>
