@@ -13,7 +13,8 @@ class CourseBase(BaseModel):
     description: str
     price: int
     level: "CourseLevel"
-    
+    video_url: str | None = None
+    photo_url: str | None = None
 
 class CourseInput(CourseBase):
     pass
@@ -34,3 +35,5 @@ class CourseUpdate(BaseModel):
     price: int | None = None
     level: CourseLevel | None = None
     is_published: bool | None = None
+    video_url: str | None = None
+    photo_url: str | None = None
