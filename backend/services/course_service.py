@@ -22,11 +22,15 @@ class CourseService:
         course_id: int,
         user: UserOut
     ) -> bool:
-        course: Course | None = await self.course_repository.check_is_course_exists(
+        course: Course | None = await self.course_repository.get_course_by_id(
             session=session,
             course_id=course_id
         )
-        if await check_is_user_a_course_staff(user=user, course=course):
+        if course and await check_is_user_a_course_staff(
+            user=user, 
+            creator_id=course.creator_id,
+            instructors=course.instructors
+        ):
             return True
         return False
 
@@ -35,16 +39,15 @@ class CourseService:
         session: AsyncSession, 
         skip: int,
         limit: int,
-        user: User,
+        user: UserOut,
         **kwargs,
     ) -> list[CourseOutput]:
-        is_user_admin = False if user.admin else True
         courses: list[Course] = await self.course_repository.get_all_courses(
             **kwargs,
             session=session, 
             skip=skip,
             limit=limit,
-            is_admin=is_user_admin
+            is_admin=user.admin
         )
         return [
             CourseOutput.model_validate(course, from_attributes=True) 
@@ -74,12 +77,13 @@ class CourseService:
             session=session,
             course_id=course_id
         )
-        if not course.is_published:
-            await self.check_is_user_a_course_staff(
-                course=course,
-                user=user
-            )
-        return CourseOutput.model_validate(course, from_attributes=True)
+        is_staff: bool = await check_is_user_a_course_staff(
+            user=user, 
+            creator_id=course.creator_id,
+            instructors=course.instructors
+        )
+        if course.is_published or is_staff:
+            return CourseOutput.model_validate(course, from_attributes=True)
         
     async def update_course(
         self,

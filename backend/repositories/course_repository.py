@@ -62,7 +62,7 @@ class CourseRepository:
             .order_by(Course.id)
         )
         if not is_admin:
-            stmt = stmt.filter_by(is_published=False)            
+            stmt = stmt.filter_by(is_published=True)
         for field, value in kwargs.items():
             if value is not None:
                 stmt = stmt.filter(getattr(Course, field) == value)
