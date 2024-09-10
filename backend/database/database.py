@@ -13,8 +13,8 @@ from config import SQLALCHEMY_DATABASE_URL
 # Create an asynchronous engine for the database connection
 engine: AsyncEngine = create_async_engine(
     url=SQLALCHEMY_DATABASE_URL,
-    echo=False,
-    echo_pool=False,
+    echo=True,
+    echo_pool=True,
     pool_size=5,
     max_overflow=10
 )
@@ -34,7 +34,5 @@ async def session_getter() -> AsyncGenerator[AsyncSession, None]:
         a session from the session factory.
     """
     async with session_factory() as session:
-        try:
-            yield session
-        finally:
-            await session.close()
+        yield session
+
