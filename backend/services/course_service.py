@@ -1,6 +1,11 @@
+from fastapi import UploadFile
+from aws.s3_actions import S3Client
 from sqlalchemy.ext.asyncio import AsyncSession
 from authentication.custom_exceptions import not_enough_rights_exception
 from authentication.schemas import UserOut
+from constants import COURSE, IMAGES, VIDEOS
+from course.mixins.file_action_mixin import FileActionMixin
+from enums import CourseLevel
 from utils import check_is_user_a_course_staff
 from repositories.user_repository import UserRepository
 from repositories.course_repository import CourseRepository
@@ -8,7 +13,7 @@ from database.models import Course, User
 from course.schemas import CourseInput, CourseOutput, CourseUpdate
 
 
-class CourseService:
+class CourseService(FileActionMixin):
     def __init__(self, course_repository: CourseRepository, user_repository: UserRepository):
         """
         Initialize the course service with a course and user repository.
@@ -75,16 +80,38 @@ class CourseService:
     
     async def create_course(
         self,
-        course_input: CourseInput,
+        title: str,
+        description: str,
+        price: int,
+        level: CourseLevel,
+        photo_file: UploadFile,
+        video_file: UploadFile,
         session: AsyncSession,
         user: UserOut
     ) -> CourseOutput:
+        video_filename, video_url_key = await self._generate_file_key(video_file, VIDEOS, COURSE)
+        photo_filename, photo_url_key = await self._generate_file_key(photo_file, IMAGES, COURSE)
+
+        async with S3Client() as s3_client:
+            await self._upload_file(s3_client, video_file, video_url_key, VIDEOS)
+            await self._upload_file(s3_client, photo_file, photo_url_key, IMAGES)
+
+        course_input: CourseInput = CourseInput(
+            title=title,
+            description=description,
+            price=price,
+            level=level,
+            video_url=video_url_key,
+            photo_url=photo_url_key,
+        )
+        
         course: Course = await self.course_repository.create_course(
             session=session,
             course_input=course_input,
             creator_id=user.id,
         )
-        return CourseOutput.model_validate(course, from_attributes=True)
+        course_schema: CourseOutput = CourseOutput.model_validate(course, from_attributes=True)
+        return course_schema
     
     async def get_course_by_id(
         self,
@@ -107,7 +134,13 @@ class CourseService:
     async def update_course(
         self,
         session: AsyncSession,
-        course_update: CourseUpdate,
+        is_published: bool | None,
+        title: str | None,
+        description: str | None,
+        price: int | None,
+        level: CourseLevel | None,
+        photo_file: UploadFile | None,
+        video_file: UploadFile | None,
         course_id: int,
         user: UserOut,
     ) -> CourseOutput:
@@ -115,6 +148,28 @@ class CourseService:
             session=session,
             course_id=course_id
         )
+        video_filename, video_url_key = None, None
+        photo_filename, photo_url_key = None, None
+
+        async with S3Client() as s3_client:
+            if video_file:
+                video_filename, video_url_key = await self._generate_file_key(video_file, VIDEOS, COURSE)
+                await self._update_file(s3_client, video_file, course.video_url, video_url_key, VIDEOS)
+
+            if photo_file:
+                photo_filename, photo_url_key = await self._generate_file_key(photo_file, IMAGES, COURSE)
+                await self._update_file(s3_client, photo_file, course.photo_url, photo_url_key, IMAGES)
+
+        course_update: CourseUpdate = CourseUpdate(
+            title=title,
+            description=description,
+            price=price,
+            level=level,
+            photo_url=photo_url_key or course.photo_url,
+            video_url=video_url_key or course.video_url,
+            is_published=is_published
+        )
+
         if user.admin or user.id == course.creator_id:
             course: Course = await self.course_repository.update_course(
                 session=session,
@@ -132,10 +187,14 @@ class CourseService:
     ) -> None:
         course: Course = await session.get(Course, course_id)
         if user.admin or user.id == course.creator_id:
+            async with S3Client() as s3_client:
+                await self._delete_file(s3_client, course.video_url)
+                await self._delete_file(s3_client, course.photo_url)
             return await self.course_repository.delete_course(
                 session=session,
                 course=course
             )
+            
         raise not_enough_rights_exception
 
     async def add_instructor(

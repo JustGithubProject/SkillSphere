@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, File, Form, Query, UploadFile, status
 from authentication.schemas import UserOut
 from authentication.validation import get_current_active_auth_user
 from services.course_service import CourseService, get_course_service
@@ -52,11 +52,21 @@ async def create_course(
     course_service: Annotated[CourseService, Depends(get_course_service)],
     user: Annotated[UserOut, Depends(get_current_active_auth_user)],
     session: Annotated[AsyncSession, Depends(session_getter)],
-    course_input: CourseInput
+    title: Annotated[str, Form()],
+    description: Annotated[str, Form()],
+    price: Annotated[int, Form()],
+    level: Annotated[CourseLevel, Form()],
+    photo_file: Annotated[UploadFile, File(...)],
+    video_file: Annotated[UploadFile, File(...)]
 ) -> CourseOutput:
     return await course_service.create_course(
         session=session,
-        course_input=course_input,
+        title=title,
+        description=description,
+        price=price,
+        level=level,
+        photo_file=photo_file,
+        video_file=video_file,
         user=user
     )
 
@@ -75,15 +85,27 @@ async def get_course_by_id(
 
 @router.patch("/{course_id}/", response_model=CourseOutput)
 async def update_course(
+    course_id: int,
     course_service: Annotated[CourseService, Depends(get_course_service)],
     session: Annotated[AsyncSession, Depends(session_getter)],
     user: Annotated[UserOut, Depends(get_current_active_auth_user)],
-    course_update: CourseUpdate,
-    course_id: int,
+    title: str | None = Form(default=None),
+    description: str | None = Form(default=None),
+    is_published: bool | None = Form(default=None),
+    price: int | None = Form(default=None),
+    level: CourseLevel | None = Form(default=None),
+    photo_file: UploadFile | None = File(default=None),
+    video_file: UploadFile | None = File(default=None)
 ) -> CourseOutput:
     return await course_service.update_course(
         session=session,
-        course_update=course_update,
+        title=title,
+        description=description,
+        price=price,
+        level=level,
+        photo_file=photo_file,
+        video_file=video_file,
+        is_published=is_published,
         course_id=course_id,
         user=user
     )

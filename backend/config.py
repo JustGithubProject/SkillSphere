@@ -40,3 +40,6 @@ auth_jwt_algorithm: str = "RS256"
 auth_jwt_access_token_expire_minutes: int = 30  # 30 minutes
 auth_jwt_refresh_token_expire_minutes: int = 60 * 24 * 30  # 30 days
 # auth_jwt_refresh_token_expire_days: int = 60 * 24 * 30
+
+
+AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
