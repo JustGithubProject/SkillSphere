@@ -36,6 +36,17 @@ async def get_all_courses(
         user=user,
     )
 
+@router.get("/all/no-auth/", response_model=list[CourseOutput])
+async def get_all_courses_no_auth(
+    course_service: Annotated[CourseService, Depends(get_course_service)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    limit: int = Query(default=10, ge=1)
+) -> list[CourseOutput]:
+    return await course_service.fetch_all_courses_no_auth(
+        session=session,
+        limit=limit
+    )
+
 @router.post("/", response_model=CourseOutput, status_code=status.HTTP_201_CREATED)
 async def create_course(
     course_service: Annotated[CourseService, Depends(get_course_service)],

@@ -34,7 +34,5 @@ async def session_getter() -> AsyncGenerator[AsyncSession, None]:
         a session from the session factory.
     """
     async with session_factory() as session:
-        try:
-            yield session
-        finally:
-            await session.close()
+        yield session
+

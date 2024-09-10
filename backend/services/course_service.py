@@ -54,6 +54,25 @@ class CourseService:
             for course in courses
         ]
     
+    async def fetch_all_courses_no_auth(
+        self,
+        session: AsyncSession,
+        limit: int
+    ) -> list[CourseOutput]:
+        """
+            Method to get courses without auth 
+        """
+        courses: list[Course] = await self.course_repository.fetch_all_courses_no_auth(
+            session=session,
+            limit=limit
+        )
+        
+        return [
+            CourseOutput.model_validate(course, from_attributes=True) 
+            for course in courses
+        ]
+
+    
     async def create_course(
         self,
         course_input: CourseInput,

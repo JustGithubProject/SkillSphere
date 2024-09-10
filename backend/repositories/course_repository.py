@@ -70,6 +70,26 @@ class CourseRepository:
         courses: list[Course] = await session.scalars(stmt)
         return courses.all()
     
+    async def fetch_all_courses_no_auth(
+        self,
+        session: AsyncSession,
+        limit: int
+    ) -> list[Course]:
+        stmt = (
+            select(Course)
+            .options(
+                joinedload(Course.creator),
+                selectinload(Course.instructors),
+                selectinload(Course.modules)
+            )
+            .limit(limit)
+            .order_by(Course.id)
+        )
+        result = await session.execute(stmt)
+        courses: list[Course] = result.scalars().all()
+        return courses
+        
+    
     async def create_course(
         self,
         session: AsyncSession,
