@@ -49,6 +49,7 @@ class UserRepository:
         return user.one_or_none()
     
     async def get_all_users(
+        self,
         session: AsyncSession,
         skip: int,
         limit: int
@@ -59,8 +60,8 @@ class UserRepository:
             .limit(limit)
             .order_by(User.id)
         )
-        users: list[User] = await session.scalars(stmt).all()
-        return users
+        users: list[User] = await session.scalars(stmt)
+        return users.all()
 
     async def update_user_ban_status(
         self,
