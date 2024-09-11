@@ -53,7 +53,7 @@ const LoginForm = () => {
           )
           
           // Redirect after login
-          window.location.href = "https://www.youtube.com/"; // redirect to youtube (for a while)
+          window.location.href = "/"; 
         } catch (error) {
           console.error('Error login user:', error);
         }
