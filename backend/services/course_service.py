@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from authentication.custom_exceptions import not_enough_rights_exception
 from authentication.schemas import UserOut
 from constants import COURSE, IMAGES, VIDEOS
-from course.mixins.file_action_mixin import FileActionMixin
+from services.mixins.file_action_mixin import FileActionMixin
 from enums import CourseLevel
 from utils import check_is_user_a_course_staff
 from repositories.user_repository import UserRepository
