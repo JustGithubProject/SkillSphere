@@ -82,6 +82,17 @@ async def get_course_by_id(
         course_id=course_id,
         user=user
     )
+    
+@router.get("/no-auth/{course_id}", response_model=CourseOutput)
+async def get_course_by_id_no_auth(
+    course_service: Annotated[CourseService, Depends(get_course_service)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    course_id: int
+) -> CourseOutput:
+    return await course_service.get_course_by_id_no_auth(
+        session=session,
+        course_id=course_id
+    )
 
 @router.patch("/{course_id}/", response_model=CourseOutput)
 async def update_course(

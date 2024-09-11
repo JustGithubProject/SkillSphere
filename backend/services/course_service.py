@@ -130,6 +130,21 @@ class CourseService(FileActionMixin):
         )
         if course.is_published or is_staff:
             return CourseOutput.model_validate(course, from_attributes=True)
+    
+    async def get_course_by_id_no_auth(
+        self,
+        session: AsyncSession,
+        course_id: int,
+    ) -> CourseOutput:
+        course: Course = await self.course_repository.get_course_by_id(
+            session=session,
+            course_id=course_id
+        )
+        # TODO: course.is_published condition ...
+        # if course.is_published:
+        #     return CourseOutput.model_validate(course, from_attributes=True)    
+        return CourseOutput.model_validate(course, from_attributes=True)
+        
         
     async def update_course(
         self,

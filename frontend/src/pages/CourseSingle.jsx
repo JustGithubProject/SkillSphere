@@ -6,7 +6,11 @@ import CourseSiteSection from '../components/CourseSiteSection/CourseSiteSection
 import CourseMoreSection from '../components/CourseMoreSection/CourseMoreSection';
 import Footer from '../components/Footer/Footer';
 
+import { useParams } from 'react-router-dom';
+
 const CourseSingle = () => {
+    const { id } = useParams();
+
     return (
         <div className="site-wrap">
             <div className="site-mobile-menu site-navbar-target">
@@ -19,7 +23,7 @@ const CourseSingle = () => {
             </div>
             <Header/>
             <CourseIntroSection/>
-            <CourseSiteSection/>
+            <CourseSiteSection courseID={id} />
             <CourseMoreSection/>
             <Footer/>
         </div>
