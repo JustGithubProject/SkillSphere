@@ -30,16 +30,11 @@ class FileActionMixin:
         await s3_client.s3_delete_file(key=key)
 
     @staticmethod
-    async def download_song_or_photo_file(file_name: str, folder_type: str) -> str:
+    async def download_video_or_photo_file(file_name: str) -> str:
         if not file_name:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail='No file name provided'
             )
-        file_type = file_name.split(".")[-1]
-        if file_type in SUPPORTED_FILE_TYPES[IMAGES].values():
-            key = f"{folder_type}/{IMAGES}/{file_name}"
-        else:
-            key = f"{folder_type}/{VIDEOS}/{file_name}"
         async with S3Client() as s3_client:
-            return await FileActionMixin._download_file(s3_client, file_name, key=key)
+            return await FileActionMixin._download_file(s3_client, file_name, key=file_name)
