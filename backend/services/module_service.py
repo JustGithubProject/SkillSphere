@@ -28,16 +28,29 @@ class ModuleService:
         user: UserOut,
         course_id: int,
     ) -> list[ModuleOutput]:
-        if await self.course_service.check_is_course_exists(
+        course: CourseOutput = await self.course_service.get_course_by_id(
             session=session,
             course_id=course_id,
             user=user
-        ):
-            modules: list[Module] = await self.module_repository.get_all_modules_by_course_id(
-                session=session,
-                course_id=course_id,
-            )
-            return [ModuleOutput.model_validate(module, from_attributes=True) for module in modules]
+        )
+        return course.modules
+
+    # async def get_all_modules_by_course_id(
+    #     self,
+    #     session: AsyncSession,
+    #     user: UserOut,
+    #     course_id: int,
+    # ) -> list[ModuleOutput]:
+    #     if await self.course_service.check_is_course_exists(
+    #         session=session,
+    #         course_id=course_id,
+    #         user=user
+    #     ):
+    #         modules: list[Module] = await self.module_repository.get_all_modules_by_course_id(
+    #             session=session,
+    #             course_id=course_id,
+    #         )
+    #         return [ModuleOutput.model_validate(module, from_attributes=True) for module in modules]
     
     async def get_module_by_id(
         self,

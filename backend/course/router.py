@@ -4,7 +4,7 @@ from authentication.schemas import UserOut
 from authentication.validation import get_current_active_auth_user
 from services.course_service import CourseService, get_course_service
 from enums import CourseLevel, FileType
-from course.schemas import CourseInput, CourseOutput, CourseUpdate
+from course.schemas import CourseOutput
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import session_getter
 
