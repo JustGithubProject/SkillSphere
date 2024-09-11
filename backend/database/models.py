@@ -93,3 +93,13 @@ class Module(Base):
     course = relationship('Course', back_populates="modules")
     # lessons: Mapped[list["Lesson"]] = relationship("Lesson", back_populates="module")
 
+
+class ContactUs(Base):
+    full_name: Mapped[str] = mapped_column(String(50))
+    email: Mapped[str] = mapped_column(String(30))
+    message: Mapped[str] = mapped_column(String(200))
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
+    is_checked = mapped_column(Boolean, default=False, server_default='false')
+
+
+
