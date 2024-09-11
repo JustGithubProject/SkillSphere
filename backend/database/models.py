@@ -54,8 +54,8 @@ class User(Base):
 class Course(Base):
     title: Mapped[str] = mapped_column(String(50), unique=True)
     description: Mapped[str]
-    video_url: Mapped[str]
-    photo_url: Mapped[str]
+    video_url: Mapped[str | None]
+    photo_url: Mapped[str | None]
     price: Mapped[int]
     level: Mapped["CourseLevel"] = mapped_column(default=CourseLevel.BEGINNER)
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
