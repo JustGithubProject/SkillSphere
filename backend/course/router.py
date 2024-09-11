@@ -1,9 +1,9 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, File, Form, Query, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, Query, Response, UploadFile, status
 from authentication.schemas import UserOut
 from authentication.validation import get_current_active_auth_user
 from services.course_service import CourseService, get_course_service
-from enums import CourseLevel
+from enums import CourseLevel, FileType
 from course.schemas import CourseInput, CourseOutput, CourseUpdate
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import session_getter
@@ -56,8 +56,8 @@ async def create_course(
     description: Annotated[str, Form()],
     price: Annotated[int, Form()],
     level: Annotated[CourseLevel, Form()],
-    photo_file: Annotated[UploadFile, File(...)],
-    video_file: Annotated[UploadFile, File(...)]
+    photo_file: UploadFile | None = File(default=None),
+    video_file: UploadFile | None = File(default=None)
 ) -> CourseOutput:
     return await course_service.create_course(
         session=session,
@@ -136,4 +136,31 @@ async def add_course_instructor(
         user=user,
         instructor_id=instructor_id,
         course_id=course_id
+    )
+
+
+@router.get("/download/{course_id}/")
+async def download_video_or_photo(
+    course_id: int,
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    user: Annotated[UserOut, Depends(get_current_active_auth_user)],
+    file_type: Annotated[FileType, Query()], 
+    course_service: Annotated[CourseService, Depends(get_course_service)],
+) -> Response:
+    course: CourseOutput = await course_service.get_course_by_id(
+        course_id=course_id,
+        session=session,
+        user=user,
+    )
+    file_route: str = course.video_url if file_type.VIDEO else course.photo_url
+    contents = await course_service.download_video_or_photo_file(
+        file_name=file_route,
+    )
+    file_name: str = file_route.split("/")[-1]
+    return Response(
+        content=contents,
+        headers={
+            'Content-Disposition': f'attachment;filename={file_name}',
+            'Content-Type': 'application/octet-stream',
+        }
     )
