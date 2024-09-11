@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Header.css';
 
 const Header = () => {
+    const [username, setUsername] = useState('');
+
     return (
       <header className="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
         <div className="container-fluid">
@@ -23,6 +25,7 @@ const Header = () => {
               <nav className="site-navigation position-relative text-right" role="navigation">
                 <ul className="site-menu main-menu site-menu-dark js-clone-nav mr-auto d-none d-lg-block m-0 p-0">
                   <li className="cta"><a href="/contact-us" className="nav-link"><span>Contact Us</span></a></li>
+                  <li className="cta"><a href="/contact-us" className="nav-link"><span>{username}</span></a></li>
                 </ul>
               </nav>
               <a href="#" className="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right"><span className="icon-menu h3"></span></a>

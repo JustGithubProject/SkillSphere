@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import SignUpForm from '../SignUpForm/SignUpForm';
 import LoginForm from '../LoginForm/LoginForm';
 
+import Cookies from 'js-cookie';
+
 const IntroSection = () => {
   const [isSignUp, setIsSignUp] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(() => {
+    const accessToken = Cookies.get("access_token");
+    if (accessToken && accessToken.length > 10) {
+      setIsAuthorized(true);
+    }
+  }, []);
 
   const toggleForm = () => {
     setIsSignUp(prevState => !prevState);
@@ -22,13 +31,14 @@ const IntroSection = () => {
                   <p className="mb-4" data-aos="fade-up" data-aos-delay="200">Welcome to our comprehensive learning platform, where you can elevate your skills and knowledge through expertly crafted courses.</p>
                   <p data-aos="fade-up" data-aos-delay="300"><a href="#" className="btn btn-primary py-3 px-5 btn-pill">Admission Now</a></p>
                 </div>
-
-                <div className="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="500">
-                  <button onClick={toggleForm} className="btn btn-secondary">
-                    {isSignUp ? 'Switch to Login' : 'Switch to Sign Up'}
-                  </button>
-                  {isSignUp ? <SignUpForm /> : <LoginForm />}
-                </div>
+                {!isAuthorized &&
+                  <div className="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="500">
+                    <button onClick={toggleForm} className="btn btn-secondary">
+                      {isSignUp ? 'Switch to Login' : 'Switch to Sign Up'}
+                    </button>
+                    {isSignUp ? <SignUpForm /> : <LoginForm />}
+                  </div>
+                }
               </div>
             </div>
           </div>
