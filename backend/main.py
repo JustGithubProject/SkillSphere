@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from course.router import router as course_router
 from authentication.routers import router as authentication_router
 from module.router import router as module_router
+from contactus.router import router as contactus_router
+
 
 API_V1_PREFIX = "/api/v1"
 
@@ -24,6 +26,11 @@ app.include_router(
 
 app.include_router(
     router=module_router,
+    prefix=API_V1_PREFIX
+)
+
+app.include_router(
+    router=contactus_router,
     prefix=API_V1_PREFIX
 )
 
