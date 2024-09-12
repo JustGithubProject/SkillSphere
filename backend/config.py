@@ -43,3 +43,10 @@ auth_jwt_refresh_token_expire_minutes: int = 60 * 24 * 30  # 30 days
 
 
 AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
+
+
+
+###########################################################
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")          #  
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")  #
+###########################################################
