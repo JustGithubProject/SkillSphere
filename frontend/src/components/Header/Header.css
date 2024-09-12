@@ -1,0 +1,21 @@
+.username-li-style {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    color: #fff;
+    background-color: #333;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: inline-block;
+    transition: background-color 0.3s, transform 0.3s;
+    margin-right: 10px; 
+  }
+  
+  .username-li-style span {
+    font-weight: bold;
+  }
+  
+  .username-li-style:hover {
+    background-color: #444;
+    transform: scale(1.05);
+  }
+  
