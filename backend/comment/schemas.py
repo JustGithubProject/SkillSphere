@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
 from authentication.schemas import UserBase
@@ -19,6 +20,8 @@ class CommentInput(CommentBase):
 class CommentOutput(CommentInput):
     id: int
     replies: list['CommentOutput'] = []  # Список ответов на комментарий
+    created_at: datetime
+    updated_at: datetime
     user: "UserBase"
 
 
