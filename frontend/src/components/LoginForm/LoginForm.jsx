@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const LoginForm = () => {
     const [username, setUsername] = useState('');
@@ -15,80 +15,86 @@ const LoginForm = () => {
         formData.append('password', password);
         
         try {
-          const response = await axios.post('http://127.0.0.1:8000/api/v1/jwt/auth/login/', formData,
-          {
+          const response = await axios.post('http://127.0.0.1:8000/api/v1/jwt/auth/login/', formData, {
             withCredentials: true,
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
             },
-           }
-          );
-          
+          });
+
           console.log("AccessToken: ", response.data.access_token);
           console.log("RefreshToken: ", response.data.refresh_token);
-          
 
           const expiresInMinutes = 30;
           const minutes30 = new Date(new Date().getTime() + expiresInMinutes * 60 * 1000);
 
           // Setting access and refresh tokens to cookies
-          Cookies.set(
-            "access_token", response.data.access_token,
-            {
-              expires: minutes30, // 30 minutes
-              path: '/',
-              secure: false,
-              sameSite: 'Strict'
-            }
-          );
-          Cookies.set(
-            "refresh_token",
-            response.data.refresh_token,
-            {
-              expires: 30, // 30 days
-              path: '/',
-              secure: false,
-              sameSite: 'Strict'
-            }
-          )
-          
+          Cookies.set("access_token", response.data.access_token, {
+            expires: minutes30, // 30 minutes
+            path: '/',
+            secure: false,
+            sameSite: 'Strict'
+          });
+          Cookies.set("refresh_token", response.data.refresh_token, {
+            expires: 30, // 30 days
+            path: '/',
+            secure: false,
+            sameSite: 'Strict'
+          });
+
           // Redirect after login
           window.location.href = "/"; 
         } catch (error) {
           console.error('Error login user:', error);
         }
-      };
+    };
 
+    const handleGoogleLoginSuccess = (response) => {
+        console.log('Google login success:', response);
+        // TODO: to send token to server
+    };
+
+    const handleGoogleLoginError = (error) => {
+        console.error('Google login error:', error);
+    };
 
     return (
-    <form onSubmit={handleSubmit} className="form-box">
-      <h3 className="h4 text-black mb-4">Sign In</h3>
-      <div className="form-group">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <input
-          type="password"
-          className="form-control"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </div>
-      <div className="form-group">
-        <input
-          type="submit"
-          className="btn btn-primary btn-pill"
-          value="Sign in"
-        />
-      </div>
-    </form>
+        <GoogleOAuthProvider clientId="884747836178-avi25mislrh63h9644g684pttij98au2.apps.googleusercontent.com">
+            <form onSubmit={handleSubmit} className="form-box">
+                <h3 className="h4 text-black mb-4">Sign In</h3>
+                <div className="form-group">
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </div>
+                <div className="form-group">
+                    <input
+                        type="password"
+                        className="form-control"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+                <div className="form-group">
+                    <input
+                        type="submit"
+                        className="btn btn-primary btn-pill"
+                        value="Sign in"
+                    />
+                </div>
+                <div className="form-group">
+                    <GoogleLogin
+                        onSuccess={handleGoogleLoginSuccess}
+                        onError={handleGoogleLoginError}
+                    />
+                </div>
+            </form>
+        </GoogleOAuthProvider>
     );
 };
 
