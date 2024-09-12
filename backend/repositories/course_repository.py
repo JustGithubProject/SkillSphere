@@ -32,7 +32,8 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules)
+                selectinload(Course.modules),
+                selectinload(Course.comments)
             )
         )
         if course:
@@ -55,7 +56,8 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules)
+                selectinload(Course.modules),
+                selectinload(Course.comments)
             )
             .offset(skip)
             .limit(limit)
@@ -80,7 +82,8 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules)
+                selectinload(Course.modules),
+                selectinload(Course.comments)
             )
             .limit(limit)
             .order_by(Course.id)

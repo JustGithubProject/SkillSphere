@@ -15,12 +15,13 @@ from sqlalchemy.orm import (
     declared_attr,
     mapped_column,
     relationship,
+    backref
 )
 
 from enums import CourseLevel
 
 class Base(DeclarativeBase):
-    abstract = True
+    __abstract__ = True
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
@@ -39,15 +40,16 @@ class User(Base):
     date_joined: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
     last_login: Mapped[datetime] = mapped_column(TIMESTAMP, default=func.now(), server_default=func.now())
     active: Mapped[bool] = mapped_column(Boolean, default=True, server_default='true')
-
+    
     courses_created = relationship('Course', back_populates='creator')
     courses_instructed = relationship(
         'Course',
         secondary='course_instructors',
         back_populates='instructors',
     )
+    comments = relationship("Comment", back_populates="user")
 
-    table_args = (
+    __table_args__ = (
         UniqueConstraint("username", "first_name", "last_name", name="idx_unique_user_first_last_names"),
     )
 
@@ -70,8 +72,9 @@ class Course(Base):
         back_populates='courses_instructed',
     )
     modules = relationship('Module', back_populates="course")
+    comments = relationship('Comment', back_populates="course")
 
-    table_args = (
+    __table_args__ = (
         CheckConstraint("price >= 0", name="check_positive_price"),
     )
 
@@ -102,4 +105,18 @@ class ContactUs(Base):
     is_checked = mapped_column(Boolean, default=False, server_default='false')
 
 
-
+class Comment(Base):    
+    id: Mapped[int] = mapped_column(primary_key=True)
+    content: Mapped[str] = mapped_column(String(200))
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    course_id: Mapped[int] = mapped_column(ForeignKey('course.id'))
+    parent_id: Mapped[int] = mapped_column(ForeignKey('comment.id'), nullable=True)  # Самоссылка на родительский комментарий
+    created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
+    
+    course = relationship("Course", back_populates="comments")
+    user = relationship("User", back_populates="comments")
+    # Самоссылочная связь: комментарий может иметь родителя
+    # parent = relationship("Comment", remote_side=[id], backref=backref("replies", cascade="all, delete-orphan"))
+    parent = relationship("Comment", remote_side=[id], back_populates="replies")
+    replies = relationship("Comment", back_populates="parent", cascade="all, delete-orphan")
