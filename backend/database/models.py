@@ -117,4 +117,6 @@ class Comment(Base):
     course = relationship("Course", back_populates="comments")
     user = relationship("User", back_populates="comments")
     # Самоссылочная связь: комментарий может иметь родителя
-    parent = relationship("Comment", remote_side=[id], backref=backref("replies", cascade="all, delete-orphan"))
+    # parent = relationship("Comment", remote_side=[id], backref=backref("replies", cascade="all, delete-orphan"))
+    parent = relationship("Comment", remote_side=[id], back_populates="replies")
+    replies = relationship("Comment", back_populates="parent", cascade="all, delete-orphan")

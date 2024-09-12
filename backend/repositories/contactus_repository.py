@@ -56,7 +56,7 @@ class ContactUsRepository:
             await session.rollaback()
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Can not delete contact us record. Error: {e}"
+                detail=f"Can not update contact us record. Error: {e}"
             )
 
     async def delete_record(
