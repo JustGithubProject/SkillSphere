@@ -1,5 +1,14 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, File, Form, Query, Response, UploadFile, status
+from fastapi import (
+    APIRouter,
+    Depends,
+    File,
+    Form,
+    Query,
+    Response,
+    UploadFile,
+    status
+)
 from authentication.schemas import UserOut
 from authentication.validation import get_current_active_auth_user
 from services.course_service import CourseService, get_course_service

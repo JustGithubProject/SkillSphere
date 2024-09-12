@@ -10,6 +10,8 @@ from authentication.custom_exceptions import (
 )
 
 from authentication.enums import UserAction
+from authentication.utils import generate_random_password
+
 
 
 class UserService:
@@ -30,6 +32,27 @@ class UserService:
                 **user_in.model_dump()
             )
             return new_user_id
+        except Exception:
+            raise failted_to_created_user_exception
+    
+    async def google_register_user(
+        self,
+        session: AsyncSession,
+        username: str,
+        first_name: str,
+        last_name: str,
+        email: str,
+    ) -> None:
+        try:
+            await self.user_repository.create_user(
+                session,
+                username=username,
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+                password_hash=generate_random_password()
+                
+            )
         except Exception:
             raise failted_to_created_user_exception
 
