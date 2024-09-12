@@ -1,4 +1,9 @@
+import random
+import string
+
 from datetime import datetime, timedelta
+
+
 import uuid
 import bcrypt
 import jwt
@@ -68,3 +73,25 @@ def validate_password(
         password=password.encode(),
         hashed_password=hashed_password
     )
+
+
+
+def generate_random_password():
+    """
+        Helper function to generate
+        random password for google
+    """
+    letters = string.ascii_letters
+    digits = string.digits
+    
+    symbols = letters + digits
+    
+    
+    generated_password = ''
+    
+    for i in range(8):
+        generated_password += random.choice(symbols)
+    
+    return generated_password
+        
+    

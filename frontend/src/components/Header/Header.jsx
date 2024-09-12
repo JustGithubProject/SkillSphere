@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import * as jwtDecodeModule from 'jwt-decode';
 import Cookies from 'js-cookie';
 
+import './Header.css';
+
 const Header = () => {
     const [username, setUsername] = useState('');
     const [isAuthorized, setIsAuthorized] = useState(false);
@@ -50,7 +52,9 @@ const Header = () => {
             <div className="ml-auto w-25">
               <nav className="site-navigation position-relative text-right" role="navigation">
                 <ul className="site-menu main-menu site-menu-dark js-clone-nav mr-auto d-none d-lg-block m-0 p-0">
-                  {/* <li className="cta"><span>{username}</span></li> */}
+                  {isAuthorized ? (
+                    <li className="username-li-style"><span>{username}</span></li>
+                  ) : null}
                   {isAuthorized ? (
                       <button  onClick={handleLogOutClick} className="btn btn-secondary">
                         Log out
