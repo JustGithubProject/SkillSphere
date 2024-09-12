@@ -2,12 +2,44 @@ from fastapi import HTTPException, status
 from sqlalchemy import exists, select
 from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from sqlalchemy import func, or_, select
 from course.schemas import CourseInput, CourseUpdate
 from database.models import Course, User
 
 
 class CourseRepository:
+    async def search_courses(
+        self,
+        session: AsyncSession,
+        is_free: bool = False,
+        search: str | None = None
+    ):
+        # Начинаем построение запроса
+        query = select(Course).options(
+            selectinload(Course.instructors),  # Загрузка инструкторов
+            selectinload(Course.creator),      # Загрузка создателя курса
+            selectinload(Course.modules)       # Загрузка модулей курса
+        )
+
+        # Поиск по полю title и description
+        if search:
+            search_term = f"%{search.lower()}%"
+            query = query.where(
+                or_(
+                    func.lower(Course.title).like(search_term),
+                    func.lower(Course.description).like(search_term)
+                )
+            )
+
+        # Фильтр по стоимости (если is_free=True, находим курсы с price = 0)
+        if is_free:
+            query = query.where(Course.price == 0)
+
+        # Выполнение запроса и возврат результатов
+        result = await session.execute(query)
+        courses = result.scalars()
+        return courses.all()
+
     async def check_is_course_exists(
         self,
         session: AsyncSession,

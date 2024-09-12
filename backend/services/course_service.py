@@ -21,6 +21,20 @@ class CourseService(FileActionMixin):
         self.course_repository = course_repository
         self.user_repository = user_repository
 
+    async def search_courses(
+        self,
+        session: AsyncSession,
+        search: str | None = None,
+        is_free: bool = False
+    ) -> list[CourseOutput]:
+        courses: list[Course] = await self.course_repository.search_courses(
+            session=session,
+            search=search,
+            is_free=is_free
+        )
+
+        return [CourseOutput.model_validate(course, from_attributes=True) for course in courses]
+    
     async def check_is_course_exists(
         self,
         session: AsyncSession,
@@ -84,17 +98,21 @@ class CourseService(FileActionMixin):
         description: str,
         price: int,
         level: CourseLevel,
-        photo_file: UploadFile,
-        video_file: UploadFile,
         session: AsyncSession,
-        user: UserOut
+        user: UserOut,
+        photo_file: UploadFile | None = None,
+        video_file: UploadFile | None = None,
     ) -> CourseOutput:
-        video_filename, video_url_key = await self._generate_file_key(video_file, VIDEOS, COURSE)
-        photo_filename, photo_url_key = await self._generate_file_key(photo_file, IMAGES, COURSE)
-
-        async with S3Client() as s3_client:
-            await self._upload_file(s3_client, video_file, video_url_key, VIDEOS)
-            await self._upload_file(s3_client, photo_file, photo_url_key, IMAGES)
+        photo_filename, photo_url_key = None, None
+        video_filename, video_url_key = None, None
+        if photo_file:
+            photo_filename, photo_url_key = await self._generate_file_key(photo_file, IMAGES, COURSE)
+        if video_file:
+            video_filename, video_url_key = await self._generate_file_key(video_file, VIDEOS, COURSE)
+        if photo_file or video_file:
+            async with S3Client() as s3_client:
+                await self._upload_file(s3_client, video_file, video_url_key, VIDEOS)
+                await self._upload_file(s3_client, photo_file, photo_url_key, IMAGES)
 
         course_input: CourseInput = CourseInput(
             title=title,

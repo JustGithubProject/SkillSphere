@@ -15,6 +15,20 @@ router = APIRouter(
 )
 
 
+@router.get("/", response_model=list[CourseOutput])
+async def search_courses(
+    course_service: Annotated[CourseService, Depends(get_course_service)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    search: str | None = Query(default=None),
+    is_free: bool = Query(default=False)
+) -> list[CourseOutput]:
+    return await course_service.search_courses(
+        session=session,
+        search=search,
+        is_free=is_free
+    )
+
+
 @router.get("/all/", response_model=list[CourseOutput])
 async def get_all_courses(
     course_service: Annotated[CourseService, Depends(get_course_service)],
