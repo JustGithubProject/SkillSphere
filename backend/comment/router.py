@@ -37,3 +37,31 @@ async def create_comment(
         user=user,
         comment_input=comment_input
     )
+
+@router.patch("/{comment_id}/", status_code=status.HTTP_204_NO_CONTENT)
+async def update_content_in_comment(
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    comment_service: Annotated[CommentService, Depends(get_comment_service)],
+    user: Annotated[UserOut, Depends(get_current_active_auth_user)],
+    comment_update: CommentUpdate,
+    comment_id: int
+) -> None:
+    return await comment_service.update_comment(
+        session=session,
+        user=user,
+        comment_id=comment_id,
+        comment_update=comment_update
+    )
+
+@router.delete("/{comment_id}/", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_comment(
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    comment_service: Annotated[CommentService, Depends(get_comment_service)],
+    user: Annotated[UserOut, Depends(get_current_active_auth_user)],
+    comment_id: int
+) -> None:
+    return await comment_service.delete_comment(
+        session=session,
+        user=user,
+        comment_id=comment_id,
+    )
