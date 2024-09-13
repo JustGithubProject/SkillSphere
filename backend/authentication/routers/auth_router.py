@@ -9,11 +9,16 @@ from fastapi import (
     status
 )
 from sqlalchemy.ext.asyncio import AsyncSession
+from redis_cache import RedisCache, get_redis_helper
 from database import session_getter
 from services.user_service import UserService, get_user_service
 from authentication.schemas import TokenInfo, UserIn, UserOut
 
-from authentication.custom_exceptions import failted_to_created_user_exception, user_already_exists_exception
+from authentication.custom_exceptions import (
+    failted_to_created_user_exception, 
+    user_already_exists_exception,
+    code_did_not_match_exception
+)
 
 from authentication.validation import (
     validate_auth_user,
@@ -42,6 +47,18 @@ router = APIRouter(
 )
 
 
+@router.post("/send/code/")
+async def send_code(
+    user_service: Annotated[UserService, Depends(get_user_service)],
+    redis_helper: Annotated[RedisCache, Depends(get_redis_helper)],
+    email: str
+) -> dict:
+    return await user_service.send_code(
+        email=email,
+        redis_helper=redis_helper
+    )
+
+
 @router.post(
     "/signup/", 
     summary="Create new user",
@@ -50,7 +67,9 @@ router = APIRouter(
 async def create_user_handler(
     session: Annotated[AsyncSession, Depends(session_getter)],
     user_service: Annotated[UserService, Depends(get_user_service)],
-    user_in: UserIn
+    redis_helper: Annotated[RedisCache, Depends(get_redis_helper)],
+    user_in: UserIn,
+    code: str,
 ):
     # Get user by email
     user: UserOut = await user_service.get_user_by_email(
@@ -63,10 +82,14 @@ async def create_user_handler(
         logger.warning(f"Attempted to create a user with an email that already exists: {user_in.email}")
         raise user_already_exists_exception
     try:
+        code_from_redis: str = await redis_helper.get(str(user_in.email))
+        if code != code_from_redis:
+            raise code_did_not_match_exception
+        await redis_helper.delete(user_in.email)
         # Create user using repository for user
         user_id = await user_service.register_user(
             session=session,
-            user_in=user_in
+            user_in=user_in,
         )
         logger.info(f"User created successfully: {user_in.username}")
         return {
