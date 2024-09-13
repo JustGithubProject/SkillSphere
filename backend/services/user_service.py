@@ -176,3 +176,5 @@ class UserService:
 # Зависимость для получения сервиса
 def get_user_service():
     return UserService(UserRepository())
+
+
