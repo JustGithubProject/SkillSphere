@@ -66,3 +66,8 @@ update_login_time_exception = HTTPException(
     detail="Failed to update user's last login time"
 
 )
+
+code_did_not_match_exception = HTTPException(
+    status_code=status.HTTP_404_NOT_FOUND,
+    detail="The code did not match"
+)
