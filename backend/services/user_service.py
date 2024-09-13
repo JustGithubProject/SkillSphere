@@ -64,8 +64,8 @@ class UserService:
                 last_name=last_name,
                 email=email,
                 password_hash=generate_random_password()
-                
             )
+        
         except Exception:
             raise failted_to_created_user_exception
 

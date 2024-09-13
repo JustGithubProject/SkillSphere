@@ -49,9 +49,38 @@ const LoginForm = () => {
         }
     };
 
-    const handleGoogleLoginSuccess = (response) => {
-        console.log('Google login success:', response);
-        // TODO: to send token to server
+    const handleGoogleLoginSuccess = async (credentialResponse) => {
+        try {
+            console.log(credentialResponse)
+            const response = await axios.get('http://localhost:8000/auth/google/callback/', {
+                params: {
+                    google_id_token: credentialResponse.credential,
+                  },
+            });
+            console.log("Google data: ", response.data);
+            // Setting tokens to cookies if returned by backend
+            if (response.data.access_token) {
+                Cookies.set("access_token", response.data.access_token, {
+                    expires: new Date(new Date().getTime() + 30 * 60 * 1000), // 30 minutes
+                    path: '/',
+                    secure: false,
+                    sameSite: 'Strict'
+                });
+            }
+            if (response.data.refresh_token) {
+                Cookies.set("refresh_token", response.data.refresh_token, {
+                    expires: 30, // 30 days
+                    path: '/',
+                    secure: false,
+                    sameSite: 'Strict'
+                });
+            }
+
+            // Redirect after login
+            window.location.href = "/";
+        } catch(error) {
+            console.log("Failed to do request", error);
+        } 
     };
 
     const handleGoogleLoginError = (error) => {
