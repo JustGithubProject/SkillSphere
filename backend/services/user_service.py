@@ -1,4 +1,6 @@
 from datetime import datetime
+import random
+from redis_cache import RedisCache
 from database.models import User
 from repositories.user_repository import UserRepository
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,7 +10,7 @@ from authentication.custom_exceptions import (
     user_not_found_exception,
     not_enough_rights_exception
 )
-
+from utils import send_code
 from authentication.enums import UserAction
 from authentication.utils import generate_random_password
 
@@ -20,6 +22,17 @@ class UserService:
         Initialize the course service with a course repository.
         """
         self.user_repository = user_repository
+
+    async def send_code(
+        self,
+        email: str,
+        redis_helper: RedisCache
+    ) -> dict:
+        code = str(random.randint(100000, 999999))
+        await send_code(email, code)
+        await redis_helper.set(key=email, value=code)
+        return {"code": code}
+
 
     async def register_user(
         self,
