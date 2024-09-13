@@ -50,3 +50,11 @@ AWS_BUCKET_NAME = os.getenv("AWS_BUCKET_NAME")
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")          #  
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")  #
 ###########################################################
+
+
+###################################################
+SMTP_USER = os.getenv("SMTP_USER")  #
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")  #
+SMTP_HOST = os.getenv("SMTP_HOST")  #
+SMTP_PORT = os.getenv("SMTP_PORT")  #
+###################################################
