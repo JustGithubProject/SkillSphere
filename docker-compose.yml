@@ -58,12 +58,12 @@ services:
       - skillsphere_database
     #  - test_database
 
-  # redis:
-  #   container_name: redis
-  #   image: redis:7.0.5-alpine
-  #   hostname: redis
-  #   ports:
-  #     - "6379:6379"
+  redis:
+    container_name: redis
+    image: redis:7.0.5-alpine
+    hostname: redis
+    ports:
+      - "6379:6379"
 
 volumes:
   postgres_database:
