@@ -5,11 +5,8 @@ from course.router import router as course_router
 from authentication.routers import router as authentication_router
 from module.router import router as module_router
 from contactus.router import router as contactus_router
-<<<<<<< HEAD
 from comment.router import router as comment_router
-=======
 from google_auth.router import router as google_router
->>>>>>> 86877f3 (Added google oauth2)
 
 
 API_V1_PREFIX = "/api/v1"
@@ -40,13 +37,14 @@ app.include_router(
 )
 
 app.include_router(
-<<<<<<< HEAD
     router=comment_router,
     prefix=API_V1_PREFIX
-=======
-    router=google_router
->>>>>>> 86877f3 (Added google oauth2)
 )
+
+app.include_router(
+    router=google_router
+)
+
 
 # Allowed origins 
 origins = [

@@ -49,10 +49,7 @@ starlette==0.38.4
 typing_extensions==4.12.2
 urllib3==2.2.2
 uvicorn==0.30.6
-<<<<<<< HEAD
-=======
 httpx==0.27.2
 cachetools==5.5.0
 google-auth==2.34.0
 requests==2.32.3
->>>>>>> 86877f3 (Added google oauth2)
