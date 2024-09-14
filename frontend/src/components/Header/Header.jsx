@@ -44,7 +44,11 @@ const Header = () => {
                   <li><a href="#home-section" className="nav-link">Home</a></li>
                   <li><a href="#courses-section" className="nav-link">Courses</a></li>
                   <li><a href="#programs-section" className="nav-link">Programs</a></li>
-                  <li><a href="#teachers-section" className="nav-link">Teachers</a></li>
+                  {isAuthorized ? (
+                     <li><a href="#teachers-section" className="nav-link">Create Course</a></li>
+                  ) : <li><a href="#teachers-section" className="nav-link">Teachers Section</a></li>}
+                  
+                 
                 </ul>
               </nav>
             </div>
