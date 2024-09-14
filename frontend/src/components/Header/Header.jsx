@@ -60,7 +60,7 @@ const Header = () => {
                         Log out
                       </button>
                   ) : null}
-                   <li className="cta"><a href="/contact-us" className="nav-link"><span>Contact Us</span></a></li>
+                   {/* <li className="cta"><a href="/contact-us" className="nav-link"><span>Contact Us</span></a></li> */}
                 </ul>
               </nav>
               <a href="#" className="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right"><span className="icon-menu h3"></span></a>

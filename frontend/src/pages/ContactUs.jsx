@@ -1,13 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios'; 
 import './css/ContactUs.css'; 
 
 const ContactUs = () => {
     const [theme, setTheme] = useState('light');
-    const nameRef = useRef(null);
-    const emailRef = useRef(null);
-    const messageRef = useRef(null);
-    const errorRef = useRef(null);
-    const successRef = useRef(null);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     const switchTheme = (e) => {
         if (e.target.checked) {
@@ -19,40 +20,48 @@ const ContactUs = () => {
         }
     };
 
-    const validate = (e) => {
+    const validateAndRequestToCreateContactUs = async (e) => {
         e.preventDefault();
-        
-        const name = nameRef.current.value;
-        const email = emailRef.current.value;
-        const message = messageRef.current.value;
 
         if (name.length < 3) {
-            errorRef.current.innerHTML = 'Your name should be at least 3 characters long.';
+            setError('Your name should be at least 3 characters long.');
             return false;
         }
 
-        if (!(email.includes('.') && email.includes('@'))) {
-            errorRef.current.innerHTML = 'Please enter a valid email address.';
+        if (!(email.includes('.') && email.includes('@')) || !emailIsValid(email)) {
+            setError('Please enter a valid email address.');
             return false;
         }
 
-        if (!emailIsValid(email)) {
-            errorRef.current.innerHTML = 'Please enter a valid email address.';
+        if (message.length < 5) {
+            setError('Please write a longer message.');
             return false;
         }
 
-        if (message.length < 15) {
-            errorRef.current.innerHTML = 'Please write a longer message.';
-            return false;
+        try {
+            await axios.post("http://127.0.0.1:8000/api/v1/contactus", 
+            {
+                full_name: name,
+                email: email,
+                message: message
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            setSuccess('Thank you! I will get back to you as soon as possible.');
+            setError('');
+            setTimeout(() => {
+                setSuccess('');
+                setName('');
+                setEmail('');
+                setMessage('');
+            }, 6000);
+        } catch (error) {
+            setError('An error occurred. Please try again later.');
+            console.error("Error: ", error);
         }
-
-        errorRef.current.innerHTML = '';
-        successRef.current.innerHTML = 'Thank you! I will get back to you as soon as possible.';
-
-        setTimeout(() => {
-            successRef.current.innerHTML = '';
-            e.target.reset();
-        }, 6000);
 
         return true;
     };
@@ -83,14 +92,15 @@ const ContactUs = () => {
                 <h1 className="contact-us-header">Contact us</h1>
                 <p className="contact-us-paragraph">Planning to visit Indonesia soon? Get insider tips on where to go, things to do, and find the best deals for your next adventure.</p>
 
-                <form id="contact-form" onSubmit={validate} className="contact-us-form">
+                <form id="contact-form" onSubmit={validateAndRequestToCreateContactUs} className="contact-us-form">
                     <label htmlFor="name" className="contact-us-label">Full name</label>
                     <input
                         type="text"
                         id="name"
                         name="name"
                         placeholder="Your Full Name"
-                        ref={nameRef}
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                         required
                         className="contact-us-input"
                     />
@@ -100,7 +110,8 @@ const ContactUs = () => {
                         id="email"
                         name="email"
                         placeholder="Your Email Address"
-                        ref={emailRef}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                         className="contact-us-input"
                     />
@@ -110,14 +121,15 @@ const ContactUs = () => {
                         placeholder="Your Message"
                         id="message"
                         name="message"
-                        ref={messageRef}
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
                         required
                         className="contact-us-textarea"
                     ></textarea>
                     <button type="submit" id="submit" name="submit" className="contact-us-button">Send</button>
                 </form>
-                <div ref={errorRef} className="contact-us-error"></div>
-                <div ref={successRef} className="contact-us-success-msg"></div>
+                {error && <div className="contact-us-error">{error}</div>}
+                {success && <div className="contact-us-success-msg">{success}</div>}
             </div>
         </div>
     );
