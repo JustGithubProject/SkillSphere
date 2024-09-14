@@ -24,6 +24,7 @@ const Footer = () => {
           </div>
           <div className="col-md-3">
             <h3>Contact</h3>
+            <a href="/contact-us" className="nav-link"><span>Contact Us</span></a>
             <p>123 Street Name, City, Country</p>
             <p>Email: example@example.com</p>
             <p>Phone: (123) 456-7890</p>

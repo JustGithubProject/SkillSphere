@@ -198,17 +198,25 @@
     border-radius: 50%;
 }
 
-.contact-us-error, .contact-us-success-msg {
-    width: 40vw;
-    margin: 0.125rem 0;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    font-family: 'Jost';
-    color: var(--secondary-color);
+
+.contact-us-error {
+    color: #FFFFFF;
+    background-color: #f87167; 
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
 .contact-us-success-msg {
-    transition-delay: 3s;
+    color: #FFFFFF;
+    background-color: #4caf50; 
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.contact-us-success-msg {
+    transition-delay: 5s;
 }
 
 /* Адаптивные стили */
