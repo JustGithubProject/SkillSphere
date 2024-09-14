@@ -73,7 +73,7 @@ const ContactUs = () => {
     return (
         <div className="contact-us-container">
             <div className="contact-us-left-col">
-                <img className="contact-us-logo" src="https://www.indonesia.travel/content/dam/indtravelrevamp/en/logo.png" alt="Logo"/>
+                <a href="/"><img className="contact-us-logo" src="https://www.indonesia.travel/content/dam/indtravelrevamp/en/logo.png" alt="Logo"/></a>
             </div>
             <div className="contact-us-right-col">
                 <div className="theme-switch-wrapper">
