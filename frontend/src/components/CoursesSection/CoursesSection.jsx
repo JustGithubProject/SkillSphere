@@ -54,7 +54,7 @@ const CoursesSection = () => {
                     <span className="course-price">${course.price}</span>
                     <div className="meta"><span className="icon-clock-o"></span>4 Lessons / 12 week</div>
                     <h3><a href="#">{course.title}</a></h3>
-                    <p>{course.description}</p>
+                    <p>{course.description.length > 100 ? `${course.description.slice(0, 100)}...` : course.description}</p>
                   </div>
                   <div className="d-flex border-top stats">
                     <div className="py-3 px-4"><span className="icon-users"></span>N/A</div>
