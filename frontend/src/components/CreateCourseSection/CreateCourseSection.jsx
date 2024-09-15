@@ -1,5 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './CreateCourseSection.css';
+
+import axios from 'axios';
+
+import Cookies from 'js-cookie';
 
 const CreateCourseSection = () => {
   const [title, setTitle] = useState('');
@@ -8,15 +12,45 @@ const CreateCourseSection = () => {
   const [level, setLevel] = useState('');
   const [photoFile, setPhotoFile] = useState(null);
   const [videoFile, setVideoFile] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const levels = [
-    { value: 'beginner', label: 'Beginner' },
-    { value: 'intermediate', label: 'Intermediate' },
-    { value: 'advanced', label: 'Advanced' },
+    { value: 'Beginner', label: 'Beginner' },
+    { value: 'Intermediate', label: 'Intermediate' },
+    { value: 'Advanced', label: 'Advanced' },
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const accessToken = Cookies.get("access_token");
+
+    // Create the URL-encoded data string
+    const formData = new URLSearchParams();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("price", price);
+    formData.append("level", level);
+
+    try {
+
+      const response = await axios.post("http://127.0.0.1:8000/api/v1/course/", formData.toString(), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': `Bearer ${accessToken}`
+
+        }
+      });
+      setSuccessMessage("Course created successfully!");
+      setErrorMessage('');
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 2000);
+    } catch(error) {
+      setErrorMessage("Failed to create course: " + error.message);
+      setSuccessMessage('');
+    }
   };
 
   return (
@@ -55,7 +89,8 @@ const CreateCourseSection = () => {
             </option>
           ))}
         </select>
-        <label className="form-file-upload">
+        {/* Remove file upload inputs since they are not supported in x-www-form-urlencoded */}
+        {/* <label className="form-file-upload">
           <input
             type="file"
             onChange={(e) => setPhotoFile(e.target.files[0])}
@@ -70,9 +105,11 @@ const CreateCourseSection = () => {
             className="form-file-input"
           />
           <span className="form-file-label">Upload Video</span>
-        </label>
+        </label> */}
         <button type="submit" className="form-button">Create Course</button>
       </form>
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 };

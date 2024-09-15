@@ -39,7 +39,6 @@ const Home = () => {
             <ProgramsSection/>
             {isAuthorized ? (<CreateCourseSection/>
             ) : <TeachersSection/>}
-            
             <BeforeWhyChooseUsSection/>
             <WhyChooseUsSection/>
             <Footer/>
