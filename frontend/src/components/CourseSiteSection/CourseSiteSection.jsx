@@ -3,11 +3,13 @@ import axios from 'axios';
 
 import CourseCommentForm from '../CourseCommentForm/CourseCommentForm';
 import Cookies from 'js-cookie';
+import * as jwtDecodeModule from 'jwt-decode';
 
 const CourseSiteSection = ({ courseID }) => {
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(false);
+    const [userID, setUserID] = useState();
 
     useEffect(() => {
         const fetchCourseByID = async () => {
@@ -29,8 +31,15 @@ const CourseSiteSection = ({ courseID }) => {
     useEffect(() => {
         const accessToken = Cookies.get("access_token");
         if (accessToken) {
-          setIsAuthorized(true);
-        }
+            setIsAuthorized(true);
+            try {
+                const decodedToken = jwtDecodeModule.jwtDecode(accessToken);
+                setUserID(decodedToken.id);
+                
+            } catch (error) {
+                console.error("Invalid token:", error);
+            }
+          }
       }, []);
 
 
@@ -70,7 +79,7 @@ const CourseSiteSection = ({ courseID }) => {
                             <ul className="comment-list">
                                 {/* Здесь можно динамически отображать комментарии */}
                             </ul>
-                            {isAuthorized ? (<CourseCommentForm/>) : null}
+                            {isAuthorized ? (<CourseCommentForm userID={userID} courseID={course.id}/>) : null}
                         </div>
                     </div>
                     <div className="col-lg-4 pl-lg-5">
