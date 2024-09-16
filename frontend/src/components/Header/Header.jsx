@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import * as jwtDecodeModule from 'jwt-decode';
 import Cookies from 'js-cookie';
 
@@ -22,7 +21,7 @@ const Header = () => {
           console.error("Invalid token:", error);
         }
       }
-    })
+    }, []); 
 
     const handleLogOutClick = () => {
         Cookies.remove("access_token");
@@ -30,7 +29,6 @@ const Header = () => {
         setUsername('');
         window.location.href = '/';
     }
-
 
     return (
       <header className="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
@@ -45,10 +43,8 @@ const Header = () => {
                   <li><a href="#courses-section" className="nav-link">Courses</a></li>
                   <li><a href="#programs-section" className="nav-link">Programs</a></li>
                   {isAuthorized ? (
-                     <li><a href="#teachers-section" className="nav-link">Create Course</a></li>
+                     <li><a href="#create-course-section" className="nav-link">Create Course</a></li>
                   ) : <li><a href="#teachers-section" className="nav-link">Teachers Section</a></li>}
-                  
-                 
                 </ul>
               </nav>
             </div>
@@ -60,11 +56,10 @@ const Header = () => {
                     <li className="username-li-style"><span>{username}</span></li>
                   ) : null}
                   {isAuthorized ? (
-                      <button  onClick={handleLogOutClick} className="btn btn-secondary">
+                      <button onClick={handleLogOutClick} className="btn btn-secondary">
                         Log out
                       </button>
                   ) : null}
-                   {/* <li className="cta"><a href="/contact-us" className="nav-link"><span>Contact Us</span></a></li> */}
                 </ul>
               </nav>
               <a href="#" className="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right"><span className="icon-menu h3"></span></a>
@@ -73,6 +68,6 @@ const Header = () => {
         </div>
       </header>
     );
-  };
+};
 
 export default Header;

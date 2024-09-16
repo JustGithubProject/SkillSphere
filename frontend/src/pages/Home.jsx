@@ -22,7 +22,8 @@ const Home = () => {
       if (accessToken) {
         setIsAuthorized(true);
       }
-    })
+    }, []); 
+
     return (
         <div className="site-wrap">
             <div className="site-mobile-menu site-navbar-target">
@@ -34,13 +35,28 @@ const Home = () => {
         <div className="site-mobile-menu-body"></div>
         </div>
             <Header/>
-            <IntroSection/>
-            <CoursesSection/>
-            <ProgramsSection/>
-            {isAuthorized ? (<CreateCourseSection/>
-            ) : <TeachersSection/>}
+            <div id="home-section">
+                <IntroSection/>
+            </div>
+            <div id="courses-section">
+                <CoursesSection/>
+            </div>
+            <div id="programs-section">
+                <ProgramsSection/>
+            </div>
+            {isAuthorized ? (
+                <div id="create-course-section">
+                    <CreateCourseSection/>
+                </div>
+            ) : (
+                <div id="teachers-section">
+                    <TeachersSection/>
+                </div>
+            )}
             <BeforeWhyChooseUsSection/>
-            <WhyChooseUsSection/>
+            <div id="why-choose-us-section">
+                <WhyChooseUsSection/>
+            </div>
             <Footer/>
         </div>
     );
