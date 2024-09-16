@@ -77,13 +77,7 @@ async def google_callback(
         
     
     access_token = create_access_token(
-        UserIn(
-            username=name,
-            email=email,
-            password_hash=user.password_hash,
-            first_name=user.first_name,
-            last_name=user.last_name
-        ),
+        user,
         False
     )
 

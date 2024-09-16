@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import CourseCommentForm from '../CourseCommentForm/CourseCommentForm';
+import Cookies from 'js-cookie';
+
 const CourseSiteSection = ({ courseID }) => {
     const [course, setCourse] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isAuthorized, setIsAuthorized] = useState(false);
 
     useEffect(() => {
         const fetchCourseByID = async () => {
@@ -20,6 +24,15 @@ const CourseSiteSection = ({ courseID }) => {
 
         fetchCourseByID();
     }, [courseID]);
+
+
+    useEffect(() => {
+        const accessToken = Cookies.get("access_token");
+        if (accessToken) {
+          setIsAuthorized(true);
+        }
+      }, []);
+
 
     if (loading) {
         return <p>Loading...</p>;
@@ -57,32 +70,7 @@ const CourseSiteSection = ({ courseID }) => {
                             <ul className="comment-list">
                                 {/* Здесь можно динамически отображать комментарии */}
                             </ul>
-                            {/* END comment-list */}
-                            <div className="comment-form-wrap pt-5">
-                                <h3 className="mb-5">Leave a comment</h3>
-                                <form action="#" className="p-5 bg-light">
-                                    <div className="form-group">
-                                        <label htmlFor="name">Name *</label>
-                                        <input type="text" className="form-control" id="name" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="email">Email *</label>
-                                        <input type="email" className="form-control" id="email" />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="website">Website</label>
-                                        <input type="url" className="form-control" id="website" />
-                                    </div>
-
-                                    <div className="form-group">
-                                        <label htmlFor="message">Message</label>
-                                        <textarea id="message" cols="30" rows="10" className="form-control"></textarea>
-                                    </div>
-                                    <div className="form-group">
-                                        <input type="submit" value="Post Comment" className="btn btn-primary" />
-                                    </div>
-                                </form>
-                            </div>
+                            {isAuthorized ? (<CourseCommentForm/>) : null}
                         </div>
                     </div>
                     <div className="col-lg-4 pl-lg-5">

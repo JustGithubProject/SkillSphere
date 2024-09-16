@@ -1,5 +1,5 @@
 from datetime import timedelta
-from authentication.schemas import UserIn
+from authentication.schemas import UserIn, UserOut
 from authentication.utils import encode_jwt
 from config import (
     auth_jwt_access_token_expire_minutes,
@@ -27,9 +27,10 @@ def create_jwt(
     )
 
 
-def create_access_token(user: UserIn, is_admin: bool) -> str:
+def create_access_token(user: UserOut, is_admin: bool) -> str:
     jwt_payload = {
         # subject
+        "id": user.id,
         "sub": user.email,
         "username": user.username,
         "email": user.email,
