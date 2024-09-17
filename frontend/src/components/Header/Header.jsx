@@ -40,11 +40,11 @@ const Header = () => {
               <nav className="site-navigation position-relative text-right" role="navigation">
                 <ul className="site-menu main-menu js-clone-nav mx-auto d-none d-lg-block m-0 p-0">
                   <li><a href="#home-section" className="nav-link">Home</a></li>
-                  <li><a href="#courses-section" className="nav-link">Courses</a></li>
+                  <li><a href="/courses" className="nav-link">Courses</a></li>
                   <li><a href="#programs-section" className="nav-link">Programs</a></li>
                   {isAuthorized ? (
                      <li><a href="#create-course-section" className="nav-link">Create Course</a></li>
-                  ) : <li><a href="#teachers-section" className="nav-link">Teachers Section</a></li>}
+                  ) : null}
                 </ul>
               </nav>
             </div>

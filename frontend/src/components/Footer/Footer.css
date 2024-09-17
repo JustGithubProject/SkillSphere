@@ -26,7 +26,7 @@
   font-size: 22px;
   margin-bottom: 20px;
   font-weight: bold;
-  color: #f39c12;
+  color: #ecf0f1;
 }
 
 .footer-text {
@@ -49,11 +49,11 @@
 
 .footer-link:hover {
   text-decoration: underline;
-  color: #f39c12;
+  color: #ecf0f1;
 }
 
 .footer-contact-link {
-  color: #3498db;
+  color: #ecf0f1;
   text-decoration: none;
 }
 

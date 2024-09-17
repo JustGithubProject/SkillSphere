@@ -1,3 +1,7 @@
+/*
+    IT WILL BE LINE ABOUT PAGE (Ознакомительная страница)
+*/
+
 import React, { useState, useEffect } from 'react';
 
 import Header from '../components/Header/Header';
@@ -38,9 +42,9 @@ const Home = () => {
             <div id="home-section">
                 <IntroSection/>
             </div>
-            <div id="courses-section">
+            {/* <div id="courses-section">
                 <CoursesSection/>
-            </div>
+            </div> */}
             <div id="programs-section">
                 <ProgramsSection/>
             </div>
@@ -48,11 +52,7 @@ const Home = () => {
                 <div id="create-course-section">
                     <CreateCourseSection/>
                 </div>
-            ) : (
-                <div id="teachers-section">
-                    <TeachersSection/>
-                </div>
-            )}
+            ) : null}
             <BeforeWhyChooseUsSection/>
             <div id="why-choose-us-section">
                 <WhyChooseUsSection/>
