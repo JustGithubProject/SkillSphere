@@ -17,7 +17,7 @@ const BeforeWhyChooseUsSection = () => {
                         <h3 className="mb-4">Jerome Jensen</h3>
                         <blockquote>
                             <p>
-                                &ldquo; Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum rem soluta sit eius necessitatibus voluptate excepturi beatae ad eveniet sapiente impedit quae modi quo provident odit molestias! Rem reprehenderit assumenda &rdquo;
+                                &ldquo; Explore our expertly designed courses crafted to elevate your skills and knowledge. Discover a world of learning with our tailored programs that meet your needs and exceed expectations. Join us to unlock new opportunities and achieve your goals with confidence!&rdquo;
                             </p>
                         </blockquote>
                     </div>
