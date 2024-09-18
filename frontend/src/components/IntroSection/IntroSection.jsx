@@ -29,7 +29,6 @@ const IntroSection = () => {
                 <div className="col-lg-6 mb-4">
                   <h1 data-aos="fade-up" data-aos-delay="100">Learn From The Expert</h1>
                   <p className="mb-4" data-aos="fade-up" data-aos-delay="200">Welcome to our comprehensive learning platform, where you can elevate your skills and knowledge through expertly crafted courses.</p>
-                  <p data-aos="fade-up" data-aos-delay="300"><a href="#" className="btn btn-primary py-3 px-5 btn-pill">Admission Now</a></p>
                 </div>
                 {!isAuthorized &&
                   <div className="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="500">
