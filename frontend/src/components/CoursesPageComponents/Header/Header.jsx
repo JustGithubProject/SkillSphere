@@ -79,17 +79,9 @@ const Header = () => {
                             </button>
                             <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                                 <div className="navbar-nav py-0">
-                                    <Link to="/index" className="nav-item nav-link">Home</Link>
-                                    <Link to="/about" className="nav-item nav-link">About</Link>
+                                    <Link to="/" className="nav-item nav-link">Home</Link>
                                     <Link to="/courses" className="nav-item nav-link active">Courses</Link>
                                     <Link to="/teachers" className="nav-item nav-link">Teachers</Link>
-                                    <div className="nav-item dropdown">
-                                        <a href="#" className="nav-link dropdown-toggle" data-toggle="dropdown">Blog</a>
-                                        <div className="dropdown-menu rounded-0 m-0">
-                                            <Link to="/blog" className="dropdown-item">Blog List</Link>
-                                            <Link to="/single" className="dropdown-item">Blog Detail</Link>
-                                        </div>
-                                    </div>
                                     <Link to="/contact" className="nav-item nav-link">Contact</Link>
                                 </div>
                                 <a className="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" href="">Join Now</a>
