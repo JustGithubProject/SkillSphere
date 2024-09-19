@@ -48,6 +48,7 @@ class User(Base):
         back_populates='instructors',
     )
     comments = relationship("Comment", back_populates="user")
+    courses = relationship('Course', secondary='course_students', back_populates='students')
 
     __table_args__ = (
         UniqueConstraint("username", "first_name", "last_name", name="idx_unique_user_first_last_names"),
@@ -71,12 +72,21 @@ class Course(Base):
         secondary='course_instructors',
         back_populates='courses_instructed',
     )
+    students = relationship('User', secondary='course_students', back_populates='courses')
     modules = relationship('Module', back_populates="course")
     comments = relationship('Comment', back_populates="course")
 
     __table_args__ = (
         CheckConstraint("price >= 0", name="check_positive_price"),
     )
+
+
+# Таблица связи курсов и учащихся
+class CourseStudents(Base):
+    __tablename__ = 'course_students'
+    
+    course_id: Mapped[int] = mapped_column(ForeignKey('course.id'))
+    student_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
 
 
 # Таблица связи курсов и инструкторов
@@ -120,3 +130,11 @@ class Comment(Base):
     # parent = relationship("Comment", remote_side=[id], backref=backref("replies", cascade="all, delete-orphan"))
     parent = relationship("Comment", remote_side=[id], back_populates="replies")
     replies = relationship("Comment", back_populates="parent", cascade="all, delete-orphan")
+
+
+class Payment(Base):
+    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    email: Mapped[str]
+    course_id: Mapped[int] = mapped_column(ForeignKey("course.id"))
+    order_id: Mapped[str]
+    intent: Mapped[str]
