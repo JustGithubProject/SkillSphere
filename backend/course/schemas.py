@@ -28,6 +28,7 @@ class CourseOutput(CourseInput):
     creator: "UserBase"
     instructors: list["UserBase"] = []
     modules: list["ModuleOutput"] = []
+    students: list["UserBase"] = []
     # comments: list["CommentOutput"] = []
 
 
