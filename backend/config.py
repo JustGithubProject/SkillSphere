@@ -58,3 +58,9 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")  #
 SMTP_HOST = os.getenv("SMTP_HOST")  #
 SMTP_PORT = os.getenv("SMTP_PORT")  #
 ###################################################
+
+
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+BASE_URL = os.getenv("BASE_URL") 
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY") 
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
