@@ -1,7 +1,5 @@
 from typing import Annotated
 
-
-from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import (
     APIRouter,
@@ -26,10 +24,7 @@ from authentication.actions import (
     create_refresh_token
 )
 
-from config import (
-    GOOGLE_CLIENT_ID,
-    GOOGLE_CLIENT_SECRET
-)
+from config import GOOGLE_CLIENT_ID
 
 
 router = APIRouter(

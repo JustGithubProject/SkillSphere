@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 
-const PayPalForm = () => {
+const PayPalForm = ({ price }) => {
     const [message, setMessage] = useState('');
 
     const createOrder = async (data, actions) => {

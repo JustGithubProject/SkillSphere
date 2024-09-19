@@ -7,7 +7,9 @@ from module.router import router as module_router
 from contactus.router import router as contactus_router
 from comment.router import router as comment_router
 from google_auth.router import router as google_router
+from paypal.router import router as paypal_router
 from stripe_payment.router import router as stripe_router
+
 
 
 API_V1_PREFIX = "/api/v1"
@@ -47,10 +49,13 @@ app.include_router(
 )
 
 app.include_router(
+    router=paypal_router
+)
+
+app.include_router(
     router=stripe_router,
     prefix=API_V1_PREFIX
 )
-
 
 # Allowed origins 
 origins = [

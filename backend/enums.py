@@ -9,3 +9,9 @@ class CourseLevel(Enum):
 class FileType(Enum):
     VIDEO = "video"
     IMAGE = "image"
+    
+
+class Currency(Enum):
+    USD = "USD"
+    EUR = "EUR"
+    UAH = "UAH"

@@ -1,5 +1,7 @@
 import React from 'react';
 
+import PayPalForm from '../../Paypal/PaypalForm';
+
 const courses = [
   { id: 1, title: 'Web design & development courses for beginner', image: 'img/course-1.jpg', students: 25, duration: '01h 30m', rating: 4.5, reviews: 250, price: '$99' },
   { id: 2, title: 'Web design & development courses for beginner', image: 'img/course-2.jpg', students: 25, duration: '01h 30m', rating: 4.5, reviews: 250, price: '$99' },
@@ -32,6 +34,9 @@ const SetCourses = () => {
                     <div className="d-flex justify-content-between">
                       <h6 className="m-0"><i className="fa fa-star text-primary mr-2"></i>{course.rating} <small>({course.reviews})</small></h6>
                       <h5 className="m-0">{course.price}</h5>
+                    </div>
+                    <div>
+                      <PayPalForm price={course.price}/>
                     </div>
                   </div>
                 </div>
