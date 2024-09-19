@@ -58,3 +58,7 @@ SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")  #
 SMTP_HOST = os.getenv("SMTP_HOST")  #
 SMTP_PORT = os.getenv("SMTP_PORT")  #
 ###################################################
+
+
+
+PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com"

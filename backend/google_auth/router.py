@@ -1,7 +1,5 @@
 from typing import Annotated
 
-
-from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import (
     APIRouter,
