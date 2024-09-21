@@ -148,3 +148,5 @@ def get_current_active_auth_user_admin(
     if user.admin:
         return user
     raise not_enough_rights_exception
+
+

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
-
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -12,11 +11,10 @@ const PayPalForm = ({ price }) => {
         try {
             const accessToken = Cookies.get("access_token");
             const response = await axios.post(
-                "http://localhost:8000/paypal/create-order",
+                "http://127.0.0.1:8000/paypal/create-order/",
                 {
                     price: price.slice(1),
-                    currency_code: "USD", // FOR A WHILE WILL BE USD AS DEFAULT
-                    access_token: accessToken 
+                    currency_code: "USD"
                 },
                 {
                     withCredentials: true,
@@ -25,18 +23,21 @@ const PayPalForm = ({ price }) => {
                         'Authorization': `Bearer ${accessToken}`
                     }
                 }
-
             );
-            
+
             console.log("Response data: ", response.data);
 
-            return response.data.id;
+            if (response.data && response.data.id) {
+                return response.data.id;
+            } else {
+                throw new Error("Order ID not found in response");
+            }
 
         } catch(error) {
-            console.log("Error: ", error);
+            console.error("Error creating order: ", error);
+            setMessage(`Sorry, your transaction could not be processed...<br><br>${error.message}`);
+            return null;
         }
-
-            
     };
 
     return (
