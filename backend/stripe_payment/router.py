@@ -1,11 +1,11 @@
-
+import stripe
 from typing import Annotated
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import APIRouter, Depends, HTTPException, Request, responses
-import stripe
 from authentication.schemas import UserOut
 from authentication.validation import get_current_active_auth_user
+from utils import send_thank_you
 from services.user_service import UserService, get_user_service
 from database.models import Course, Payment, User
 from course.schemas import CourseOutput
@@ -27,17 +27,11 @@ stripe.api_key = STRIPE_SECRET_KEY
 
 @router.get("/buy/course/{course_id}/")
 async def buy_course(
-    course_service: Annotated[CourseService, Depends(get_course_service)],
     session: Annotated[AsyncSession, Depends(session_getter)],
     course_id: int,
-    # user: Annotated[UserOut, Depends(get_current_active_auth_user)],
+    user: Annotated[UserOut, Depends(get_current_active_auth_user)],
 ):
     course: Course = await session.get(Course, course_id)
-    # course: CourseOutput = await course_service.get_course_by_id(
-    #     session=session,
-    #     course_id=course_id,
-    #     user=user
-    # )
 
     checkout_session = stripe.checkout.Session.create(
         line_items=[
@@ -52,20 +46,18 @@ async def buy_course(
                 "quantity": 1,
             }
         ],
-        # metadata={
-        #     "user_id": user.id,
-        #     "email": user.email,
-        #     "course_id": course_id
-        # },
         metadata={
-            "user_id": 28,
-            "email": "user1@example.com",
+            "user_id": user.id,
             "course_id": course_id
         },
+        # metadata={
+        #     "user_id": 28,
+        #     "course_id": course_id
+        # },
         mode="payment",
         success_url=BASE_URL + "/success/",
         cancel_url=BASE_URL + "/cancel/",
-        customer_email="user1@example.com"
+        customer_email=user.email
     )
 
     return responses.RedirectResponse(checkout_session.url, status_code=303)
@@ -74,8 +66,8 @@ async def buy_course(
 async def stripe_success(
     request: Request,
     session: Annotated[AsyncSession, Depends(session_getter)],
-    course_service: Annotated[CourseService, Depends(get_course_service)],
-    user_service: Annotated[UserService, Depends(get_user_service)],
+    # course_service: Annotated[CourseService, Depends(get_course_service)],
+    # user_service: Annotated[UserService, Depends(get_user_service)],
 ):
     payload = await request.body()
     sig_header = request.headers.get("stripe-signature")
@@ -97,7 +89,6 @@ async def stripe_success(
         checkout_session = event["data"]["object"]
 
         user_id = int(checkout_session["metadata"]["user_id"])
-        user_email = checkout_session["metadata"]["email"]
         course_id = int(checkout_session["metadata"]["course_id"])
         order_id = checkout_session["id"]
         payment_intent = checkout_session["payment_intent"]
@@ -126,14 +117,15 @@ async def stripe_success(
         # Создание платежа в бд
         payment: Payment = Payment(
             user_id=user_id,
-            email=user_email,
+            email=user.email,
             course_id=course_id,
             order_id=order_id,
             intent=payment_intent,
         )
         session.add(payment)
         await session.commit()
-        # TODO: send email in background task
+
+        await send_thank_you(user.email, course.title)
 
     return {"status": "success", "message": "User added to course"}
 
