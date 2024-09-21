@@ -65,7 +65,8 @@ class CourseRepository:
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
                 selectinload(Course.modules),
-                selectinload(Course.comments)
+                selectinload(Course.comments),
+                selectinload(Course.students)
             )
         )
         if course:

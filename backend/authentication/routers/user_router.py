@@ -9,6 +9,7 @@ from fastapi import (
     status
 )
 from sqlalchemy.ext.asyncio import AsyncSession
+from services.course_service import CourseService, get_course_service
 from database import session_getter
 from services.user_service import UserService, get_user_service
 from authentication.schemas import UserIn, UserOut
@@ -81,11 +82,12 @@ async def ban_user(
     admin: Annotated[UserOut, Depends(get_current_active_auth_user_admin)],
     email: str
 ):
-    return user_service.update_user_ban_status_by_email(
+    return await user_service.update_user_ban_status_by_email(
         session=session, 
         admin=admin, 
         email=email,
-        action=UserAction.BAN)
+        action=UserAction.BAN
+    )
     
     
 @router.post(
@@ -99,8 +101,27 @@ async def unban_user(
     admin: Annotated[UserOut, Depends(get_current_active_auth_user_admin)],
     email: str
 ):
-    return user_service.update_user_ban_status_by_email(
+    return await user_service.update_user_ban_status_by_email(
         session=session, 
         admin=admin, 
         email=email,
-        action=UserAction.UNBAN)
+        action=UserAction.UNBAN
+    )
+
+
+@router.post(
+    "/join/course/", 
+    status_code=status.HTTP_202_ACCEPTED, 
+    summary="Join the course by course_id"
+)
+async def join_the_course(
+    course_id: Annotated[int, Query()],
+    user: Annotated[UserOut, Depends(get_current_active_auth_user)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    course_service: Annotated[CourseService, Depends(get_course_service)],
+) -> None:
+    return await course_service.join_the_course(
+        course_id=course_id,
+        session=session,
+        user=user
+    )

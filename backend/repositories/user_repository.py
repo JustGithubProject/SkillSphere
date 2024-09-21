@@ -7,7 +7,8 @@ from authentication.schemas import UserOut
 from authentication.utils import hash_password
 from authentication.custom_exceptions import (
     failted_to_created_user_exception,
-    update_ban_status_exception
+    update_ban_status_exception,
+    user_not_found_exception
 )
 from database.models import User
 from authentication.enums import UserAction
@@ -41,11 +42,15 @@ class UserRepository:
     async def get_user_by_email(self, session: AsyncSession, email: str) -> User:
         stmt = select(User).where(User.email==email)
         user: User = await session.scalars(stmt)
+        if not user:
+            raise user_not_found_exception
         return user.one_or_none()
     
     async def get_user_by_username(self, session: AsyncSession, username: str) -> User:
         stmt = select(User).where(User.username==username)
         user: User = await session.scalars(stmt)
+        if not user:
+            raise user_not_found_exception
         return user.one_or_none()
     
     async def get_all_users(

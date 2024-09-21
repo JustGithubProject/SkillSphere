@@ -11,6 +11,7 @@ from repositories.user_repository import UserRepository
 from repositories.course_repository import CourseRepository
 from database.models import Course, User
 from course.schemas import CourseInput, CourseOutput, CourseUpdate
+from sqlalchemy.orm import selectinload
 
 
 class CourseService(FileActionMixin):
@@ -253,6 +254,25 @@ class CourseService(FileActionMixin):
             )
             return updated_course
         raise not_enough_rights_exception
+    
+    async def join_the_course(
+        self,
+        session: AsyncSession,
+        course_id: int,
+        user: UserOut
+    ) -> None:
+        course: Course = await self.course_repository.get_course_by_id(
+            session=session,
+            course_id=course_id
+        )
+        model_user: User = await self.user_repository.get_user_by_email(
+            session=session,
+            email=user.email
+        )
+        course.students.append(model_user)
+        await session.commit()
+
+        return None
 
 def get_course_service():
     return CourseService(CourseRepository(), UserRepository()) 
