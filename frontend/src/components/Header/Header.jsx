@@ -45,9 +45,6 @@ const Header = () => {
                   {isAuthorized ? (
                      <li><a href="#create-course-section" className="nav-link">Create Course</a></li>
                   ) : null}
-                  {isAuthorized ? (
-                     <li><a href="/paypal/top-up-balance/" className="nav-link">Top up balance</a></li>
-                  ) : null}
                 </ul>
               </nav>
             </div>

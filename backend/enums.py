@@ -6,12 +6,13 @@ class CourseLevel(Enum):
     INTERMEDIATE = "Intermediate"
     ADVANCED = "Advanced"
 
+
 class FileType(Enum):
     VIDEO = "video"
     IMAGE = "image"
     
 
-class Currency(Enum):
+class Currency(str, Enum):
     USD = "USD"
     EUR = "EUR"
     UAH = "UAH"

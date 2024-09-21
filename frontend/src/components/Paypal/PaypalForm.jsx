@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 
 const PayPalForm = ({ price }) => {
     const [message, setMessage] = useState('');
+    console.log(price);
 
     const createOrder = async (data, actions) => {
         try {
@@ -13,7 +14,7 @@ const PayPalForm = ({ price }) => {
             const response = await axios.post(
                 "http://localhost:8000/paypal/create-order",
                 {
-                    price: price,
+                    price: price.slice(1),
                     currency_code: "USD", // FOR A WHILE WILL BE USD AS DEFAULT
                     access_token: accessToken 
                 },
@@ -26,10 +27,13 @@ const PayPalForm = ({ price }) => {
                 }
 
             );
-            console.log("Success");
+            
+            console.log("Response data: ", response.data);
+
+            return response.data.id;
 
         } catch(error) {
-            console.log("Failed to top-up-balance: ", error);
+            console.log("Error: ", error);
         }
 
             
@@ -43,11 +47,10 @@ const PayPalForm = ({ price }) => {
                         style={{
                             shape: 'rect',
                             layout: 'vertical',
-                            color: 'gold',
+                            color: 'blue',
                             label: 'paypal',
                         }}
                         createOrder={createOrder}
-                        onApprove={onApprove}
                         onError={(err) => {
                             console.error(err);
                             setMessage(`Sorry, your transaction could not be processed...<br><br>${err}`);

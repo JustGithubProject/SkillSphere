@@ -38,22 +38,35 @@ async def paypal_create_order(
     session: Annotated[AsyncSession, Depends(session_getter)],
     user: Annotated[UserOut, Depends(get_current_active_auth_user)],
     paypal_data: PayPalOrderData
-    
 ):
     headers = get_paypal_headers(paypal_data.access_token)
     
     async with httpx.AsyncClient() as client:
-        response = await client.post(
-            PAYPAL_BASE_URL + "/v2/checkout/orders",
-            headers=headers,
-            json=get_paypal_json(
-                paypal_data.price,
-                paypal_data.currency_code
+        try:
+            response = await client.post(
+                PAYPAL_BASE_URL + "/v2/checkout/orders",
+                headers=headers,
+                json=get_paypal_json(
+                    paypal_data.price,
+                    str(paypal_data.currency_code.value)
+                )
             )
-        )
+            response.raise_for_status()
+            
+            order_id = response.json().get("id")
+            if order_id is None:
+                raise HTTPException(status_code=400, detail="Order ID not found in response")
+            
+        except httpx.HTTPStatusError as ex:
+            raise HTTPException(status_code=ex.response.status_code, detail=ex.response.json())
+        
+        except Exception as ex:
+            raise HTTPException(status_code=500, detail=str(ex))
+        
+    # TODO: additional logic to send 90% of the money to the owner of course, and 10% to the site owner.
     
-    return response
-    
+    return response.json()
+
     
     
     
