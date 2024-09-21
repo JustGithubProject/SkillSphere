@@ -20,14 +20,17 @@ async def check_is_user_a_course_staff(
     return True
 
 
-def get_email_template_dashboard(email, code):
+def generate_email_template(subject: str, recipient_email: str, body: str) -> EmailMessage:
     email_message = EmailMessage()
-    email_message['Subject'] = 'Подтверждение електронной почты'
+    email_message['Subject'] = subject
     email_message['From'] = SMTP_USER
-    email_message['TO'] = email
+    email_message['To'] = recipient_email
+    email_message.set_content(body, subtype='html')
+    return email_message
 
-    email_message.set_content(
-        f'''
+
+def get_dashboard_email_body(code: str) -> str:
+    return f'''
         <div style="font-family: Arial, sans-serif; line-height: 1.5;">
             <p>Спасибо за регистрацию в нашем приложении.</p>
             <p>Ваш код подтверждения регистрации:</p>
@@ -37,16 +40,43 @@ def get_email_template_dashboard(email, code):
             <br>
             <p>С уважением,<br>Команда SkillSphere</p>
         </div>
-        ''',
-        subtype='html'
-    )
-    return email_message
+    '''
 
 
-async def send_code(email, code):
-    # Логика отправки письма
-    email_message = get_email_template_dashboard(email, code)
-    with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT) as server:
-        server.login(SMTP_USER, SMTP_PASSWORD)
-        server.send_message(email_message)
-    logging.info(f"Sending email to {email}")
+def get_thank_you_email_body(course_name: str) -> str:
+    return f'''
+        <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+            <p>Здравствуйте,</p>
+            <p>Спасибо за покупку курса <strong>{course_name}</strong>!</p>
+            <p>Мы рады, что вы выбрали наш образовательный продукт. Надеемся, что курс принесет вам много пользы и новых знаний.</p>
+            <p>Если у вас возникнут вопросы или предложения, не стесняйтесь обращаться к нам.</p>
+            <br>
+            <p>С уважением,<br>Команда SkillSphere</p>
+        </div>
+    '''
+
+
+async def send_email(recipient_email: str, subject: str, body: str):
+    email_message = generate_email_template(subject, recipient_email, body)
+    try:
+        with smtplib.SMTP_SSL(SMTP_HOST, SMTP_PORT) as server:
+            server.login(SMTP_USER, SMTP_PASSWORD)
+            server.send_message(email_message)
+        logging.info(f"Email sent to {recipient_email}")
+    except Exception as e:
+        logging.error(f"Failed to send email to {recipient_email}: {e}")
+
+
+async def send_code(email: str, code: str):
+    subject = "Подтверждение электронной почты"
+    body = get_dashboard_email_body(code)
+    await send_email(email, subject, body)
+
+
+async def send_thank_you(email: str, course_name: str):
+    subject = "Спасибо за покупку курса!"
+    body = get_thank_you_email_body(course_name)
+    await send_email(email, subject, body)
+    print("EMAIL SENT")
+
+
