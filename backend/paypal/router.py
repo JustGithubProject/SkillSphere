@@ -18,13 +18,13 @@ from authentication.schemas import UserOut
 from services.user_service import UserService, get_user_service
 
 
-from utils import (
+from paypal.utils import (
     get_paypal_headers,
     get_paypal_json
 )
 from config import PAYPAL_BASE_URL
 from database import session_getter
-from schemas import PayPalOrderData
+from paypal.schemas import PayPalOrderData
 
 
 router = APIRouter(
