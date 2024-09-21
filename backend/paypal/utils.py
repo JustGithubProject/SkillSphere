@@ -20,7 +20,7 @@ def get_paypal_headers(access_token: str) -> dict:
 
 def get_paypal_json(
     price: str,
-    currency_code: Currency
+    currency_code: str
 ) -> str:
     data = {
         "intent": "CAPTURE",

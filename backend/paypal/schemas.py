@@ -1,6 +1,5 @@
-from pydantic import BaseModel
-
 from enums import Currency
+from pydantic import BaseModel
 
 
 class PayPalOrderData(BaseModel):
