@@ -1,7 +1,15 @@
+from enums import Currency
 import json
 import uuid
 
-from enums import Currency
+import requests
+from requests.auth import HTTPBasicAuth
+
+from config import (
+    PAYPAL_BASE_URL,
+    PAYPAL_CLIENT_ID,
+    PAYPAL_SECRET_KEY
+)
 
 
 def generate_paypal_unique_id() -> str:
@@ -14,7 +22,6 @@ def get_paypal_headers(access_token: str) -> dict:
         'PayPal-Request-Id': f'{generate_paypal_unique_id()}',
         'Authorization': f'Bearer {access_token}',
     }
-
 
 
 def get_paypal_json(
@@ -64,3 +71,17 @@ def get_paypal_json(
     }
     
     return json.dumps(data, indent=4)
+
+
+def get_paypal_access_token():
+    response = requests.post(
+        PAYPAL_BASE_URL + "/v1/oauth2/token",
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        data={
+            "grant_type": "client_credentials"
+        },
+        auth=HTTPBasicAuth(PAYPAL_CLIENT_ID, PAYPAL_SECRET_KEY)
+    )
+    return response

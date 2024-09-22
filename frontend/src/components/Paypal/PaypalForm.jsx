@@ -3,7 +3,7 @@ import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const PayPalForm = ({ price }) => {
+const PayPalForm = ({ price, course_id }) => {
     const [message, setMessage] = useState('');
     console.log(price);
 
@@ -28,6 +28,12 @@ const PayPalForm = ({ price }) => {
             console.log("Response data: ", response.data);
 
             if (response.data && response.data.id) {
+                // Adding extra param
+                let existingURL = response.data.links[1].href;
+                let currentURL = new URL(existingURL);
+                currentURL.searchParams.append("course_id", course_id);
+            
+                window.location.href = currentURL.toString()
                 return response.data.id;
             } else {
                 throw new Error("Order ID not found in response");

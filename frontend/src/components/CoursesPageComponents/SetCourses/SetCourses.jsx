@@ -36,7 +36,7 @@ const SetCourses = () => {
                       <h5 className="m-0">{course.price}</h5>
                     </div>
                     <div>
-                      <PayPalForm price={course.price}/>
+                      <PayPalForm price={course.price} course_id={course.id}/>
                     </div>
                   </div>
                 </div>
