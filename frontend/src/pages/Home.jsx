@@ -1,31 +1,41 @@
-/*
-    IT WILL BE LINE ABOUT PAGE (Ознакомительная страница)
-*/
-
 import React, { useState, useEffect } from 'react';
-
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
-
 import IntroSection from '../components/IntroSection/IntroSection';
-import CoursesSection from '../components/CoursesSection/CoursesSection';
 import ProgramsSection from '../components/ProgramsSection/ProgramsSection';
 import CreateCourseSection from '../components/CreateCourseSection/CreateCourseSection';
-import TeachersSection from '../components/TeachersSection/TeachersSection';
 import BeforeWhyChooseUsSection from '../components/BeforeWhyChooseUsSection/BeforeWhyChooseUsSection';
 import WhyChooseUsSection from '../components/WhyChooseUsSection/WhyChooseUsSection';
-
-
 import Cookies from 'js-cookie';
+
+import axios from 'axios';
 
 const Home = () => {
     const [isAuthorized, setIsAuthorized] = useState(false);
 
     useEffect(() => {
-      const accessToken = Cookies.get("access_token");
-      if (accessToken) {
-        setIsAuthorized(true);
-      }
+        const accessToken = Cookies.get("access_token");
+        if (accessToken) {
+            setIsAuthorized(true);
+        }
+
+        const checkUrlParams = () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tokenParam = urlParams.get('token');
+            const payerIDParam = urlParams.get('PayerID');
+            const courseID = urlParams.get("course_id");
+
+            if (tokenParam && payerIDParam) {
+                // TODO: logic to handle token and payerID
+                c
+            }
+        };
+
+        checkUrlParams();
+
+        const intervalId = setInterval(checkUrlParams, 1000);
+
+        return () => clearInterval(intervalId);
     }, []); 
 
     return (
@@ -33,31 +43,31 @@ const Home = () => {
             <div className="site-mobile-menu site-navbar-target">
                 <div className="site-mobile-menu-header">
                     <div className="site-mobile-menu-close mt-3">
-                    <span className="icon-close2 js-menu-toggle"></span>
+                        <span className="icon-close2 js-menu-toggle"></span>
+                    </div>
                 </div>
+                <div className="site-mobile-menu-body"></div>
             </div>
-        <div className="site-mobile-menu-body"></div>
-        </div>
-            <Header/>
+            <Header />
             <div id="home-section">
-                <IntroSection/>
+                <IntroSection />
             </div>
             {/* <div id="courses-section">
                 <CoursesSection/>
             </div> */}
             <div id="programs-section">
-                <ProgramsSection/>
+                <ProgramsSection />
             </div>
             {isAuthorized ? (
                 <div id="create-course-section">
-                    <CreateCourseSection/>
+                    <CreateCourseSection />
                 </div>
             ) : null}
-            <BeforeWhyChooseUsSection/>
+            <BeforeWhyChooseUsSection />
             <div id="why-choose-us-section">
-                <WhyChooseUsSection/>
+                <WhyChooseUsSection />
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 };

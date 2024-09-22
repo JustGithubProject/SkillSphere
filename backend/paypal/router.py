@@ -5,8 +5,6 @@ import logging
 # import httpx
 import requests
 
-from requests.auth import HTTPBasicAuth
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import (
     APIRouter,
@@ -24,17 +22,18 @@ from services.user_service import UserService, get_user_service
 
 from paypal.utils import (
     get_paypal_headers,
-    get_paypal_json
+    get_paypal_json,
+    get_paypal_access_token
 )
 
-from config import (
-    PAYPAL_BASE_URL,
-    PAYPAL_CLIENT_ID,
-    PAYPAL_SECRET_KEY
-)
+from config import PAYPAL_BASE_URL
 
 from database import session_getter
-from paypal.schemas import PayPalOrderData
+
+from paypal.schemas import (
+    PayPalOrderData,
+    PayPalCheckOrderData
+)
 
 
 router = APIRouter(
@@ -45,67 +44,71 @@ router = APIRouter(
 
 @router.post("/create-order")
 async def paypal_create_order(
-    session: Annotated[AsyncSession, Depends(session_getter)],
     user: Annotated[UserOut, Depends(get_current_auth_user)],
     paypal_data: PayPalOrderData
 ):
-    # Getting paypal access_token
-    response = requests.post(
-        PAYPAL_BASE_URL + "/v1/oauth2/token",
-        headers={
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        data={
-            "grant_type": "client_credentials"
-        },
-        auth=HTTPBasicAuth(PAYPAL_CLIENT_ID, PAYPAL_SECRET_KEY)
-    )
-    logging.info(f"Response Auth: {response}")
-    
-    headers = get_paypal_headers(response.json().get("access_token"))
-    
-    logging.info(f"PAYPAL_BASE_URL: {PAYPAL_BASE_URL}")
-    
-    
-    # Request to create paypal order
-    response = requests.post(
-        PAYPAL_BASE_URL + "/v2/checkout/orders",
-        headers=headers,
-        data=get_paypal_json(
-            price=paypal_data.price,
-            currency_code=paypal_data.currency_code
+    if user:
+        # Getting paypal access_token
+        response = get_paypal_access_token()
+        logging.info(f"Response Auth: {response}")
+        paypal_access_token = response.json().get("access_token")
+        headers = get_paypal_headers(paypal_access_token)
+        
+        
+        # Request to create paypal order
+        response = requests.post(
+            PAYPAL_BASE_URL + "/v2/checkout/orders",
+            headers=headers,
+            data=get_paypal_json(
+                price=paypal_data.price,
+                currency_code=paypal_data.currency_code
+            )
         )
-    )
-    
-    # async with httpx.AsyncClient() as client:
-    #     try:
-    #         response = await client.post(
-    #             PAYPAL_BASE_URL + "/v2/checkout/orders",
-    #             headers=headers,
-    #             json=get_paypal_json(
-    #                 paypal_data.price,
-    #                 str(paypal_data.currency_code.value)
-    #             )
-    #         )
-    #         response.raise_for_status()
             
-    #         order_id = response.json().get("id")
-    #         if order_id is None:
-    #             logging.error("Order ID not found in response")
-    #             raise HTTPException(status_code=400, detail="Order ID not found in response")
-            
-    #     except httpx.HTTPStatusError as ex:
-    #         raise HTTPException(status_code=ex.response.status_code, detail=ex.response.json())
-        
-    #     except Exception as ex:
-    #         raise HTTPException(status_code=500, detail=str(ex))
-        
-    # TODO: additional logic to send 90% of the money to the owner of course, and 10% to the site owner.
-    logging.info(f"Success: {response.json()}")
-    return response.json()
+        # TODO: additional logic to send 90% of the money to the owner of course, and 10% to the site owner.
+        logging.info(f"Result: {response.json()}")
+        return response.json()
+    else:
+        return "Unauthorized user"
+
 
     
-    
+@router.get("/check/payment")
+async def paypal_check_payment(
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    user: Annotated[UserOut, Depends(get_current_auth_user)],
+    paypal_check_data: PayPalCheckOrderData,
+):
+    if user:
+        # Getting paypal access_token
+        response = get_paypal_access_token()
+        paypal_access_token = response.json().get("access_token")
+        
+        
+        # Request for information about a created order
+        headers = {
+            'Authorization': f'Bearer {paypal_access_token}',
+        }
+        
+        response = requests.get(
+            PAYPAL_BASE_URL + "/v2/checkout/orders/" + paypal_check_data.token,
+            headers=headers
+        )
+        
+        status = response.json().get("status")
+        if status == "APPROVED":
+            logging.info(f"Status: {status}")
+            # TODO: to add student to course
+            ...
+        else:
+            logging.info(f"Status: {status}")
+            return "Failed to buy course"
+    else:
+        return "Unauthorized user"
+            
+        
+
+
     
     
     
