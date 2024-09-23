@@ -88,7 +88,7 @@ class CourseService(FileActionMixin):
         )
         
         return [
-            CourseOutput.model_validate(course, from_attributes=True) 
+            CourseOutput(**course.__dict__) 
             for course in courses
         ]
 
