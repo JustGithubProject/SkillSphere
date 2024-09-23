@@ -81,7 +81,6 @@ const Header = () => {
                                 <div className="navbar-nav py-0">
                                     <Link to="/" className="nav-item nav-link">Home</Link>
                                     <Link to="/courses" className="nav-item nav-link active">Courses</Link>
-                                    <Link to="/teachers" className="nav-item nav-link">Teachers</Link>
                                     <Link to="/contact-us" className="nav-item nav-link">Contact</Link>
                                 </div>
                                 <a className="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" href="">Join Now</a>

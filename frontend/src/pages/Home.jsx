@@ -19,7 +19,7 @@ const Home = () => {
             setIsAuthorized(true);
         }
 
-        const checkUrlParams = () => {
+        const checkUrlParams = async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const tokenParam = urlParams.get('token');
             const payerIDParam = urlParams.get('PayerID');
@@ -27,7 +27,22 @@ const Home = () => {
 
             if (tokenParam && payerIDParam) {
                 // TODO: logic to handle token and payerID
-                c
+                await axios.post(
+                    "http://localhost:8000/check/payment",
+                    {
+                        token: tokenParam,
+                        payer_id: payerIDParam,
+                        course_id: courseID
+                    },
+                    {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${accessToken}`,
+                        }
+                    }
+                );
+                console.log("Student has been addedd");
+
             }
         };
 

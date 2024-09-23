@@ -14,10 +14,19 @@ from fastapi import (
 )
 
 
+
 from authentication.validation import get_current_auth_user
 from authentication.schemas import UserOut
 
-from services.user_service import UserService, get_user_service
+from services.user_service import (
+    UserService,
+    get_user_service
+)
+
+from services.course_service import (
+    CourseService,
+    get_course_service
+)
 
 
 from paypal.utils import (
@@ -73,10 +82,11 @@ async def paypal_create_order(
 
 
     
-@router.get("/check/payment")
+@router.post("/check/payment")
 async def paypal_check_payment(
     session: Annotated[AsyncSession, Depends(session_getter)],
     user: Annotated[UserOut, Depends(get_current_auth_user)],
+    course_service: Annotated[CourseService, Depends(get_course_service)],
     paypal_check_data: PayPalCheckOrderData,
 ):
     if user:
@@ -96,10 +106,18 @@ async def paypal_check_payment(
         )
         
         status = response.json().get("status")
+        
+        # Checking status of paypal order
         if status == "APPROVED":
             logging.info(f"Status: {status}")
-            # TODO: to add student to course
-            ...
+            
+            # Adding student to course
+            await course_service.join_the_course(
+                session=session,
+                course_id=paypal_check_data.course_id,
+                user=user
+            )
+            logging.info("The student has been added successfully")
         else:
             logging.info(f"Status: {status}")
             return "Failed to buy course"
