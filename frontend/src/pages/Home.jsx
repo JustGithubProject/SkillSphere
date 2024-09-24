@@ -23,12 +23,13 @@ const Home = () => {
             const urlParams = new URLSearchParams(window.location.search);
             const tokenParam = urlParams.get('token');
             const payerIDParam = urlParams.get('PayerID');
-            const courseID = urlParams.get("course_id");
+            const courseID = localStorage.getItem("course_id");
+            localStorage.removeItem("course_id");
 
             if (tokenParam && payerIDParam) {
                 // TODO: logic to handle token and payerID
                 await axios.post(
-                    "http://localhost:8000/check/payment",
+                    "http://127.0.0.1:8000/paypal/check/payment",
                     {
                         token: tokenParam,
                         payer_id: payerIDParam,
@@ -41,14 +42,17 @@ const Home = () => {
                         }
                     }
                 );
+                
                 console.log("Student has been addedd");
+                console.log(courseID);
+                window.location.href = "/";
 
             }
         };
 
         checkUrlParams();
 
-        const intervalId = setInterval(checkUrlParams, 1000);
+        const intervalId = setInterval(checkUrlParams, 3000);
 
         return () => clearInterval(intervalId);
     }, []); 

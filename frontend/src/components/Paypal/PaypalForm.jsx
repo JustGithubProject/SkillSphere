@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 const PayPalForm = ({ price, course_id }) => {
     const [message, setMessage] = useState('');
     console.log(price);
+    console.log(course_id);
 
     const createOrder = async (data, actions) => {
         try {
@@ -32,7 +33,7 @@ const PayPalForm = ({ price, course_id }) => {
                 let existingURL = response.data.links[1].href;
                 let currentURL = new URL(existingURL);
                 currentURL.searchParams.append("course_id", course_id);
-            
+                localStorage.setItem("course_id", course_id);
                 window.location.href = currentURL.toString()
                 return response.data.id;
             } else {
