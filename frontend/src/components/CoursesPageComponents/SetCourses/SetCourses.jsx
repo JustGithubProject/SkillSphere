@@ -1,17 +1,30 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import PayPalForm from '../../Paypal/PaypalForm';
 
-const courses = [
-  { id: 1, title: 'Web design & development courses for beginner', image: 'img/course-1.jpg', students: 25, duration: '01h 30m', rating: 4.5, reviews: 250, price: '$99' },
-  { id: 2, title: 'Web design & development courses for beginner', image: 'img/course-2.jpg', students: 25, duration: '01h 30m', rating: 4.5, reviews: 250, price: '$99' },
-  { id: 3, title: 'Web design & development courses for beginner', image: 'img/course-3.jpg', students: 25, duration: '01h 30m', rating: 4.5, reviews: 250, price: '$99' },
-  { id: 4, title: 'Web design & development courses for beginner', image: 'img/course-4.jpg', students: 25, duration: '01h 30m', rating: 4.5, reviews: 250, price: '$99' },
-  { id: 5, title: 'Web design & development courses for beginner', image: 'img/course-5.jpg', students: 25, duration: '01h 30m', rating: 4.5, reviews: 250, price: '$99' },
-  { id: 6, title: 'Web design & development courses for beginner', image: 'img/course-6.jpg', students: 25, duration: '01h 30m', rating: 4.5, reviews: 250, price: '$99' }
-];
-
 const SetCourses = () => {
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/api/v1/course/all/no-auth/')
+      .then(response => {
+        const fetchedCourses = response.data.map(course => ({
+          id: course.id,
+          title: course.title,
+          image: course.photo_url,
+          students: course.students.length,
+          duration: '01h 30m', // Assuming fixed duration for now
+          rating: 4.5, // Assuming fixed rating for now
+          reviews: 250, // Assuming fixed reviews count for now
+          price: `$${course.price}`
+        }));
+        setCourses(fetchedCourses);
+      })
+      .catch(error => {
+        console.error('Error fetching courses:', error);
+      });
+  }, []);
+
   return (
     <div className="container-fluid py-5">
       <div className="container py-5">
@@ -23,7 +36,7 @@ const SetCourses = () => {
           {courses.map(course => (
             <div key={course.id} className="col-lg-4 col-md-6 mb-4">
               <div className="rounded overflow-hidden mb-2">
-                <img className="img-fluid" src={course.image} alt={course.title} />
+                <img className="img-fluid" src="https://static.vecteezy.com/system/resources/thumbnails/033/176/717/small_2x/online-course-icon-vector.jpg" alt={course.title} />
                 <div className="bg-secondary p-4">
                   <div className="d-flex justify-content-between mb-3">
                     <small className="m-0"><i className="fa fa-users text-primary mr-2"></i>{course.students} Students</small>
