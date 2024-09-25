@@ -1,3 +1,4 @@
+import logging
 from fastapi import UploadFile
 from aws.s3_actions import S3Client
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -269,9 +270,15 @@ class CourseService(FileActionMixin):
             session=session,
             email=user.email
         )
-        course.students.append(model_user)
-        await session.commit()
-
+        if model_user not in course.students:
+            course.students.append(model_user)
+            logging.info("student appended!")
+        
+        try:
+            await session.commit()
+        except Exception as ex:
+            logging.info(f"Failed to commit: {ex}")
+    
         return None
 
 def get_course_service():

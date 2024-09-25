@@ -106,17 +106,23 @@ async def paypal_check_payment(
         )
         
         status = response.json().get("status")
+        logging.info(f"Status: {status}")
+        logging.info(f"User: {user}")
+        logging.info(f"course_id: {paypal_check_data.course_id}")
         
         # Checking status of paypal order
         if status == "APPROVED":
             logging.info(f"Status: {status}")
             
             # Adding student to course
-            await course_service.join_the_course(
-                session=session,
-                course_id=paypal_check_data.course_id,
-                user=user
-            )
+            try:
+                await course_service.join_the_course(
+                    session=session,
+                    course_id=paypal_check_data.course_id,
+                    user=user
+                )
+            except Exception as ex:
+                logging.info(f"Failed to add student to course: {ex}")
             logging.info("The student has been added successfully")
         else:
             logging.info(f"Status: {status}")
