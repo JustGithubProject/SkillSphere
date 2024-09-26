@@ -266,12 +266,21 @@ class CourseService(FileActionMixin):
             session=session,
             course_id=course_id
         )
-        model_user: User = await self.user_repository.get_user_by_email(
+        logging.info(f"Did we get course?: {course.title}")
+        user_to_add: User = await self.user_repository.get_user_by_email(
             session=session,
             email=user.email
         )
-        if model_user not in course.students:
-            course.students.append(model_user)
+        
+        user_course_owner: User = await self.user_repository.get_user_by_id(
+            session=session,
+            id=int(course.creator_id)
+        )
+        
+        logging.info(f"Did we get user?: {user_to_add.username}: {user_to_add.active}")
+        if user_to_add not in course.students and user_course_owner.username != user_to_add.username:
+            course.students.append(user_to_add)
+            logging.info(course.students)
             logging.info("student appended!")
         
         try:
