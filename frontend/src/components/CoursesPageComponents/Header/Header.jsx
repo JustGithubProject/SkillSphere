@@ -1,8 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
+import * as jwtDecodeModule from 'jwt-decode';
+import Cookies from 'js-cookie';
 
 
 const Header = () => {
+    const [username, setUsername] = useState('');
+    const [isAuthorized, setIsAuthorized] = useState(false);
+
+    useEffect(() => {
+      const accessToken = Cookies.get("access_token");
+      if (accessToken) {
+        setIsAuthorized(true);
+        try {
+          const decodedToken = jwtDecodeModule.jwtDecode(accessToken);
+          if (decodedToken && decodedToken.username) {
+            setUsername(decodedToken.username);
+          }
+        } catch (error) {
+          console.error("Invalid token:", error);
+        }
+      }
+    }, []); 
+
+    const handleLogOutClick = () => {
+        Cookies.remove("access_token");
+        setIsAuthorized(false);
+        setUsername('');
+        window.location.href = '/';
+    }
     return (
         <>
             {/* Topbar Start */}
@@ -81,9 +108,20 @@ const Header = () => {
                                 <div className="navbar-nav py-0">
                                     <Link to="/" className="nav-item nav-link">Home</Link>
                                     <Link to="/courses" className="nav-item nav-link active">Courses</Link>
+                                    <Link to="/purchased-course" className="nav-item nav-link">Purchased courses</Link>
                                     <Link to="/contact-us" className="nav-item nav-link">Contact</Link>
+                                    
                                 </div>
-                                <a className="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" href="">Join Now</a>
+                                <ul className="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" style={{ backgroundColor: 'white', color: 'black' }}>
+                                    {isAuthorized ? (
+                                        <li className="username-li-style"><span>{username}</span></li>
+                                    ) : null}
+                                    {isAuthorized ? (
+                                        <button onClick={handleLogOutClick} className="btn btn-secondary">
+                                            Log out
+                                        </button>
+                                    ) : null}
+                                </ul>
                             </div>
                         </nav>
                     </div>
