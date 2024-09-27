@@ -10,7 +10,12 @@ from authentication.custom_exceptions import (
     update_ban_status_exception,
     user_not_found_exception
 )
-from database.models import User
+from database.models import (
+    User,
+    Course,
+    CourseStudents
+)
+
 from authentication.enums import UserAction
 
 
@@ -134,6 +139,16 @@ class UserRepository:
         except Exception:
             session.rollback()
             raise update_ban_status_exception
+    
+    async def get_user_enrolled_courses(
+        self,
+        user_id: int,
+        session: AsyncSession
+    ):
+        result = await session.execute(
+            select(Course).join(CourseStudents).filter(CourseStudents.student_id == user_id)
+        )
+        return result.scalars().all()
 
 
 # Зависимость для получения репозитория

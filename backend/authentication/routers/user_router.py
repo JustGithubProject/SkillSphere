@@ -125,3 +125,20 @@ async def join_the_course(
         session=session,
         user=user
     )
+    
+    
+@router.get(
+    "/joined/courses",
+    status_code=status.HTTP_200_OK,
+    summary="Current user's purchased courses"
+)
+async def get_purchased_courses(
+    user: Annotated[UserOut, Depends(get_current_active_auth_user)],
+    user_service: Annotated[UserService, Depends(get_user_service)],
+    session: Annotated[AsyncSession, Depends(session_getter)],   
+) -> None:
+    return await user_service.get_user_enrolled_courses(
+        user_id=user.id,
+        session=session        
+    )
+    

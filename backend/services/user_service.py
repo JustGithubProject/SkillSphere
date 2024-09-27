@@ -171,6 +171,13 @@ class UserService:
             session=session,
             new_login_time=new_login_time,
         )
+    
+    async def get_user_enrolled_courses(
+        self,
+        user_id: int,
+        session: AsyncSession
+    ):
+        return await self.user_repository.get_user_enrolled_courses(user_id, session)
         
 
 # Зависимость для получения сервиса
