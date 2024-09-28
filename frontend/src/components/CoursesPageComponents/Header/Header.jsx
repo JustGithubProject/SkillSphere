@@ -108,7 +108,9 @@ const Header = () => {
                                 <div className="navbar-nav py-0">
                                     <Link to="/" className="nav-item nav-link">Home</Link>
                                     <Link to="/courses" className="nav-item nav-link active">Courses</Link>
-                                    <Link to="/purchased-course" className="nav-item nav-link">Purchased courses</Link>
+                                    {isAuthorized ? (
+                                        <Link to="/purchased-courses" className="nav-item nav-link">Purchased courses</Link>
+                                    ) : null}
                                     <Link to="/contact-us" className="nav-item nav-link">Contact</Link>
                                     
                                 </div>
