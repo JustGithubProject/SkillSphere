@@ -5,7 +5,7 @@ import * as jwtDecodeModule from 'jwt-decode';
 import Cookies from 'js-cookie';
 
 
-const Header = () => {
+const Header = ({isCoursesPage, isPurchasedCoursesPage}) => {
     const [username, setUsername] = useState('');
     const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -107,14 +107,22 @@ const Header = () => {
                             <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                                 <div className="navbar-nav py-0">
                                     <Link to="/" className="nav-item nav-link">Home</Link>
-                                    <Link to="/courses" className="nav-item nav-link active">Courses</Link>
+                                    <Link to="/courses" className={`nav-item nav-link ${isCoursesPage ? 'active' : ''}`}>Courses</Link>
                                     {isAuthorized ? (
-                                        <Link to="/purchased-courses" className="nav-item nav-link">Purchased courses</Link>
+                                        <Link to="/purchased-courses" className={`nav-item nav-link ${isPurchasedCoursesPage ? 'active' : ''}`}>Purchased courses</Link>
                                     ) : null}
                                     <Link to="/contact-us" className="nav-item nav-link">Contact</Link>
                                     
                                 </div>
-                                <ul className="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" style={{ backgroundColor: 'white', color: 'black' }}>
+                                {isAuthorized ? (
+                                <ul className="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" style={
+                                    {
+                                        backgroundColor: 'white',
+                                        color: 'black',
+                                        border: 'none',
+                                        boxShadow: 'none'
+                                    }
+                                    }>
                                     {isAuthorized ? (
                                         <li className="username-li-style"><span>{username}</span></li>
                                     ) : null}
@@ -124,6 +132,8 @@ const Header = () => {
                                         </button>
                                     ) : null}
                                 </ul>
+                                ) : null}
+                                
                             </div>
                         </nav>
                     </div>
@@ -131,20 +141,6 @@ const Header = () => {
             </div>
             {/* Navbar End */}
 
-            {/* Header Start */}
-            <div className="container-fluid page-header" style={{ marginBottom: '90px' }}>
-                <div className="container">
-                    <div className="d-flex flex-column justify-content-center" style={{ minHeight: '300px' }}>
-                        <h3 className="display-4 text-white text-uppercase">Courses</h3>
-                        <div className="d-inline-flex text-white">
-                            <p className="m-0 text-uppercase"><Link className="text-white" to="/">Home</Link></p>
-                            <i className="fa fa-angle-double-right pt-1 px-3"></i>
-                            <p className="m-0 text-uppercase">Courses</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {/* Header End */}
         </>
     );
 };
