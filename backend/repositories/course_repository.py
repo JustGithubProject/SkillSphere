@@ -139,7 +139,7 @@ class CourseRepository:
             course: Course = Course(**course_dict)
             session.add(course)
             await session.commit()
-            await session.refresh(course, attribute_names=["creator", "instructors", "modules"])
+            await session.refresh(course, attribute_names=["creator", "instructors", "modules", "students"])
             return course
         except Exception as e:
             await session.rollback()
