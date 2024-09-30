@@ -12,10 +12,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      docker:
-        image: docker:19.03.12
-        options: --privileged
+    # services:
+    #   docker:
+    #     image: docker:19.03.12
+    #     options: --privileged
 
     steps:
       - name: Checkout code
@@ -53,6 +53,6 @@ jobs:
         run: |
           pytest
 
-      - name: Stop Docker Compose
-        run: |
-          docker-compose down
+      # - name: Stop Docker Compose
+      #   run: |
+      #     docker-compose down
