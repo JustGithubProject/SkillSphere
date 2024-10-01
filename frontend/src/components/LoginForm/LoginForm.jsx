@@ -120,6 +120,8 @@ const LoginForm = () => {
                     <GoogleLogin
                         onSuccess={handleGoogleLoginSuccess}
                         onError={handleGoogleLoginError}
+                        useOneTap={false}
+                        prompt="select_account"
                     />
                 </div>
             </form>
