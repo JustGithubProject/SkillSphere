@@ -25,6 +25,10 @@ const SetCourses = () => {
       });
   }, []);
 
+  const handleViewCourse = (course_id) => {
+      window.location.href = `/course-single/${course_id}`
+  };
+
   return (
     <div className="container-fluid py-5">
       <div className="container py-5">
@@ -51,6 +55,7 @@ const SetCourses = () => {
                     <div>
                       <PayPalForm price={course.price} course_id={course.id}/>
                     </div>
+                    <button className="btn btn-primary mt-3" onClick={() => handleViewCourse(course.id)}>View Course</button>
                   </div>
                 </div>
               </div>

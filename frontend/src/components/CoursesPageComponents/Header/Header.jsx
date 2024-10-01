@@ -5,7 +5,7 @@ import * as jwtDecodeModule from 'jwt-decode';
 import Cookies from 'js-cookie';
 
 
-const Header = ({isCoursesPage, isPurchasedCoursesPage}) => {
+const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
     const [username, setUsername] = useState('');
     const [isAuthorized, setIsAuthorized] = useState(false);
 
@@ -106,7 +106,7 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage}) => {
                             </button>
                             <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                                 <div className="navbar-nav py-0">
-                                    <Link to="/" className="nav-item nav-link">Home</Link>
+                                    <Link to="/" className={`nav-item nav-link ${isHomePage ? 'active' : ''}`}>Home</Link>
                                     <Link to="/courses" className={`nav-item nav-link ${isCoursesPage ? 'active' : ''}`}>Courses</Link>
                                     {isAuthorized ? (
                                         <Link to="/purchased-courses" className={`nav-item nav-link ${isPurchasedCoursesPage ? 'active' : ''}`}>Purchased courses</Link>

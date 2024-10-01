@@ -9,7 +9,7 @@ import Footer from '../components/CoursesPageComponents/Footer/Footer';
 const Courses = () => {
     return (
         <>
-            <Header isCoursesPage={true} isPurchasedCoursesPage={false}/>
+            <Header isCoursesPage={true} isPurchasedCoursesPage={false} isHomePage={false}/>
             <BookImageContainer/>
             <CoursesCategory/>
             <SetCourses/>
