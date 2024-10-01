@@ -141,8 +141,9 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                             boxShadow: 'none'
                                         }
                                         }>
-                                        <a href="/login" className="btn btn-secondary me-2">Login</a>
-                                        <a href="/signup" className="btn btn-secondary ms-2">Sign Up</a>
+                                        <a href="/login" className="btn btn-info btn-lg active" role="button">Login</a>
+                                        <a href="/signup" className="btn btn-info btn-lg active" role="button">Sign Up</a>
+                            
                                     </ul>
                                 )}
                                 
