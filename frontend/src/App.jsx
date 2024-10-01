@@ -1,7 +1,9 @@
-import HomeV2Page from "./pages/HomeV2";
+import HomeV2Page from "./pages/Home";
 import ContactUs from "./pages/ContactUs";
 import CourseSingle from "./pages/CourseSingle";
 import Courses from "./pages/Courses";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
 import PurchasedCoursesPage from "./pages/PurchasedCoursesPage";
 
 
@@ -17,6 +19,8 @@ function App() {
           <Route path="/course-single/:id" element={<CourseSingle/>} />
           <Route path="/courses" element={<Courses/>} />
           <Route path="/purchased-courses" element={<PurchasedCoursesPage/>} />
+          <Route path="/login" element={<LoginPage/>} />
+          <Route path="/signup" element={<SignUpPage/>} />
         </Routes>
     </Router>
   );

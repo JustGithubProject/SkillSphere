@@ -41,7 +41,6 @@ const SignUpForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="form-box">
-      <h3 className="h4 text-black mb-4">Sign Up</h3>
       <div className="form-group">
         <input
           type="text"
@@ -99,7 +98,7 @@ const SignUpForm = () => {
       <div className="form-group">
         <input
           type="submit"
-          className="btn btn-primary btn-pill"
+          className="btn btn-warning btn-pill"
           value="Sign up"
         />
       </div>
