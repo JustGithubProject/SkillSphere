@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios'; 
-import './css/ContactUs.css'; 
+import './css/ContactUs.css';
+import Header from '../components/CoursesPageComponents/Header/Header';
 
 const ContactUs = () => {
     const [theme, setTheme] = useState('light');
@@ -71,6 +72,7 @@ const ContactUs = () => {
     };
 
     return (
+    <>
         <div className="contact-us-container">
             <div className="contact-us-left-col">
                 <a href="/"><img className="contact-us-logo" src="https://www.indonesia.travel/content/dam/indtravelrevamp/en/logo.png" alt="Logo"/></a>
@@ -132,6 +134,7 @@ const ContactUs = () => {
                 {success && <div className="contact-us-success-msg">{success}</div>}
             </div>
         </div>
+    </>
     );
 };
 
