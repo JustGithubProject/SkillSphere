@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
-import IntroSection from '../components/IntroSection/IntroSection';
-import ProgramsSection from '../components/ProgramsSection/ProgramsSection';
-import CreateCourseSection from '../components/CreateCourseSection/CreateCourseSection';
-import BeforeWhyChooseUsSection from '../components/BeforeWhyChooseUsSection/BeforeWhyChooseUsSection';
-import WhyChooseUsSection from '../components/WhyChooseUsSection/WhyChooseUsSection';
+import Header from '../components/CoursesPageComponents/Header/Header';
+import CarouselComponent from '../components/CarouselComponent/CarouselComponent';
+import AboutUsComponent from '../components/AboutUsComponent/AboutUsComponent';
+import CategorySectionComponent from '../components/CategorySectionComponent/CategorySectionComponent';
+import RegistrationComponent from '../components/RegistrationComponent/RegistrationComponent';
+import Footer from '../components/CoursesPageComponents/Footer/Footer';
 import Cookies from 'js-cookie';
 
 import axios from 'axios';
 
-const Home = () => {
+
+
+const HomeV2Page = () => {
     const [isAuthorized, setIsAuthorized] = useState(false);
 
     useEffect(() => {
@@ -58,37 +59,15 @@ const Home = () => {
     }, []); 
 
     return (
-        <div className="site-wrap">
-            <div className="site-mobile-menu site-navbar-target">
-                <div className="site-mobile-menu-header">
-                    <div className="site-mobile-menu-close mt-3">
-                        <span className="icon-close2 js-menu-toggle"></span>
-                    </div>
-                </div>
-                <div className="site-mobile-menu-body"></div>
-            </div>
-            <Header />
-            <div id="home-section">
-                <IntroSection />
-            </div>
-            {/* <div id="courses-section">
-                <CoursesSection/>
-            </div> */}
-            <div id="programs-section">
-                <ProgramsSection />
-            </div>
-            {isAuthorized ? (
-                <div id="create-course-section">
-                    <CreateCourseSection />
-                </div>
-            ) : null}
-            <BeforeWhyChooseUsSection />
-            <div id="why-choose-us-section">
-                <WhyChooseUsSection />
-            </div>
+        <>
+            <Header isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false}/>
+            <CarouselComponent/>
+            <AboutUsComponent/>
+            <CategorySectionComponent/>
+            <RegistrationComponent/>
             <Footer />
-        </div>
+        </>
     );
 };
 
-export default Home;
+export default HomeV2Page;

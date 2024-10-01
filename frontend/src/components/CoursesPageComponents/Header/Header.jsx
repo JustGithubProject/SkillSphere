@@ -132,7 +132,19 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                         </button>
                                     ) : null}
                                 </ul>
-                                ) : null}
+                                ) : (
+                                    <ul className="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" style={
+                                        {
+                                            backgroundColor: 'white',
+                                            color: 'black',
+                                            border: 'none',
+                                            boxShadow: 'none'
+                                        }
+                                        }>
+                                        <a href="/login" className="btn btn-secondary me-2">Login</a>
+                                        <a href="/signup" className="btn btn-secondary ms-2">Sign Up</a>
+                                    </ul>
+                                )}
                                 
                             </div>
                         </nav>

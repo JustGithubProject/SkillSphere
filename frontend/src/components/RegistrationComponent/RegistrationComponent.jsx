@@ -1,5 +1,7 @@
 import React from 'react';
 
+import SignUpForm from '../SignUpForm/SignUpForm';
+
 const RegistrationComponent = () => {
     return (
         <div className="container-fluid bg-registration py-5" style={{ margin: '90px 0' }}>
@@ -29,37 +31,7 @@ const RegistrationComponent = () => {
                                 <h1 className="m-0">Sign Up Now</h1>
                             </div>
                             <div className="card-body rounded-bottom bg-primary p-5">
-                                <form>
-                                    <div className="form-group">
-                                        <input
-                                            type="text"
-                                            className="form-control border-0 p-4"
-                                            placeholder="Your name"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <input
-                                            type="email"
-                                            className="form-control border-0 p-4"
-                                            placeholder="Your email"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <select className="custom-select border-0 px-4" style={{ height: '47px' }} required>
-                                            <option selected disabled>Select a course</option>
-                                            <option value="1">Course 1</option>
-                                            <option value="2">Course 2</option>
-                                            <option value="3">Course 3</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <button className="btn btn-dark btn-block border-0 py-3" type="submit">
-                                            Sign Up Now
-                                        </button>
-                                    </div>
-                                </form>
+                                <SignUpForm/>
                             </div>
                         </div>
                     </div>
