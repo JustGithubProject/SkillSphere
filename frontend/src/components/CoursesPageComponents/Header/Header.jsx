@@ -8,6 +8,7 @@ import Cookies from 'js-cookie';
 const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
     const [username, setUsername] = useState('');
     const [isAuthorized, setIsAuthorized] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     useEffect(() => {
       const accessToken = Cookies.get("access_token");
@@ -30,6 +31,10 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
         setUsername('');
         window.location.href = '/';
     }
+
+    const toggleDropdown = () => {
+        setIsDropdownOpen(prev => !prev); 
+    };
     return (
         <>
             {/* Topbar Start */}
@@ -115,36 +120,30 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                     
                                 </div>
                                 {isAuthorized ? (
-                                <ul className="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" style={
-                                    {
-                                        backgroundColor: 'white',
-                                        color: 'black',
-                                        border: 'none',
-                                        boxShadow: 'none'
-                                    }
-                                    }>
-                                    {isAuthorized ? (
-                                        <li className="username-li-style"><span>{username}</span></li>
-                                    ) : null}
-                                    {isAuthorized ? (
-                                        <button onClick={handleLogOutClick} className="btn btn-secondary">
-                                            Log out
+                                    <div className="dropdown ml-auto d-none d-lg-block">
+                                        <button className="btn btn-primary" type="button" onClick={toggleDropdown}>
+                                            {username} <i className={`fa ${isDropdownOpen ? 'fa-angle-up' : 'fa-angle-down'}`}></i>
                                         </button>
-                                    ) : null}
-                                </ul>
+                                        {isDropdownOpen && (
+                                            <div className="dropdown-menu show" aria-labelledby="userDropdown">
+                                                <button onClick={handleLogOutClick} className="dropdown-item">
+                                                    Log out
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                 ) : (
-                                    <ul className="btn btn-primary py-2 px-4 ml-auto d-none d-lg-block" style={
-                                        {
-                                            backgroundColor: 'white',
-                                            color: 'black',
-                                            border: 'none',
-                                            boxShadow: 'none'
-                                        }
-                                        }>
-                                        <a href="/login" className="btn btn-info btn-lg active" role="button">Login</a>
-                                        <a href="/signup" className="btn btn-info btn-lg active" role="button">Sign Up</a>
-                            
-                                    </ul>
+                                    <div className="dropdown ml-auto d-none d-lg-block">
+                                        <button className="btn btn-info" type="button" onClick={toggleDropdown}>
+                                            Login / Sign Up <i className={`fa ${isDropdownOpen ? 'fa-angle-up' : 'fa-angle-down'}`}></i>
+                                        </button>
+                                        {isDropdownOpen && (
+                                            <div className="dropdown-menu show" aria-labelledby="authDropdown">
+                                                <Link to="/login" className="dropdown-item">Login</Link>
+                                                <Link to="/signup" className="dropdown-item">Sign Up</Link>
+                                            </div>
+                                        )}
+                                    </div>
                                 )}
                                 
                             </div>
