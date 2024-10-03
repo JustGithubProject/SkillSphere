@@ -1,3 +1,6 @@
+import os
+import shutil
+
 from typing import Annotated
 from fastapi import (
     APIRouter,
@@ -82,14 +85,39 @@ async def create_course(
     photo_file: UploadFile | None = File(default=None),
     video_file: UploadFile | None = File(default=None)
 ) -> CourseOutput:
+    
+    ################################################################
+    # TODO: ВЫНЕСТИ В ОТДЕЛЬНУЮ ФУНКЦИЮ
+    photo_path = None
+    video_path = None
+    
+    SHARED_DIRECTORY_PATH = "/shared_data/uploads"
+    PHOTO_DIRECTORY = os.path.join(SHARED_DIRECTORY_PATH, "photos")
+    VIDEO_DIRECTORY = os.path.join(SHARED_DIRECTORY_PATH, "videos")
+    
+    # Creating directories if they don't exist
+    os.makedirs(PHOTO_DIRECTORY, exist_ok=True)
+    os.makedirs(VIDEO_DIRECTORY, exist_ok=True)
+    
+    if photo_file:
+        photo_path = os.path.join(PHOTO_DIRECTORY, photo_file.filename)
+        with open(photo_path, "wb") as buffer:
+            shutil.copyfileobj(photo_file.file, buffer)
+
+    if video_file:
+        video_path = os.path.join(VIDEO_DIRECTORY, video_file.filename)
+        with open(video_path, "wb") as buffer:
+            shutil.copyfileobj(video_file.file, buffer)
+    ###########################################################
+    
     return await course_service.create_course(
         session=session,
         title=title,
         description=description,
         price=price,
         level=level,
-        photo_file=photo_file,
-        video_file=video_file,
+        photo_file=photo_path,
+        video_file=video_path,
         user=user
     )
 

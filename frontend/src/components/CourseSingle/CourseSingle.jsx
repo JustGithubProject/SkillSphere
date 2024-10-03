@@ -1,6 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const CourseSingleComponent = () => {
+const CourseSingleComponent = ({ course_id }) => {
+  const [course, setCourse] = useState();
+
+  useEffect(() => {
+    const fetchCourseById = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/v1/course/no-auth/${course_id}`);
+        setCourse(response.data);
+        console.log("Course: ", response.data);
+      } catch (error) {
+        console.log("Error fetching course: ", error);
+      }
+    };
+    fetchCourseById();
+  }, [course_id]);
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   return (
     <div>
       {/* Header Start */}
@@ -24,9 +45,9 @@ const CourseSingleComponent = () => {
           <div className="row">
             <div className="col-lg-8">
               <div className="mb-5">
-                <h6 className="text-primary mb-3">Jan 01, 2050</h6>
-                <h1 className="mb-5">Vero ipsum sea justo dolore eirmod amet dolor tempor lorem</h1>
-                <img className="img-fluid rounded w-100 mb-4" src="img/carousel-1.jpg" alt="Image" />
+                <h6 className="text-primary mb-3">{course && formatDate(course.created_at)}</h6>
+                <h1 className="mb-5">{course && course.title}</h1>
+                <img className="img-fluid rounded w-100 mb-4" src={course && `http://127.0.0.1:8080${course.photo_url}`} alt="Image" />
                 <p>Sadipscing labore amet rebum est et justo gubergren. Et eirmod ipsum sit diam ut magna lorem.
                   Nonumy vero labore lorem sanctus rebum et lorem magna kasd, stet amet magna accusam
                   consetetur eirmod. Kasd accusam sit ipsum sadipscing et at at sanctus et. Ipsum sit
@@ -116,93 +137,97 @@ const CourseSingleComponent = () => {
                     <textarea id="message" cols="30" rows="5" className="form-control border-0"></textarea>
                   </div>
                   <div className="form-group mb-0">
-                    <input type="submit" value="Leave Comment" className="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold" />
+                    <input type="submit" value="Leave a comment" className="btn btn-primary py-md-2 px-md-4 mt-2" />
                   </div>
                 </form>
               </div>
             </div>
 
+            {/* Sidebar */}
             <div className="col-lg-4 mt-5 mt-lg-0">
-              {/* Author Bio */}
-              <div className="d-flex flex-column text-center bg-dark rounded mb-5 py-5 px-4">
-                <img src="img/user.jpg" className="img-fluid rounded-circle mx-auto mb-3" style={{ width: '100px' }} alt="User" />
-                <h3 className="text-primary mb-3">John Doe</h3>
-                <p className="text-white m-0">Conset elitr erat vero dolor ipsum et diam, eos dolor lorem ipsum, ipsum
-                  ipsum sit no ut est. Guber ea ipsum erat clita. Dolores diam magna</p>
+              {/* Categories */}
+              <div className="d-flex flex-column text-center bg-secondary rounded mb-5 py-5 px-4">
+                <h3 className="text-primary mb-3">Categories</h3>
+                <a href="" className="text-white mb-2">Web Design <span className="badge badge-primary">150</span></a>
+                <a href="" className="text-white mb-2">Web Development <span className="badge badge-primary">131</span></a>
+                <a href="" className="text-white mb-2">Online Marketing <span className="badge badge-primary">78</span></a>
+                <a href="" className="text-white mb-2">Keyword Research <span className="badge badge-primary">56</span></a>
+                <a href="" className="text-white mb-2">Email Marketing <span className="badge badge-primary">98</span></a>
               </div>
 
-              {/* Search Form */}
-              <div className="mb-5">
-                <div className="input-group">
-                  <input type="text" className="form-control form-control-lg" placeholder="Keyword" />
-                  <div className="input-group-append">
-                    <span className="input-group-text bg-transparent text-primary"><i className="fa fa-search"></i></span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Category List */}
-              <div className="mb-5">
-                <h3 className="text-uppercase mb-4" style={{ letterSpacing: '5px' }}>Categories</h3>
-                <div className="d-flex flex-wrap m-n1">
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">Web Design</a>
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">Web Development</a>
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">Online Marketing</a>
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">Keyword Research</a>
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">Email Marketing</a>
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">Social Media</a>
-                </div>
-              </div>
-
-              {/* Recent Post List */}
+              {/* Recent Post */}
               <div className="mb-5">
                 <h3 className="text-uppercase mb-4" style={{ letterSpacing: '5px' }}>Recent Post</h3>
-                <div className="d-flex align-items-center border-bottom mb-3 pb-3">
-                  <img className="img-fluid rounded" src="img/blog-1.jpg" style={{ width: '80px', height: '80px', objectFit: 'cover' }} alt="Blog" />
+                <div className="d-flex align-items-center bg-secondary rounded overflow-hidden mb-3" style={{ height: '110px' }}>
+                  <img className="img-fluid" src="img/blog-1.jpg" alt="Image" />
                   <div className="pl-3">
-                    <h6 className="text-primary mb-1">Lorem ipsum dolor sit amet</h6>
-                    <small>Jan 01, 2050</small>
+                    <h6 className="text-white">Diam amet eos at no eos</h6>
+                    <small className="text-body">Jan 01, 2045</small>
                   </div>
                 </div>
-                <div className="d-flex align-items-center border-bottom mb-3 pb-3">
-                  <img className="img-fluid rounded" src="img/blog-2.jpg" style={{ width: '80px', height: '80px', objectFit: 'cover' }} alt="Blog" />
+                <div className="d-flex align-items-center bg-secondary rounded overflow-hidden mb-3" style={{ height: '110px' }}>
+                  <img className="img-fluid" src="img/blog-2.jpg" alt="Image" />
                   <div className="pl-3">
-                    <h6 className="text-primary mb-1">Lorem ipsum dolor sit amet</h6>
-                    <small>Jan 01, 2050</small>
+                    <h6 className="text-white">Diam amet eos at no eos</h6>
+                    <small className="text-body">Jan 01, 2045</small>
                   </div>
                 </div>
-                <div className="d-flex align-items-center border-bottom mb-3 pb-3">
-                  <img className="img-fluid rounded" src="img/blog-3.jpg" style={{ width: '80px', height: '80px', objectFit: 'cover' }} alt="Blog" />
+                <div className="d-flex align-items-center bg-secondary rounded overflow-hidden mb-3" style={{ height: '110px' }}>
+                  <img className="img-fluid" src="img/blog-3.jpg" alt="Image" />
                   <div className="pl-3">
-                    <h6 className="text-primary mb-1">Lorem ipsum dolor sit amet</h6>
-                    <small>Jan 01, 2050</small>
+                    <h6 className="text-white">Diam amet eos at no eos</h6>
+                    <small className="text-body">Jan 01, 2045</small>
                   </div>
                 </div>
-                <div className="d-flex align-items-center">
-                  <img className="img-fluid rounded" src="img/blog-1.jpg" style={{ width: '80px', height: '80px', objectFit: 'cover' }} alt="Blog" />
+                <div className="d-flex align-items-center bg-secondary rounded overflow-hidden mb-3" style={{ height: '110px' }}>
+                  <img className="img-fluid" src="img/blog-1.jpg" alt="Image" />
                   <div className="pl-3">
-                    <h6 className="text-primary mb-1">Lorem ipsum dolor sit amet</h6>
-                    <small>Jan 01, 2050</small>
+                    <h6 className="text-white">Diam amet eos at no eos</h6>
+                    <small className="text-body">Jan 01, 2045</small>
+                  </div>
+                </div>
+                <div className="d-flex align-items-center bg-secondary rounded overflow-hidden mb-3" style={{ height: '110px' }}>
+                  <img className="img-fluid" src="img/blog-2.jpg" alt="Image" />
+                  <div className="pl-3">
+                    <h6 className="text-white">Diam amet eos at no eos</h6>
+                    <small className="text-body">Jan 01, 2045</small>
                   </div>
                 </div>
               </div>
 
-              {/* Tags List */}
+              {/* Image */}
+              <div className="mb-5">
+                <img src="img/blog-1.jpg" alt="Image" className="img-fluid rounded" />
+              </div>
+
+              {/* Tags */}
               <div className="mb-5">
                 <h3 className="text-uppercase mb-4" style={{ letterSpacing: '5px' }}>Tag Cloud</h3>
                 <div className="d-flex flex-wrap m-n1">
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">Design</a>
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">Development</a>
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">Marketing</a>
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">SEO</a>
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">Writing</a>
-                  <a href="" className="btn btn-sm btn-outline-secondary m-1">Consulting</a>
+                  <a href="" className="btn btn-primary m-1">Design</a>
+                  <a href="" className="btn btn-primary m-1">Development</a>
+                  <a href="" className="btn btn-primary m-1">Marketing</a>
+                  <a href="" className="btn btn-primary m-1">SEO</a>
+                  <a href="" className="btn btn-primary m-1">Writing</a>
+                  <a href="" className="btn btn-primary m-1">Consulting</a>
+                  <a href="" className="btn btn-primary m-1">Design</a>
+                  <a href="" className="btn btn-primary m-1">Development</a>
+                  <a href="" className="btn btn-primary m-1">Marketing</a>
+                  <a href="" className="btn btn-primary m-1">SEO</a>
+                  <a href="" className="btn btn-primary m-1">Writing</a>
+                  <a href="" className="btn btn-primary m-1">Consulting</a>
                 </div>
               </div>
 
               {/* Plain Text */}
-              <div className="mb-5">
-                <img src="img/blog-1.jpg" alt="Image" className="img-fluid rounded" />
+              <div>
+                <h3 className="text-uppercase mb-4" style={{ letterSpacing: '5px' }}>Plain Text</h3>
+                <div className="bg-secondary text-center" style={{ padding: '30px' }}>
+                  <p>Vero sea et accusam justo dolor accusam lorem consetetur, dolores sit amet
+                    sit dolor clita kasd justo, diam accusam no sea ut tempor magna takimata, amet
+                    sit et diam dolor ipsum amet diam</p>
+                  <a href="" className="btn btn-primary py-2 px-4">Read More</a>
+                </div>
               </div>
             </div>
           </div>
@@ -211,6 +236,6 @@ const CourseSingleComponent = () => {
       {/* Detail End */}
     </div>
   );
-}
+};
 
 export default CourseSingleComponent;

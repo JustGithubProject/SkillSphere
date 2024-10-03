@@ -102,27 +102,16 @@ class CourseService(FileActionMixin):
         level: CourseLevel,
         session: AsyncSession,
         user: UserOut,
-        photo_file: UploadFile | None = None,
-        video_file: UploadFile | None = None,
+        photo_file: str,
+        video_file: str,
     ) -> CourseOutput:
-        photo_filename, photo_url_key = None, None
-        video_filename, video_url_key = None, None
-        if photo_file:
-            photo_filename, photo_url_key = await self._generate_file_key(photo_file, IMAGES, COURSE)
-        if video_file:
-            video_filename, video_url_key = await self._generate_file_key(video_file, VIDEOS, COURSE)
-        if photo_file or video_file:
-            async with S3Client() as s3_client:
-                await self._upload_file(s3_client, video_file, video_url_key, VIDEOS)
-                await self._upload_file(s3_client, photo_file, photo_url_key, IMAGES)
-
         course_input: CourseInput = CourseInput(
             title=title,
             description=description,
             price=price,
             level=level,
-            video_url=video_url_key,
-            photo_url=photo_url_key,
+            video_url=video_file,
+            photo_url=photo_file,
         )
         
         course: Course = await self.course_repository.create_course(

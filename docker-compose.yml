@@ -8,6 +8,7 @@ services:
       - 8000:8000
     volumes:
       - ./backend:/backend
+      - shared_data:/shared_data
     depends_on:
       - skillsphere_database
     env_file:
@@ -21,6 +22,8 @@ services:
       dockerfile: Dockerfile.frontend
     ports:
       - "3000:3000"
+    volumes:
+      - shared_data:/shared_data 
     depends_on:
       - skillsphere_app
 
@@ -33,6 +36,17 @@ services:
       - "5433:5432"
     volumes:
       - postgres_database:/var/lib/postgresql/data/
+  
+  nginx:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    depends_on:
+      - skillsphere_app
+      - frontend
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - shared_data:/shared_data 
       
   # test_database:
   #   image: postgres:latest
@@ -67,4 +81,5 @@ services:
 
 volumes:
   postgres_database:
+  shared_data: 
   # postgres_test_database:
