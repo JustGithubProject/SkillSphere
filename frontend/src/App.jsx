@@ -5,6 +5,7 @@ import Courses from "./pages/Courses";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import PurchasedCoursesPage from "./pages/PurchasedCoursesPage";
+import CreateCoursePage from "./pages/CreateCoursePage";
 
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -21,6 +22,7 @@ function App() {
           <Route path="/purchased-courses" element={<PurchasedCoursesPage/>} />
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/signup" element={<SignUpPage/>} />
+          <Route path="/create-course" element={<CreateCoursePage/>} />
         </Routes>
     </Router>
   );

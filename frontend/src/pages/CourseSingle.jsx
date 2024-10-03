@@ -14,7 +14,7 @@ const CourseSingle = () => {
     return (
         <>
             <Header />
-            <CourseSingleComponent/>
+            <CourseSingleComponent course_id={id}/>
             <Footer/>
         </>
     );

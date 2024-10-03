@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import './CreateCourseSection.css';
-
 import axios from 'axios';
-
 import Cookies from 'js-cookie';
 
 const CreateCourseSection = () => {
@@ -26,20 +24,19 @@ const CreateCourseSection = () => {
 
     const accessToken = Cookies.get("access_token");
 
-    // Create the URL-encoded data string
-    const formData = new URLSearchParams();
+    const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
     formData.append("price", price);
     formData.append("level", level);
+    if (photoFile) formData.append("photo_file", photoFile);
+    if (videoFile) formData.append("video_file", videoFile);
 
     try {
-
-      const response = await axios.post("http://127.0.0.1:8000/api/v1/course/", formData.toString(), {
+      const response = await axios.post("http://127.0.0.1:8000/api/v1/course/", formData, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${accessToken}`
-
         }
       });
       setSuccessMessage("Course created successfully!");
@@ -47,7 +44,7 @@ const CreateCourseSection = () => {
       setTimeout(() => {
         window.location.href = "/";
       }, 2000);
-    } catch(error) {
+    } catch (error) {
       setErrorMessage("Failed to create course: " + error.message);
       setSuccessMessage('');
     }
@@ -89,8 +86,7 @@ const CreateCourseSection = () => {
             </option>
           ))}
         </select>
-        {/* Remove file upload inputs since they are not supported in x-www-form-urlencoded */}
-        {/* <label className="form-file-upload">
+        <label className="form-file-upload">
           <input
             type="file"
             onChange={(e) => setPhotoFile(e.target.files[0])}
@@ -105,7 +101,7 @@ const CreateCourseSection = () => {
             className="form-file-input"
           />
           <span className="form-file-label">Upload Video</span>
-        </label> */}
+        </label>
         <button type="submit" className="form-button">Create Course</button>
       </form>
       {successMessage && <p className="success-message">{successMessage}</p>}

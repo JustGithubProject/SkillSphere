@@ -32,6 +32,14 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
         window.location.href = '/';
     }
 
+    const handlePurchasedCoursesClick = () => {
+        window.location.href = '/purchased-courses'
+    }
+
+    const handleCreateCourseClick = () => {
+        window.location.href = "/create-course"
+    }
+
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev); 
     };
@@ -113,9 +121,7 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                 <div className="navbar-nav py-0">
                                     <Link to="/" className={`nav-item nav-link ${isHomePage ? 'active' : ''}`}>Home</Link>
                                     <Link to="/courses" className={`nav-item nav-link ${isCoursesPage ? 'active' : ''}`}>Courses</Link>
-                                    {isAuthorized ? (
-                                        <Link to="/purchased-courses" className={`nav-item nav-link ${isPurchasedCoursesPage ? 'active' : ''}`}>Purchased courses</Link>
-                                    ) : null}
+                                
                                     <Link to="/contact-us" className="nav-item nav-link">Contact</Link>
                                     
                                 </div>
@@ -126,6 +132,12 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                         </button>
                                         {isDropdownOpen && (
                                             <div className="dropdown-menu show" aria-labelledby="userDropdown">
+                                                <button onClick={handleCreateCourseClick} className="dropdown-item">
+                                                    Create Course
+                                                </button>
+                                                <button onClick={handlePurchasedCoursesClick} className="dropdown-item">
+                                                    Purchases Courses
+                                                </button>
                                                 <button onClick={handleLogOutClick} className="dropdown-item">
                                                     Log out
                                                 </button>
