@@ -2,7 +2,7 @@ import React from 'react';
 
 import SignUpForm from '../SignUpForm/SignUpForm';
 
-const RegistrationComponent = () => {
+const RegistrationComponentEN = () => {
     return (
         <div className="container-fluid bg-registration py-5" style={{ margin: '90px 0' }}>
             <div className="container py-5">
@@ -15,14 +15,17 @@ const RegistrationComponent = () => {
                             <h1 className="text-white">30% Off For New Students</h1>
                         </div>
                         <p className="text-white">
-                            Invidunt lorem justo sanctus clita. Erat lorem labore ea, justo dolor lorem ipsum ut sed eos,
-                            ipsum et dolor kasd sit ea justo. Erat justo sed sed diam. Ea et erat ut sed diam sea ipsum est
-                            dolor
+                            We are dedicated to providing high-quality educational content
+                            that caters to the needs of modern learners.
+                            Our platform offers a wide variety of courses across different fields,
+                            ensuring that you can find what suits you best. Join us to embark on a transformative
+                            learning journey that empowers you with the skills needed to excel in today's
+                            competitive environment.
                         </p>
                         <ul className="list-inline text-white m-0">
-                            <li className="py-2"><i className="fa fa-check text-primary mr-3"></i>Labore eos amet dolor amet diam</li>
-                            <li className="py-2"><i className="fa fa-check text-primary mr-3"></i>Etsea et sit dolor amet ipsum</li>
-                            <li className="py-2"><i className="fa fa-check text-primary mr-3"></i>Diam dolor diam elitripsum vero.</li>
+                            <li className="py-2"><i className="fa fa-check text-primary mr-3"></i>Experienced instructors guiding your learning journey</li>
+                            <li className="py-2"><i className="fa fa-check text-primary mr-3"></i>Comprehensive resources and support available</li>
+                            <li className="py-2"><i className="fa fa-check text-primary mr-3"></i>Flexible learning schedules to fit your lifestyle</li>
                         </ul>
                     </div>
                     <div className="col-lg-5">
@@ -41,4 +44,4 @@ const RegistrationComponent = () => {
     );
 };
 
-export default RegistrationComponent;
+export default RegistrationComponentEN;

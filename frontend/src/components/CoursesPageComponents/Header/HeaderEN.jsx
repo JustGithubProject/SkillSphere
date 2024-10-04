@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 import * as jwtDecodeModule from 'jwt-decode';
 import Cookies from 'js-cookie';
 
+import './Header.css';
 
-const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
+
+const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
     const [username, setUsername] = useState('');
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -43,6 +45,17 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev); 
     };
+
+    const changeLanguage = (lang) => {
+        const currentKey = localStorage.getItem("language_key");
+        if (lang === 'en' && currentKey === 'ua') {
+            localStorage.removeItem("language_key");
+        } else if (lang === 'ua' && currentKey === 'en') {
+            localStorage.removeItem("language_key");
+        }
+        localStorage.setItem("language_key", lang);
+        window.location.reload();
+    }
     return (
         <>
             {/* Topbar Start */}
@@ -123,7 +136,12 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                     <Link to="/courses" className={`nav-item nav-link ${isCoursesPage ? 'active' : ''}`}>Courses</Link>
                                 
                                     <Link to="/contact-us" className="nav-item nav-link">Contact</Link>
-                                    
+                                    <button className="language-button" onClick={() => changeLanguage('en')}>
+                                        EN
+                                    </button>
+                                    <button className="language-button" onClick={() => changeLanguage('ua')}>
+                                        UA
+                                    </button>
                                 </div>
                                 {isAuthorized ? (
                                     <div className="dropdown ml-auto d-none d-lg-block">
@@ -169,4 +187,4 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
     );
 };
 
-export default Header;
+export default HeaderEN;

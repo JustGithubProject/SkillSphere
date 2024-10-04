@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios'; 
 import './css/ContactUs.css';
-import Header from '../components/CoursesPageComponents/Header/Header';
 
 const ContactUs = () => {
     const [theme, setTheme] = useState('light');
