@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CarouselComponent = () => {
+const CarouselComponentEN = () => {
   return (
     <div className="container-fluid p-0 pb-5 mb-5">
       <div id="header-carousel" className="carousel slide carousel-fade" data-ride="carousel">
@@ -67,4 +67,4 @@ const CarouselComponent = () => {
   );
 };
 
-export default CarouselComponent;
+export default CarouselComponentEN;

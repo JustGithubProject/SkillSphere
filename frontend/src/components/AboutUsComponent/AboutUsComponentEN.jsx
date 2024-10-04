@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AboutUsComponent = () => {
+const AboutUsComponentEN = () => {
   return (
     <div className="container-fluid py-5">
       <div className="container py-5">
@@ -20,12 +20,12 @@ const AboutUsComponent = () => {
               <h1>Innovative Way To Learn</h1>
             </div>
             <p>
-              Aliquyam accusam clita nonumy ipsum sit sea clita ipsum clita, ipsum dolores amet
-              voluptua duo dolores et sit ipsum rebum, sadipscing et erat eirmod diam kasd labore
-              clita est. Diam sanctus gubergren sit rebum clita amet, sea est sea vero sed et.
-              Sadipscing labore tempor at sit dolor clita consetetur diam. Diam ut diam tempor no
-              et, lorem dolore invidunt no nonumy stet ea labore, dolor justo et sit gubergren
-              diam sed sed no ipsum. Sit tempor ut nonumy elitr dolores justo aliquyam ipsum stet.
+              Our mission is to empower learners around the world
+              by providing high-quality educational content and a supportive community.
+              We leverage innovative technology to create interactive learning
+              experiences that keep you engaged and motivated. 
+              From video lectures and quizzes to discussion forums and hands-on projects,
+              our courses cater to various learning styles.
             </p>
             <a href="#" className="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">
               Learn More
@@ -37,4 +37,4 @@ const AboutUsComponent = () => {
   );
 };
 
-export default AboutUsComponent;
+export default AboutUsComponentEN;
