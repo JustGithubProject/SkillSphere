@@ -1,5 +1,8 @@
+import React, { useState, useEffect } from 'react';
+
 import HomeV2Page from "./pages/Home";
-import ContactUs from "./pages/ContactUs";
+import ContactUsEN from "./pages/ContactUsEN";
+import ContactUsUA from "./pages/ContactUsUA";
 import CourseSingle from "./pages/CourseSingle";
 import Courses from "./pages/Courses";
 import LoginPage from "./pages/LoginPage";
@@ -12,11 +15,26 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 function App() {
+  const [currentLanguage, setCurrentLanguage] = useState('en');
+
+  useEffect(() => {
+      const currentLang = localStorage.getItem("language_key");
+      setCurrentLanguage(currentLang);
+  }, []);
+
   return (
     <Router>
         <Routes>
           <Route path="/" element={<HomeV2Page />} />
-          <Route path="/contact-us" element={<ContactUs/>}/>
+          {currentLanguage === 'en' ? (
+            <>
+              <Route path="/contact-us" element={<ContactUsEN/>}/>
+            </>
+          ): (
+            <>
+              <Route path="/contact-us" element={<ContactUsUA/>}/>
+            </>
+          )}
           <Route path="/course-single/:id" element={<CourseSingle/>} />
           <Route path="/courses" element={<Courses/>} />
           <Route path="/purchased-courses" element={<PurchasedCoursesPage/>} />

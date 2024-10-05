@@ -11,7 +11,7 @@ const courses = [
   { id: 8, title: 'SEO', image: 'img/cat-8.jpg', coursesCount: 100 }
 ];
 
-const CoursesCategory = () => {
+const CoursesCategoryEN = () => {
   return (
     <div className="container-fluid py-5">
       <div className="container pt-5 pb-3">
@@ -37,4 +37,4 @@ const CoursesCategory = () => {
   );
 };
 
-export default CoursesCategory;
+export default CoursesCategoryEN;

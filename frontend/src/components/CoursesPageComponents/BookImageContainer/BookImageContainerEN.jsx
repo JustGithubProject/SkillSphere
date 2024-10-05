@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const BookImageContainer = () => {
+const BookImageContainerEN = () => {
     return (
         <div className="container-fluid page-header" style={{ marginBottom: '90px' }}>
                 <div className="container">
@@ -19,4 +19,4 @@ const BookImageContainer = () => {
     )
 }
 
-export default BookImageContainer;
+export default BookImageContainerEN;
