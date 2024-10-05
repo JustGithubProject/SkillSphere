@@ -5,6 +5,8 @@ import Cookies from 'js-cookie';
 
 import './Header.css';
 
+
+
 const HeaderUA = ({ isCoursesPage, isPurchasedCoursesPage, isHomePage }) => {
     const [username, setUsername] = useState('');
     const [isAuthorized, setIsAuthorized] = useState(false);
@@ -134,10 +136,18 @@ const HeaderUA = ({ isCoursesPage, isPurchasedCoursesPage, isHomePage }) => {
                                     <Link to="/" className={`nav-item nav-link ${isHomePage ? 'active' : ''}`}>Головна</Link>
                                     <Link to="/courses" className={`nav-item nav-link ${isCoursesPage ? 'active' : ''}`}>Курси</Link>
                                     <Link to="/contact-us" className="nav-item nav-link">Контакти</Link>
-                                    <button className="language-button" onClick={() => changeLanguage('en')}>
+                                    <button
+                                        onClick={() => changeLanguage('en')}
+                                        className="btn btn-outline-primary btn-sm mx-2"
+                                        title="English"
+                                    >
                                         EN
                                     </button>
-                                    <button className="language-button" onClick={() => changeLanguage('ua')}>
+                                    <button
+                                        onClick={() => changeLanguage('ua')}
+                                        className="btn btn-outline-primary btn-sm mx-2"
+                                        title="Українська"
+                                    >
                                         UA
                                     </button>
                                 </div>

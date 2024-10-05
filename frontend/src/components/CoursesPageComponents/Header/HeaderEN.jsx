@@ -4,7 +4,9 @@ import { Link } from 'react-router-dom';
 import * as jwtDecodeModule from 'jwt-decode';
 import Cookies from 'js-cookie';
 
-import './Header.css';
+import { FaLanguage } from 'react-icons/fa';
+import { BiWorld } from 'react-icons/bi';
+
 
 
 const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
@@ -136,10 +138,18 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                     <Link to="/courses" className={`nav-item nav-link ${isCoursesPage ? 'active' : ''}`}>Courses</Link>
                                 
                                     <Link to="/contact-us" className="nav-item nav-link">Contact</Link>
-                                    <button className="language-button" onClick={() => changeLanguage('en')}>
+                                    <button
+                                        onClick={() => changeLanguage('en')}
+                                        className="btn btn-outline-primary btn-sm mx-2"
+                                        title="English"
+                                    >
                                         EN
                                     </button>
-                                    <button className="language-button" onClick={() => changeLanguage('ua')}>
+                                    <button
+                                        onClick={() => changeLanguage('ua')}
+                                        className="btn btn-outline-primary btn-sm mx-2"
+                                        title="Українська"
+                                    >
                                         UA
                                     </button>
                                 </div>
