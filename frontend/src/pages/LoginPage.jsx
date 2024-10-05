@@ -1,10 +1,17 @@
-import React from 'react';
-import LoginForm from '../components/LoginForm/LoginForm';
+import React, { useState, useEffect } from 'react';
+import LoginFormEN from '../components/LoginForm/LoginFormEN';
+import LoginFormUA from '../components/LoginForm/LoginFormUA';
 
 const LoginPage = () => {
+    const [currentLanguage, setCurrentLanguage] = useState('en');
+
+    useEffect(() => {
+        const currentLang = localStorage.getItem("language_key");
+        setCurrentLanguage(currentLang);
+    }, []);
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
-            <LoginForm />
+            {currentLanguage === 'en' ? <LoginFormEN/> : <LoginFormUA/>}
         </div>
     );
 }

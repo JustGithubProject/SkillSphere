@@ -3,7 +3,7 @@ import './CreateCourseSection.css';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const CreateCourseSection = () => {
+const CreateCourseSectionEN = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
@@ -110,4 +110,4 @@ const CreateCourseSection = () => {
   );
 };
 
-export default CreateCourseSection;
+export default CreateCourseSectionEN;

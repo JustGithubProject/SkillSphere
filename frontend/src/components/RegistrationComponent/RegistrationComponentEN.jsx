@@ -1,6 +1,6 @@
 import React from 'react';
 
-import SignUpForm from '../SignUpForm/SignUpForm';
+import SignUpFormEN from '../SignUpForm/SignUpFormEN';
 
 const RegistrationComponentEN = () => {
     return (
@@ -34,7 +34,7 @@ const RegistrationComponentEN = () => {
                                 <h1 className="m-0">Sign Up Now</h1>
                             </div>
                             <div className="card-body rounded-bottom bg-primary p-5">
-                                <SignUpForm/>
+                                <SignUpFormEN/>
                             </div>
                         </div>
                     </div>
