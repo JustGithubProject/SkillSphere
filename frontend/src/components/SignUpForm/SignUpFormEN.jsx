@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const SignUpForm = () => {
+const SignUpFormEN = () => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -106,4 +106,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default SignUpFormEN;

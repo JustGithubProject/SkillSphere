@@ -1,6 +1,6 @@
 import React from 'react';
 
-import SignUpForm from '../SignUpForm/SignUpForm';
+import SignUpFormUA from '../SignUpForm/SignUpFormUA';
 
 const RegistrationComponentUA = () => {
     return (
@@ -34,7 +34,7 @@ const RegistrationComponentUA = () => {
                                 <h1 className="m-0">Зареєструйтесь зараз</h1>
                             </div>
                             <div className="card-body rounded-bottom bg-primary p-5">
-                                <SignUpForm/>
+                                <SignUpFormUA/>
                             </div>
                         </div>
                     </div>

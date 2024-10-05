@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PayPalForm from '../../Paypal/PaypalForm';
-
 import Cookies from 'js-cookie';
+import './SetCoursesEN.css';
 
 const SetCoursesEN = () => {
   const [courses, setCourses] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [showPayPalForm, setShowPayPalForm] = useState({ visible: false, price: null, courseId: null });
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/v1/course/all/no-auth/')
@@ -36,7 +37,15 @@ const SetCoursesEN = () => {
   }, []); 
 
   const handleViewCourse = (course_id) => {
-      window.location.href = `/course-single/${course_id}`
+    window.location.href = `/course-single/${course_id}`;
+  };
+
+  const handleBuyCourse = (price, courseId) => {
+    setShowPayPalForm({ visible: true, price, courseId });
+  };
+
+  const handleClosePayPalForm = () => {
+    setShowPayPalForm({ visible: false, price: null, courseId: null });
   };
 
   console.log(courses);
@@ -51,29 +60,33 @@ const SetCoursesEN = () => {
         <div className="row">
           {courses.map(course => (
             <div key={course.id} className="col-lg-4 col-md-6 mb-4">
-              <div className="rounded overflow-hidden mb-2">
-              <img
-                className="img-fluid"
-                src={`http://127.0.0.1:8080${course.image}`}
-                alt={course.title}
-              />
-              
-                <div className="bg-secondary p-4">
-                  <div className="d-flex justify-content-between mb-3">
-                    <small className="m-0"><i className="fa fa-users text-primary mr-2"></i>{course.students} Students</small>
-                    <small className="m-0"><i className="far fa-clock text-primary mr-2"></i>{course.duration}</small>
+              <div className="course-card rounded overflow-hidden mb-2">
+                <img
+                  className="img-fluid"
+                  src={`http://127.0.0.1:8080${course.image}`}
+                  alt={course.title}
+                />
+                <div className="bg-secondary p-4 d-flex flex-column justify-content-between">
+                  <div>
+                    <div className="d-flex justify-content-between mb-3">
+                      <small className="m-0"><i className="fa fa-users text-primary mr-2"></i>{course.students} Students</small>
+                      <small className="m-0"><i className="far fa-clock text-primary mr-2"></i>{course.duration}</small>
+                    </div>
+                    <a className="h5" href="#">{course.title}</a>
                   </div>
-                  <a className="h5" href="#">{course.title}</a>
                   <div className="border-top mt-4 pt-4">
                     <div className="d-flex justify-content-between">
                       <h6 className="m-0"><i className="fa fa-star text-primary mr-2"></i>{course.rating} <small>({course.reviews})</small></h6>
                       <h5 className="m-0">{course.price}</h5>
                     </div>
-                    {isAuthorized ? (
-                      <div>
-                        <PayPalForm price={course.price} course_id={course.id}/>
-                      </div>
-                    ) : null}
+                    {isAuthorized && (
+                      <button
+                        className="btn btn-success mt-3"
+                        onClick={() => handleBuyCourse(course.price, course.id)}
+                      >
+                        Buy Course
+                      </button>
+                    )}
                     <button className="btn btn-primary mt-3" onClick={() => handleViewCourse(course.id)}>View Course</button>
                   </div>
                 </div>
@@ -82,6 +95,25 @@ const SetCoursesEN = () => {
           ))}
         </div>
       </div>
+      {showPayPalForm.visible && (
+        <div className="modal" style={{ display: 'block' }}>
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Payment Details</h5>
+                <button type="button" className="close" onClick={handleClosePayPalForm}>&times;</button>
+              </div>
+              <div className="modal-body">
+                <p>Total Price: {showPayPalForm.price}</p>
+                <PayPalForm price={showPayPalForm.price} course_id={showPayPalForm.courseId} />
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" onClick={handleClosePayPalForm}>Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

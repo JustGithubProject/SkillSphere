@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import HeaderEN from '../components/CoursesPageComponents/Header/HeaderEN';
 import HeaderUA from '../components/CoursesPageComponents/Header/HeaderUA';
-import CreateCourseSection from '../components/CreateCourseSection/CreateCourseSection';
+import CreateCourseSectionEN from '../components/CreateCourseSection/CreateCourseSectionEN';
+import CreateCourseSectionUA from '../components/CreateCourseSection/CreateCourseSectionUA';
 import FooterEN from '../components/CoursesPageComponents/Footer/FooterEN';
 import FooterUA from '../components/CoursesPageComponents/Footer/FooterUA';
 
@@ -18,14 +19,14 @@ const CreateCoursePage = () => {
             {currentLanguage === 'en' ? (
                 <>
                     <HeaderEN isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
-                    <CreateCourseSection/>
+                    <CreateCourseSectionEN/>
                     <FooterEN/>
                 </>
                 
             ) : (
                 <>
                     <HeaderUA isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
-                    <CreateCourseSection/>
+                    <CreateCourseSectionUA/>
                     <FooterUA/>
                 </>
             )}
