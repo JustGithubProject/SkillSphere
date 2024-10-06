@@ -55,7 +55,7 @@ class User(Base):
     )
 
 class Course(Base):
-    title: Mapped[str] = mapped_column(String(1000), unique=True)
+    title: Mapped[str] = mapped_column(unique=True)
     description: Mapped[str]
     video_url: Mapped[str | None]
     photo_url: Mapped[str | None]
