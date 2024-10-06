@@ -12,7 +12,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from redis_cache import RedisCache, get_redis_helper
 from database import session_getter
 from services.user_service import UserService, get_user_service
-from authentication.schemas import TokenInfo, UserIn, UserOut
+from authentication.schemas import (
+    TokenInfo,
+    UserIn,
+    UserOut,
+    UserWithCode
+)
 
 from authentication.custom_exceptions import (
     failted_to_created_user_exception, 
@@ -59,48 +64,112 @@ async def send_code(
     )
 
 
+# @router.post(
+#     "/signup/", 
+#     summary="Create new user",
+#     status_code=status.HTTP_201_CREATED,
+# )
+# async def create_user_handler(
+#     session: Annotated[AsyncSession, Depends(session_getter)],
+#     user_service: Annotated[UserService, Depends(get_user_service)],
+#     redis_helper: Annotated[RedisCache, Depends(get_redis_helper)],
+#     user_in: UserIn,
+#     code: str,
+# ):
+#     # Get user by email
+#     user: UserOut = await user_service.get_user_by_email(
+#         session=session,
+#         email=user_in.email
+#     )
+
+#     # If the user exists raise HTTPException
+#     if user:
+#         logger.warning(f"Attempted to create a user with an email that already exists: {user_in.email}")
+#         raise user_already_exists_exception
+#     try:
+#         code_from_redis: str = await redis_helper.get(str(user_in.email))
+#         if code != code_from_redis:
+#             raise code_did_not_match_exception
+#         await redis_helper.delete(user_in.email)
+#         # Create user using repository for user
+#         user_id = await user_service.register_user(
+#             session=session,
+#             user_in=user_in,
+#         )
+#         logger.info(f"User created successfully: {user_in.username}")
+#         return {
+#             "user": {
+#                 "user_id": user_id,
+#                 **user_in.model_dump(exclude_defaults=True)
+#                 }
+#             }
+#     except Exception as e:
+#         logger.error(f"Failed to create a new user: {e}", exc_info=True)
+#         raise failted_to_created_user_exception
+
 @router.post(
     "/signup/", 
     summary="Create new user",
     status_code=status.HTTP_201_CREATED,
 )
-async def create_user_handler(
+async def send_code_handler(
     session: Annotated[AsyncSession, Depends(session_getter)],
     user_service: Annotated[UserService, Depends(get_user_service)],
     redis_helper: Annotated[RedisCache, Depends(get_redis_helper)],
     user_in: UserIn,
-    code: str,
 ):
     # Get user by email
     user: UserOut = await user_service.get_user_by_email(
         session=session,
         email=user_in.email
     )
-
     # If the user exists raise HTTPException
     if user:
         logger.warning(f"Attempted to create a user with an email that already exists: {user_in.email}")
         raise user_already_exists_exception
     try:
-        code_from_redis: str = await redis_helper.get(str(user_in.email))
-        if code != code_from_redis:
-            raise code_did_not_match_exception
-        await redis_helper.delete(user_in.email)
-        # Create user using repository for user
-        user_id = await user_service.register_user(
-            session=session,
-            user_in=user_in,
+        # Sending code to email
+        logger.info("Sending code to email")
+        await user_service.send_code(
+            email=user_in.email,
+            redis_helper=redis_helper
         )
-        logger.info(f"User created successfully: {user_in.username}")
-        return {
-            "user": {
-                "user_id": user_id,
-                **user_in.model_dump(exclude_defaults=True)
-                }
-            }
+        return {"message": "Verification code sent successfully", "user": user_in}
     except Exception as e:
         logger.error(f"Failed to create a new user: {e}", exc_info=True)
         raise failted_to_created_user_exception
+
+
+@router.post(
+    "/confirm/code/"
+)
+async def confirm_code_to_create_user_handler(
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    user_service: Annotated[UserService, Depends(get_user_service)],
+    redis_helper: Annotated[RedisCache, Depends(get_redis_helper)],
+    user: UserWithCode,  
+):
+    code_from_redis = await redis_helper.get(str(user.email))
+    entered_code = user.code
+    if code_from_redis == entered_code:
+        await user_service.register_user(
+            session=session,
+            user_in=UserIn(
+                username=user.username,
+                email=user.email,
+                password_hash=user.password_hash,
+                first_name=user.first_name,
+                last_name=user.last_name
+            )
+        )
+        return {"message": "The user has been created successfully"}
+    else:
+        return {"message": "Failed to create user (wrong code)"}
+        
+        
+
+
+
     
 
 @router.post(

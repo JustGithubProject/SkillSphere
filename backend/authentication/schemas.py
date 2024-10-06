@@ -15,6 +15,9 @@ class UserBase(BaseModel):
 class UserIn(UserBase):
     pass
 
+class UserWithCode(UserBase):
+    code: str
+
 
 class UserOut(UserBase):
     id: int
