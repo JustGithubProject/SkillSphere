@@ -199,3 +199,13 @@ class CourseRepository:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Can not add instructor. Error: {e}"
             )
+    
+    async def get_courses_created_by_user(
+        self,
+        session: AsyncSession,
+        user_id: int
+    ):
+        result = await session.execute(
+            select(Course).options(selectinload(Course.creator)).filter(Course.creator_id == user_id)
+        )
+        return result.scalars().all()

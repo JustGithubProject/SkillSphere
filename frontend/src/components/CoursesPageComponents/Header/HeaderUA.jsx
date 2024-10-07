@@ -38,6 +38,10 @@ const HeaderUA = ({ isCoursesPage, isPurchasedCoursesPage, isHomePage }) => {
         window.location.href = '/purchased-courses';
     }
 
+    const handleMyCreatedCoursesClick = () => {
+        window.location.href = "/my-created-courses"
+    }
+
     const handleCreateCourseClick = () => {
         window.location.href = "/create-course";
     }
@@ -164,9 +168,13 @@ const HeaderUA = ({ isCoursesPage, isPurchasedCoursesPage, isHomePage }) => {
                                                 <button onClick={handlePurchasedCoursesClick} className="dropdown-item">
                                                     Придбані курси
                                                 </button>
+                                                <button onClick={handleMyCreatedCoursesClick} className="dropdown-item">
+                                                    Створені мною курси
+                                                </button>
                                                 <button onClick={handleLogOutClick} className="dropdown-item">
                                                     Вихід
                                                 </button>
+                                                
                                             </div>
                                         )}
                                     </div>

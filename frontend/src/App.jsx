@@ -9,7 +9,7 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import PurchasedCoursesPage from "./pages/PurchasedCoursesPage";
 import CreateCoursePage from "./pages/CreateCoursePage";
-
+import MyCreatedCoursesPage from './pages/MyCreatedCoursesPage';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -41,6 +41,7 @@ function App() {
           <Route path="/login" element={<LoginPage/>} />
           <Route path="/signup" element={<SignUpPage/>} />
           <Route path="/create-course" element={<CreateCoursePage/>} />
+          <Route path="/my-created-courses" element={<MyCreatedCoursesPage/>} />
         </Routes>
     </Router>
   );

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import HeaderEN from '../components/CoursesPageComponents/Header/HeaderEN';
 import HeaderUA from '../components/CoursesPageComponents/Header/HeaderUA';
-import PurchasedCourses from '../components/PurchasedCourses/PurchasedCourses';
+import PurchasedCoursesEN from '../components/PurchasedCourses/PurchasedCoursesEN';
+import PurchasedCoursesUA from '../components/PurchasedCourses/PurchasedCoursesUA';
 
 const PurchasedCoursesPage = () => {
     const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -12,11 +13,17 @@ const PurchasedCoursesPage = () => {
     return (
         <>
         {currentLanguage === 'en' ? (
-            <HeaderEN isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
+            <>
+                <HeaderEN isCoursesPage={false} isHomePage={false} isPurchasedCoursesPage={false} />
+                <PurchasedCoursesEN/>
+            </>
         ) : (
-            <HeaderUA isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
+            <>
+                <HeaderUA isCoursesPage={false} isHomePage={false} isPurchasedCoursesPage={false} />
+                <PurchasedCoursesUA/>
+            </>
         )}
-        <PurchasedCourses/>
+        
         </>
     )
 }

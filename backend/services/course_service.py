@@ -279,5 +279,16 @@ class CourseService(FileActionMixin):
     
         return None
 
+    async def get_courses_created_by_user(
+        self,
+        session: AsyncSession,
+        user_id: int
+    ):
+        list_courses = await self.course_repository.get_courses_created_by_user(
+            session=session,
+            user_id=user_id
+        )
+        return list_courses
+
 def get_course_service():
     return CourseService(CourseRepository(), UserRepository()) 
