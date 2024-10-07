@@ -44,6 +44,10 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
         window.location.href = "/create-course"
     }
 
+    const handleMyCreatedCoursesClick = () => {
+        window.location.href = "/my-created-courses"
+    }
+
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev); 
     };
@@ -165,6 +169,9 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                                 </button>
                                                 <button onClick={handlePurchasedCoursesClick} className="dropdown-item">
                                                     Purchases Courses
+                                                </button>
+                                                <button onClick={handleMyCreatedCoursesClick} className="dropdown-item">
+                                                    My created courses
                                                 </button>
                                                 <button onClick={handleLogOutClick} className="dropdown-item">
                                                     Log out

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import './PurchasedCourses.css';
 
-const PurchasedCourses = () => {
+
+const MyCreatedCourses = () => {
     const [isAuthorized, setIsAuthorized] = useState(false);
-    const [purchasedCourses, setPurchasedCourses] = useState([]);
+    const [myCreatedCourses, setMyCreatedCourses] = useState([]);
     
     useEffect(() => {
         const fetchData = async () => {
@@ -14,14 +14,14 @@ const PurchasedCourses = () => {
                 setIsAuthorized(true);
                 try {
                     const response = await axios.get(
-                        "http://127.0.0.1:8000/api/v1/jwt/users/joined/courses",
+                        "http://127.0.0.1:8000/api/v1/course/my-created-courses/",
                         {
                             headers: {
                                 'Authorization': `Bearer ${accessToken}`
                             }
                         }
                     );
-                    setPurchasedCourses(response.data);
+                    setMyCreatedCourses(response.data);
                 } catch (error) {
                     console.error("Failed to get purchased courses:", error);
                 }
@@ -33,10 +33,10 @@ const PurchasedCourses = () => {
 
     return (
         <div className="purchased-courses">
-            <h1>Купленные курсы</h1>
+            <h1>My Created Courses</h1>
             {isAuthorized ? (
                 <div className="course-list">
-                    {purchasedCourses.map(course => (
+                    {myCreatedCourses.map(course => (
                         <div key={course.id} className="course-card">
                             <h2>{course.title}</h2>
                             <p>
@@ -55,4 +55,4 @@ const PurchasedCourses = () => {
     );
 };
 
-export default PurchasedCourses;
+export default MyCreatedCourses;

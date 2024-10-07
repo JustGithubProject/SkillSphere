@@ -1,5 +1,6 @@
 import os
 import shutil
+import logging
 
 from typing import Annotated
 from fastapi import (
@@ -143,6 +144,17 @@ async def get_course_by_id_no_auth(
     return await course_service.get_course_by_id_no_auth(
         session=session,
         course_id=course_id
+    )
+
+@router.get("/my-created-courses/", response_model=list[CourseOutput])
+async def get_my_created_courses(
+    course_service: Annotated[CourseService, Depends(get_course_service)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    user: Annotated[UserOut, Depends(get_current_active_auth_user)],
+) -> list[CourseOutput]:
+    return await course_service.get_courses_created_by_user(
+        session=session,
+        user_id=user.id
     )
 
 @router.patch("/{course_id}/", response_model=CourseOutput)
