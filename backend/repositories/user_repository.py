@@ -8,7 +8,8 @@ from authentication.utils import hash_password
 from authentication.custom_exceptions import (
     failted_to_created_user_exception,
     update_ban_status_exception,
-    user_not_found_exception
+    user_not_found_exception,
+    update_user_password_exception
 )
 from database.models import (
     User,
@@ -101,6 +102,26 @@ class UserRepository:
         except Exception:
             session.rollback()
             raise update_ban_status_exception
+        
+    async def update_user_password(
+        self,
+        session: AsyncSession,
+        new_password: str,
+        email: str
+    ) -> User:
+        new_password_hash = hash_password(new_password)
+        try:
+            stmt = (
+                update(User)
+                .values(password_hash=new_password_hash)
+                .where(User.email==email)
+            )
+            await session.execute(stmt)
+            await session.commit()
+            return None
+        except Exception:
+            session.rollback()
+            raise update_user_password_exception
 
     async def get_instructor_by_id(
         self,

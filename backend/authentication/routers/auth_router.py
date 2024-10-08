@@ -6,6 +6,7 @@ from typing import Annotated
 from fastapi import (
     APIRouter, 
     Depends,
+    Query,
     status
 )
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -166,11 +167,6 @@ async def confirm_code_to_create_user_handler(
     else:
         return {"message": "Failed to create user (wrong code)"}
         
-        
-
-
-
-    
 
 @router.post(
     "/login/", 
@@ -215,7 +211,6 @@ async def auth_refresh_jwt(
     user: Annotated[UserOut, Depends(get_current_auth_user_for_refresh)],
     session: Annotated[AsyncSession, Depends(session_getter)],
     user_service: Annotated[UserService, Depends(get_user_service)]
-
 ) -> TokenInfo:
     is_admin: bool = await user_service.check_user_is_admin(
         session=session, 
@@ -227,3 +222,33 @@ async def auth_refresh_jwt(
         access_token=access_token
     )
 
+
+@router.post("/forgot/password/")
+async def forgot_password(
+    email: Annotated[str, Query()],
+    redis_helper: Annotated[RedisCache, Depends(get_redis_helper)],
+    user_service: Annotated[UserService, Depends(get_user_service)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
+) -> dict:
+    return await user_service.send_url_code(
+        email=email,
+        redis_helper=redis_helper,
+        session=session,
+    )
+
+@router.post("/change/password/{url_code}/", status_code=status.HTTP_204_NO_CONTENT)
+async def change_password(
+    url_code: str,
+    new_password: str,
+    new_password_repeat: str,
+    redis_helper: Annotated[RedisCache, Depends(get_redis_helper)],
+    user_service: Annotated[UserService, Depends(get_user_service)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
+) -> None:
+    return await user_service.change_password(
+        url_code=url_code,
+        redis_helper=redis_helper,
+        session=session,
+        new_password=new_password,
+        new_password_repeat=new_password_repeat,
+    )

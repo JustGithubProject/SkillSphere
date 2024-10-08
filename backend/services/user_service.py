@@ -1,5 +1,8 @@
 from datetime import datetime
 import random
+import uuid
+
+from fastapi import HTTPException, status
 from redis_cache import RedisCache
 from database.models import User
 from repositories.user_repository import UserRepository
@@ -10,7 +13,7 @@ from authentication.custom_exceptions import (
     user_not_found_exception,
     not_enough_rights_exception
 )
-from utils import send_code
+from utils import send_code, send_url_code
 from authentication.enums import UserAction
 from authentication.utils import generate_random_password
 
@@ -33,7 +36,50 @@ class UserService:
         await redis_helper.set(key=email, value=code)
         return {"code": code}
 
+    async def send_url_code(
+        self,
+        email: str,
+        redis_helper: RedisCache,
+        session: AsyncSession
+    ) -> dict:
+        user: UserOut = self.get_user_by_email(session=session, email=email)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"User by email {email} not found"
+            )
+        url_code = str(uuid.uuid4())
+        await send_url_code(email, url_code)
+        await redis_helper.set(key=url_code, value=email, time_expire=10*60)
+        return {"url_code": url_code}
 
+    async def change_password(
+        self,
+        url_code: str,
+        redis_helper: RedisCache,
+        session: AsyncSession,
+        new_password: str,
+        new_password_repeat: str,
+    ) -> None:
+        email = await redis_helper.get(url_code)
+        if not email:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Url code not found"
+            )
+        if new_password != new_password_repeat:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The passwords do not match"
+            )
+        await self.user_repository.update_user_password(
+            session=session,
+            email=email,
+            new_password=new_password
+        )
+        await redis_helper.delete(url_code)
+        return None
+        
     async def register_user(
         self,
         session: AsyncSession, 
