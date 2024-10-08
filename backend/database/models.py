@@ -32,7 +32,7 @@ class Base(DeclarativeBase):
 
 class User(Base):
     username: Mapped[str] = mapped_column(unique=True)
-    email: Mapped[str]
+    email: Mapped[str] = mapped_column(unique=True)
     password_hash: Mapped[bytes] = mapped_column(LargeBinary)
     first_name: Mapped[str]
     last_name: Mapped[str]

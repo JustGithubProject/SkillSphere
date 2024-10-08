@@ -25,9 +25,9 @@ class RedisCache:
         logging.info("Redis didnt found key %s", key)
         return None
     
-    async def set(self, key: int, value: dict):
+    async def set(self, key: int, value: dict, time_expire: int = 3 * 60):
         await self.redis.set(key, pickle.dumps(value))
-        await self.redis.expire(key, 3 * 60)
+        await self.redis.expire(key, time=time_expire)
         logging.info("Redis set key %s value %s", key, value)
 
     async def delete(self, key: int):

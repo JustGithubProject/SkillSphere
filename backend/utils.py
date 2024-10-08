@@ -55,6 +55,18 @@ def get_thank_you_email_body(course_name: str) -> str:
         </div>
     '''
 
+def get_code_url_email_body(urL_code: str) -> str:
+    return f'''
+        <div style="font-family: Arial, sans-serif; line-height: 1.5;">
+            <p>Здравствуйте,</p>
+            <p>Перейдите по уникальной ссылке для сброса пароля <strong><a href="">{urL_code}</a></strong>! Если вы не хотите сбрасывать свой пароль, просто проигнорируйте это письмо.</p>
+            <p>Обратите внимание, что данная ссылка доступна 10 минут.</p>
+            <p>Если у вас возникнут вопросы или предложения, не стесняйтесь обращаться к нам.</p>
+            <br>
+            <p>С уважением,<br>Команда SkillSphere</p>
+        </div>
+    '''
+
 
 async def send_email(recipient_email: str, subject: str, body: str):
     email_message = generate_email_template(subject, recipient_email, body)
@@ -77,6 +89,11 @@ async def send_thank_you(email: str, course_name: str):
     subject = "Спасибо за покупку курса!"
     body = get_thank_you_email_body(course_name)
     await send_email(email, subject, body)
-    print("EMAIL SENT")
+
+
+async def send_url_code(email: str, url_code: str):
+    subject = "Cброс пароля"
+    body = get_code_url_email_body(url_code)
+    await send_email(email, subject, body)
 
 
