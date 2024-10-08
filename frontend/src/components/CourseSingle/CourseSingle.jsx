@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const CourseSingleComponent = ({ course_id }) => {
   const [course, setCourse] = useState();
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
     const fetchCourseById = async () => {
@@ -14,7 +15,17 @@ const CourseSingleComponent = ({ course_id }) => {
         console.log("Error fetching course: ", error);
       }
     };
+    const fetchCommentsById = async () => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/v1/comment/all/${course_id}`);
+        setComments(response.data);
+        console.log("Comments: ", response.data);
+      } catch(error) {
+        console.log("Error fetching comments: ", error);
+      }
+    }
     fetchCourseById();
+    fetchCommentsById();
   }, [course_id]);
 
   const formatDate = (dateString) => {
@@ -46,74 +57,39 @@ const CourseSingleComponent = ({ course_id }) => {
             <div className="col-lg-8">
               <div className="mb-5">
                 <h6 className="text-primary mb-3">{course && formatDate(course.created_at)}</h6>
+   
                 <h1 className="mb-5">{course && course.title}</h1>
-                <img className="img-fluid rounded w-100 mb-4" src={course && `http://127.0.0.1:8080${course.photo_url}`} alt="Image" />
-                <p>Sadipscing labore amet rebum est et justo gubergren. Et eirmod ipsum sit diam ut magna lorem.
-                  Nonumy vero labore lorem sanctus rebum et lorem magna kasd, stet amet magna accusam
-                  consetetur eirmod. Kasd accusam sit ipsum sadipscing et at at sanctus et. Ipsum sit
-                  gubergren dolores et, consetetur justo invidunt at et aliquyam ut et vero clita. Diam sea
-                  sea no sed dolores diam nonumy, gubergren sit stet no diam kasd vero.</p>
-                <p>Voluptua est takimata stet invidunt sed rebum nonumy stet, clita aliquyam dolores vero stet
-                  consetetur elitr takimata rebum sanctus. Sit sed accusam stet sit nonumy kasd diam dolores,
-                  sanctus lorem kasd duo dolor dolor vero sit et. Labore ipsum duo sanctus amet eos et.
-                  Consetetur no sed et aliquyam ipsum justo et, clita lorem sit vero amet amet est dolor
-                  elitr, stet et no diam sit. Dolor erat justo dolore sit invidunt.</p>
-                <h2 className="mb-4">Est dolor lorem et ea</h2>
-                <img className="img-fluid rounded w-50 float-left mr-4 mb-3" src="img/blog-1.jpg" alt="Image" />
-                <p>Diam dolor est labore duo invidunt ipsum clita et, sed et lorem voluptua tempor invidunt at
-                  est sanctus sanctus. Clita dolores sit kasd diam takimata justo diam lorem sed. Magna amet
-                  sed rebum eos. Clita no magna no dolor erat diam tempor rebum consetetur, sanctus labore sed
-                  nonumy diam lorem amet eirmod. No at tempor sea diam kasd, takimata ea nonumy elitr
-                  sadipscing gubergren erat. Gubergren at lorem invidunt sadipscing rebum sit amet ut ut,
-                  voluptua diam dolores at sadipscing stet. Clita dolor amet dolor ipsum vero ea ea eos.
-                  Invidunt sed diam dolores takimata dolor dolore dolore sit. Sit ipsum erat amet lorem et,
-                  magna sea at sed et eos. Accusam eirmod kasd lorem clita sanctus ut consetetur et. Et duo
-                  tempor sea kasd clita ipsum et. Takimata kasd diam justo est eos erat aliquyam et ut. Ea sed
-                  sadipscing no justo et eos labore, gubergren ipsum magna dolor lorem dolore, elitr aliquyam
-                  takimata sea kasd dolores diam, amet et est accusam labore eirmod vero et voluptua. Amet
-                  labore clita duo et no. Rebum voluptua magna eos magna, justo gubergren labore sit.</p>
-                <p>Diam dolor est labore duo invidunt ipsum clita et, sed et lorem voluptua tempor invidunt at
-                  est sanctus sanctus. Clita dolores sit kasd diam takimata justo diam lorem sed. Magna amet
-                  sed rebum eos. Clita no magna no dolor erat diam tempor rebum consetetur, sanctus labore sed
-                  nonumy diam lorem amet eirmod. No at tempor sea diam kasd, takimata ea nonumy elitr
-                  sadipscing gubergren erat.</p>
+                <video className="video-fluid rounded w-100 mb-4" controls>
+                  <source src={course && `http://127.0.0.1:8080${course.video_url}`} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <p>{course && course.description}</p>
               </div>
 
               {/* Comment List */}
               <div className="mb-5">
-                <h3 className="text-uppercase mb-4" style={{ letterSpacing: '5px' }}>3 Comments</h3>
-                <div className="media mb-4">
-                  <img src="img/user.jpg" alt="Image" className="img-fluid rounded-circle mr-3 mt-1" style={{ width: '45px' }} />
-                  <div className="media-body">
-                    <h6>John Doe <small><i>01 Jan 2045 at 12:00pm</i></small></h6>
-                    <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at.
-                      Kasd diam tempor rebum magna dolores sed sed eirmod ipsum. Gubergren clita aliquyam
-                      consetetur sadipscing, at tempor amet ipsum diam tempor consetetur at sit.</p>
-                    <button className="btn btn-sm btn-secondary">Reply</button>
-                  </div>
-                </div>
-                <div className="media mb-4">
-                  <img src="img/user.jpg" alt="Image" className="img-fluid rounded-circle mr-3 mt-1" style={{ width: '45px' }} />
-                  <div className="media-body">
-                    <h6>John Doe <small><i>01 Jan 2045 at 12:00pm</i></small></h6>
-                    <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at.
-                      Kasd diam tempor rebum magna dolores sed sed eirmod ipsum. Gubergren clita aliquyam
-                      consetetur sadipscing, at tempor amet ipsum diam tempor consetetur at sit.</p>
-                    <button className="btn btn-sm btn-secondary">Reply</button>
-                    <div className="media mt-4">
-                      <img src="img/user.jpg" alt="Image" className="img-fluid rounded-circle mr-3 mt-1" style={{ width: '45px' }} />
+                  <h3 className="text-uppercase mb-4" style={{ letterSpacing: '5px' }}>{comments.length} Comments</h3>
+                  {comments.map(comment => (
+                    <div key={comment && comment.id} className="media mb-4">
+                      {/* <img src="img/user.jpg" alt="Image" className="img-fluid rounded-circle mr-3 mt-1" style={{ width: '45px' }} /> */}
                       <div className="media-body">
-                        <h6>John Doe <small><i>01 Jan 2045 at 12:00pm</i></small></h6>
-                        <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum
-                          et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.
-                          Gubergren clita aliquyam consetetur, at tempor amet ipsum diam tempor at
-                          sit.</p>
+                        <h6>{comment && comment.user_id} <small><i>{comment && comment.created_at}</i></small></h6>
+                        <p>{comment && comment.content}</p>
                         <button className="btn btn-sm btn-secondary">Reply</button>
+                        {/* {comment.replies.length > 0 && comment.replies.map(reply => (
+                          <div key={reply.id} className="media mt-4">
+                            <img src="img/user.jpg" alt="Image" className="img-fluid rounded-circle mr-3 mt-1" style={{ width: '45px' }} />
+                            <div className="media-body">
+                              <h6>{reply.name} <small><i>{reply.date}</i></small></h6>
+                              <p>{reply.text}</p>
+                              <button className="btn btn-sm btn-secondary">Reply</button>
+                            </div>
+                          </div>
+                        ))} */}
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              </div>
 
               {/* Comment Form */}
               <div className="bg-secondary rounded p-5">
@@ -145,14 +121,11 @@ const CourseSingleComponent = ({ course_id }) => {
 
             {/* Sidebar */}
             <div className="col-lg-4 mt-5 mt-lg-0">
-              {/* Categories */}
+              {/* About Course */}
               <div className="d-flex flex-column text-center bg-secondary rounded mb-5 py-5 px-4">
-                <h3 className="text-primary mb-3">Categories</h3>
-                <a href="" className="text-white mb-2">Web Design <span className="badge badge-primary">150</span></a>
-                <a href="" className="text-white mb-2">Web Development <span className="badge badge-primary">131</span></a>
-                <a href="" className="text-white mb-2">Online Marketing <span className="badge badge-primary">78</span></a>
-                <a href="" className="text-white mb-2">Keyword Research <span className="badge badge-primary">56</span></a>
-                <a href="" className="text-white mb-2">Email Marketing <span className="badge badge-primary">98</span></a>
+                <h3 className="text-primary mb-3">About Course</h3>
+                <a href="" className="text-black mb-2">Price: {course && course.price}$</a>
+                <a href="" className="text-black mb-2">Level: {course && course.level}</a>
               </div>
 
               {/* Recent Post */}
