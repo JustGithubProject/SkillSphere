@@ -17,6 +17,7 @@ const SetCoursesEN = () => {
           title: course.title,
           image: course.photo_url,
           students: course.students.length,
+          video_url: course.video_url,
           duration: '01h 30m', 
           rating: 4.5, 
           reviews: 250, 
@@ -36,8 +37,8 @@ const SetCoursesEN = () => {
     }
   }, []); 
 
-  const handleViewCourse = (course_id) => {
-    window.location.href = `/course-single/${course_id}`;
+  const handleViewCourse = (course_id, video_url) => {
+    window.location.href = `/course-single/${course_id}?watch=${video_url}`;
   };
 
   const handleBuyCourse = (price, courseId) => {
@@ -87,7 +88,7 @@ const SetCoursesEN = () => {
                         Buy Course
                       </button>
                     )}
-                    <button className="btn btn-primary mt-3" onClick={() => handleViewCourse(course.id)}>View Course</button>
+                    <button className="btn btn-primary mt-3" onClick={() => handleViewCourse(course.id, course.video_url)}>View Course</button>
                   </div>
                 </div>
               </div>

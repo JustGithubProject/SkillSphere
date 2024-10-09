@@ -36,8 +36,8 @@ const SetCoursesUA = () => {
     }
   }, []);
 
-  const handleViewCourse = (course_id) => {
-    window.location.href = `/course-single/${course_id}`;
+  const handleViewCourse = (course_id, video_url) => {
+    window.location.href = `/course-single/${course_id}?watch=${video_url}`;
   };
 
   const handleBuyCourse = (course) => {
