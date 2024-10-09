@@ -1,6 +1,7 @@
 import os
 import shutil
 import logging
+import uuid
 
 from typing import Annotated
 from fastapi import (
@@ -101,12 +102,22 @@ async def create_course(
     os.makedirs(VIDEO_DIRECTORY, exist_ok=True)
     
     if photo_file:
-        photo_path = os.path.join(PHOTO_DIRECTORY, photo_file.filename)
+        random_uuid_string = uuid.uuid4()
+        file_extension = photo_file.filename.split(".")[-1]
+        photo_path = os.path.join(
+            PHOTO_DIRECTORY,
+            f"{random_uuid_string}.{file_extension}"
+        )
         with open(photo_path, "wb") as buffer:
             shutil.copyfileobj(photo_file.file, buffer)
 
     if video_file:
-        video_path = os.path.join(VIDEO_DIRECTORY, video_file.filename)
+        random_uuid_string = uuid.uuid4()
+        file_extension = video_file.filename.split(".")[-1]
+        video_path = os.path.join(
+            VIDEO_DIRECTORY,
+            f"{random_uuid_string}.{file_extension}"
+        )
         with open(video_path, "wb") as buffer:
             shutil.copyfileobj(video_file.file, buffer)
     ###########################################################

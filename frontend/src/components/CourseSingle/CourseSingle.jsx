@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import { useLocation } from 'react-router-dom';
+
 const CourseSingleComponent = ({ course_id }) => {
   const [course, setCourse] = useState();
   const [comments, setComments] = useState([]);
+  const query = new URLSearchParams(useLocation().search);
+  const videoURLParamValue = query.get("watch");
 
   useEffect(() => {
     const fetchCourseById = async () => {
@@ -55,17 +59,15 @@ const CourseSingleComponent = ({ course_id }) => {
         <div className="container py-5">
           <div className="row">
             <div className="col-lg-8">
-              <div className="mb-5">
+            <div className="mb-5">
                 <h6 className="text-primary mb-3">{course && formatDate(course.created_at)}</h6>
-   
                 <h1 className="mb-5">{course && course.title}</h1>
-                <video className="video-fluid rounded w-100 mb-4" controls>
-                  <source src={course && `http://127.0.0.1:8080${course.video_url}`} type="video/mp4" />
+                <video className="video-fluid rounded w-100 mb-4" width="800" controls>
+                  <source src={`http://127.0.0.1:8080${videoURLParamValue}`} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
                 <p>{course && course.description}</p>
-              </div>
-
+            </div>
               {/* Comment List */}
               <div className="mb-5">
                   <h3 className="text-uppercase mb-4" style={{ letterSpacing: '5px' }}>{comments.length} Comments</h3>
@@ -129,7 +131,7 @@ const CourseSingleComponent = ({ course_id }) => {
               </div>
 
               {/* Recent Post */}
-              <div className="mb-5">
+              {/* <div className="mb-5">
                 <h3 className="text-uppercase mb-4" style={{ letterSpacing: '5px' }}>Recent Post</h3>
                 <div className="d-flex align-items-center bg-secondary rounded overflow-hidden mb-3" style={{ height: '110px' }}>
                   <img className="img-fluid" src="img/blog-1.jpg" alt="Image" />
@@ -166,7 +168,7 @@ const CourseSingleComponent = ({ course_id }) => {
                     <small className="text-body">Jan 01, 2045</small>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Image */}
               <div className="mb-5">
