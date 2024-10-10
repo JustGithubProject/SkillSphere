@@ -1,25 +1,24 @@
 .course-card {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  
-  .course-card img {
-    width: 100%;
-    height: auto;
-  }
-  
-  .course-card .bg-secondary {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-  }
-  
-  .course-card .border-top {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    flex-grow: 1;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.course-card img {
+  width: 100%;
+  height: auto;
+}
+
+.course-card .bg-secondary {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.course-card .border-top {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+}

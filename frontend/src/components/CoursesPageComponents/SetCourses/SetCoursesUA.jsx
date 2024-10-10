@@ -16,6 +16,7 @@ const SetCoursesUA = () => {
           id: course.id,
           title: course.title,
           image: course.photo_url,
+          video_url: course.video_url,
           students: course.students.length,
           duration: '01г 30хв',
           rating: 4.5,
@@ -80,7 +81,7 @@ const SetCoursesUA = () => {
                     {isAuthorized ? (
                       <button className="btn btn-success w-100 mb-2" onClick={() => handleBuyCourse(course)}>Придбати курс</button>
                     ) : null}
-                    <button className="btn btn-primary w-100" onClick={() => handleViewCourse(course.id)}>Переглянути курс</button>
+                    <button className="btn btn-primary w-100" onClick={() => handleViewCourse(course.id, course.video_url)}>Переглянути курс</button>
                   </div>
                 </div>
               </div>

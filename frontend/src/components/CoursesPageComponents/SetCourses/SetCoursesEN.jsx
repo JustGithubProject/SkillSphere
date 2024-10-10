@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import PayPalForm from '../../Paypal/PaypalForm';
 import Cookies from 'js-cookie';
-import './SetCoursesEN.css';
+import './SetCoursesEN.css'; 
 
 const SetCoursesEN = () => {
   const [courses, setCourses] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
-  const [showPayPalForm, setShowPayPalForm] = useState({ visible: false, price: null, courseId: null });
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/v1/course/all/no-auth/')
@@ -41,15 +41,13 @@ const SetCoursesEN = () => {
     window.location.href = `/course-single/${course_id}?watch=${video_url}`;
   };
 
-  const handleBuyCourse = (price, courseId) => {
-    setShowPayPalForm({ visible: true, price, courseId });
+  const handleBuyCourse = (course) => {
+    setSelectedCourse(course);
   };
 
-  const handleClosePayPalForm = () => {
-    setShowPayPalForm({ visible: false, price: null, courseId: null });
+  const handleCloseModal = () => {
+    setSelectedCourse(null);
   };
-
-  console.log(courses);
 
   return (
     <div className="container-fluid py-5">
@@ -60,35 +58,30 @@ const SetCoursesEN = () => {
         </div>
         <div className="row">
           {courses.map(course => (
-            <div key={course.id} className="col-lg-4 col-md-6 mb-4">
-              <div className="course-card rounded overflow-hidden mb-2">
+            <div key={course.id} className="col-lg-4 col-md-6 mb-4 d-flex">
+              <div className="card course-card">
                 <img
-                  className="img-fluid"
+                  className="card-img-top"
                   src={`http://127.0.0.1:8080${course.image}`}
                   alt={course.title}
                 />
-                <div className="bg-secondary p-4 d-flex flex-column justify-content-between">
-                  <div>
-                    <div className="d-flex justify-content-between mb-3">
-                      <small className="m-0"><i className="fa fa-users text-primary mr-2"></i>{course.students} Students</small>
-                      <small className="m-0"><i className="far fa-clock text-primary mr-2"></i>{course.duration}</small>
+                <div className="card-body d-flex flex-column">
+                  <div className="mb-3 flex-grow-1">
+                    <div className="d-flex justify-content-between mb-2">
+                      <small className="text-muted"><i className="fa fa-users text-primary mr-2"></i>{course.students} Students</small>
+                      <small className="text-muted"><i className="far fa-clock text-primary mr-2"></i>{course.duration}</small>
                     </div>
-                    <a className="h5" href="#">{course.title}</a>
+                    <h5 className="card-title">{course.title}</h5>
                   </div>
-                  <div className="border-top mt-4 pt-4">
-                    <div className="d-flex justify-content-between">
-                      <h6 className="m-0"><i className="fa fa-star text-primary mr-2"></i>{course.rating} <small>({course.reviews})</small></h6>
-                      <h5 className="m-0">{course.price}</h5>
+                  <div className="mt-auto">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                      <h6 className="mb-0"><i className="fa fa-star text-primary mr-2"></i>{course.rating} <small>({course.reviews})</small></h6>
+                      <h5 className="mb-0">{course.price}</h5>
                     </div>
-                    {isAuthorized && (
-                      <button
-                        className="btn btn-success mt-3"
-                        onClick={() => handleBuyCourse(course.price, course.id)}
-                      >
-                        Buy Course
-                      </button>
-                    )}
-                    <button className="btn btn-primary mt-3" onClick={() => handleViewCourse(course.id, course.video_url)}>View Course</button>
+                    {isAuthorized ? (
+                      <button className="btn btn-success w-100 mb-2" onClick={() => handleBuyCourse(course)}>Buy Course</button>
+                    ) : null}
+                    <button className="btn btn-primary w-100" onClick={() => handleViewCourse(course.id, course.video_url)}>View Course</button>
                   </div>
                 </div>
               </div>
@@ -96,20 +89,24 @@ const SetCoursesEN = () => {
           ))}
         </div>
       </div>
-      {showPayPalForm.visible && (
-        <div className="modal" style={{ display: 'block' }}>
+
+      {selectedCourse && (
+        <div className="modal show" style={{ display: 'block' }}>
           <div className="modal-dialog">
             <div className="modal-content">
               <div className="modal-header">
                 <h5 className="modal-title">Payment Details</h5>
-                <button type="button" className="close" onClick={handleClosePayPalForm}>&times;</button>
+                <button type="button" className="close" onClick={handleCloseModal}>
+                  <span>&times;</span>
+                </button>
               </div>
               <div className="modal-body">
-                <p>Total Price: {showPayPalForm.price}</p>
-                <PayPalForm price={showPayPalForm.price} course_id={showPayPalForm.courseId} />
+                <h5>{selectedCourse.title}</h5>
+                <p>Price: {selectedCourse.price}</p>
+                <PayPalForm price={selectedCourse.price} course_id={selectedCourse.id} />
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={handleClosePayPalForm}>Close</button>
+                <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>Close</button>
               </div>
             </div>
           </div>
