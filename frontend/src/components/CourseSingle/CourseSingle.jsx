@@ -4,12 +4,17 @@ import Cookies from 'js-cookie';
 import * as jwtDecodeModule from 'jwt-decode';
 import { useLocation } from 'react-router-dom';
 
+import PayPalForm from '../Paypal/PaypalForm';
+
+import './CourseSingle.css';
+
 const CourseSingleComponent = ({ course_id }) => {
   const [course, setCourse] = useState();
   const [comments, setComments] = useState([]);
   const [formMessage, setFormMessage] = useState('');
   const [replyToCommentId, setReplyToCommentId] = useState(null);
   const [formReplyMessage, setFormReplyMessage] = useState('');
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   const query = new URLSearchParams(useLocation().search);
   const videoURLParamValue = query.get("watch");
@@ -18,6 +23,7 @@ const CourseSingleComponent = ({ course_id }) => {
     e.preventDefault();
     const accessToken = Cookies.get("access_token");
     if (accessToken) {
+
       const decodedToken = jwtDecodeModule.jwtDecode(accessToken);
       const userID = decodedToken.id;
       try {
@@ -76,6 +82,10 @@ const CourseSingleComponent = ({ course_id }) => {
   };
 
   useEffect(() => {
+    const accessToken = Cookies.get("access_token");
+    if (accessToken) {
+      setIsAuthorized(true);
+    }
     const fetchCourseById = async () => {
       try {
         const response = await axios.get(`http://127.0.0.1:8000/api/v1/course/no-auth/${course_id}`);
@@ -194,6 +204,9 @@ const CourseSingleComponent = ({ course_id }) => {
                 <h3 className="text-primary mb-3">About Course</h3>
                 <a href="" className="text-black mb-2">Price: {course && course.price}$</a>
                 <a href="" className="text-black mb-2">Level: {course && course.level}</a>
+                {isAuthorized ? (
+                  <PayPalForm price={course && course.price} course_id={course_id} />
+                ): null}
               </div>
             </div>
           </div>
