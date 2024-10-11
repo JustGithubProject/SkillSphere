@@ -141,4 +141,4 @@ async def get_purchased_courses(
         user_id=user.id,
         session=session        
     )
-    
+
