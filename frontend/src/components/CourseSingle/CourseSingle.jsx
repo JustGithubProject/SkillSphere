@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+import Cookies from 'js-cookie';
+import * as jwtDecodeModule from 'jwt-decode';
+
 import { useLocation } from 'react-router-dom';
 
 const CourseSingleComponent = ({ course_id }) => {
@@ -8,13 +11,36 @@ const CourseSingleComponent = ({ course_id }) => {
   const [comments, setComments] = useState([]);
   const [formMessage, setFormMessage] = useState();
 
-
   const query = new URLSearchParams(useLocation().search);
   const videoURLParamValue = query.get("watch");
 
-  const handleSubmit = () => {
-    event.preventDefault();
-    // TODO: Form to add comment
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const accessToken = Cookies.get("access_token");
+    if (accessToken) {
+      const decodedToken = jwtDecodeModule.jwtDecode(accessToken);
+      const userID = decodedToken.id;
+      try {
+        const response = await axios.post(
+          'http://127.0.0.1:8000/api/v1/comment',
+          {
+            content: formMessage,
+            parent_id: null,
+            course_id: course_id,
+            user_id: userID
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`,
+            }
+          }
+    
+        );
+      } catch(error) {
+        console.log("Failed to create comment: ", error);
+      }
+    }
   }
 
   useEffect(() => {
@@ -83,8 +109,8 @@ const CourseSingleComponent = ({ course_id }) => {
                     <div key={comment && comment.id} className="media mb-4">
                       {/* <img src="img/user.jpg" alt="Image" className="img-fluid rounded-circle mr-3 mt-1" style={{ width: '45px' }} /> */}
                       <div className="media-body">
-                        <h6>{comment && comment.user_id} <small><i>{comment && comment.created_at}</i></small></h6>
-                        <p>{comment && comment.content}</p>
+                        <h6><small><i>{comment && formatDate(comment.created_at)}</i></small></h6>
+                        <p>{comment && comment.user.username}: {comment && comment.content}</p>
                         <button className="btn btn-sm btn-secondary">Reply</button>
                         {/* {comment.replies.length > 0 && comment.replies.map(reply => (
                           <div key={reply.id} className="media mt-4">
@@ -107,7 +133,15 @@ const CourseSingleComponent = ({ course_id }) => {
                 <form onSubmit={handleSubmit}>
                   <div className="form-group">
                     <label htmlFor="message">Message *</label>
-                    <textarea id="message" cols="30" rows="5" className="form-control border-0"></textarea>
+                    <textarea
+                        id="message"
+                        cols="30"
+                        placeholder="Message"
+                        value={formMessage}
+                        onChange={(e) => setFormMessage(e.target.value)}
+                        rows="5"
+                        className="form-control border-0"
+                    ></textarea>
                   </div>
                   <div className="form-group mb-0">
                     <input type="submit" value="Leave a comment" className="btn btn-primary py-md-2 px-md-4 mt-2" />

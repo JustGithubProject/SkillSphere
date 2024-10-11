@@ -11,7 +11,6 @@ from paypal.router import router as paypal_router
 from stripe_payment.router import router as stripe_router
 
 
-
 API_V1_PREFIX = "/api/v1"
 
 # Initialize FastAPI application
