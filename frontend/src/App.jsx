@@ -12,6 +12,7 @@ import CreateCoursePage from "./pages/CreateCoursePage";
 import MyCreatedCoursesPage from './pages/MyCreatedCoursesPage';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import AuthPage from './pages/AuthPageEN';
 
 
 function App() {
