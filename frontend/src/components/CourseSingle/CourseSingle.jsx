@@ -14,14 +14,17 @@ const CourseSingleComponent = ({ course_id }) => {
   const query = new URLSearchParams(useLocation().search);
   const videoURLParamValue = query.get("watch");
 
-  const handleSubmit = async (e) => {
+  const [selectReply, setSelectReply] = useState(false);
+  const [formReplyMessage, setFormReplyMessage] = useState();
+
+  const handleCreateCommentSubmit = async (e) => {
     e.preventDefault();
     const accessToken = Cookies.get("access_token");
     if (accessToken) {
       const decodedToken = jwtDecodeModule.jwtDecode(accessToken);
       const userID = decodedToken.id;
       try {
-        const response = await axios.post(
+        await axios.post(
           'http://127.0.0.1:8000/api/v1/comment',
           {
             content: formMessage,
@@ -39,6 +42,42 @@ const CourseSingleComponent = ({ course_id }) => {
         );
       } catch(error) {
         console.log("Failed to create comment: ", error);
+      }
+    }
+  }
+
+  const handleOpenSelectReply = () => {
+    setSelectReply(true);
+  }
+
+  const handleCloseSelectReply = () => {
+    setSelectReply(false);
+  }
+
+  const handleReplyForm = async (e, commentParentID) => {
+    e.preventDefault();
+    const accessToken = Cookies.get("access_token");
+    if (accessToken) {
+      const decodedToken = jwtDecodeModule.jwtDecode(accessToken);
+      const userID = decodedToken.id;
+      try {
+        await axios.post(
+          'http://127.0.0.1:8000/api/v1/comment',
+          {
+            content: formReplyMessage, 
+            parent_id: commentParentID,
+            course_id: course_id,
+            user_id: userID
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`,
+            }
+          }
+        )
+      } catch(error) {
+        console.log("Failed to create reply comment: ", error);
       }
     }
   }
@@ -111,17 +150,31 @@ const CourseSingleComponent = ({ course_id }) => {
                       <div className="media-body">
                         <h6><small><i>{comment && formatDate(comment.created_at)}</i></small></h6>
                         <p>{comment && comment.user.username}: {comment && comment.content}</p>
-                        <button className="btn btn-sm btn-secondary">Reply</button>
-                        {/* {comment.replies.length > 0 && comment.replies.map(reply => (
-                          <div key={reply.id} className="media mt-4">
-                            <img src="img/user.jpg" alt="Image" className="img-fluid rounded-circle mr-3 mt-1" style={{ width: '45px' }} />
-                            <div className="media-body">
-                              <h6>{reply.name} <small><i>{reply.date}</i></small></h6>
-                              <p>{reply.text}</p>
-                              <button className="btn btn-sm btn-secondary">Reply</button>
+                        <button className="btn btn-sm btn-secondary" onClick={() => !selectReply ? handleOpenSelectReply() : handleCloseSelectReply()}>Reply</button>
+                        {selectReply && (
+                            <div className="media mt-4">
+                                <div className="media-body">
+                                  {/* <button className="btn btn-sm btn-secondary" onClick={() => handleCloseSelectReply()}>Close Reply</button> */}
+                                  <form onSubmit={(e) => handleReplyForm(e, comment ? comment.id : null)}>
+                                    <div className="form-group">
+                                      <label htmlFor="message">Reply message *</label>
+                                      <textarea
+                                          id="message"
+                                          cols="10"
+                                          placeholder="Reply message"
+                                          value={formReplyMessage}
+                                          onChange={(e) => setFormReplyMessage(e.target.value)}
+                                          rows="2"
+                                          className="form-control border-0"
+                                      ></textarea>
+                                      <button className="btn btn-sm btn-secondary">Send</button>
+                                    </div>
+                                    
+                                  </form>
+                                  
+                                </div>
                             </div>
-                          </div>
-                        ))} */}
+                        )}
                       </div>
                     </div>
                   ))}
@@ -130,7 +183,7 @@ const CourseSingleComponent = ({ course_id }) => {
               {/* Comment Form */}
               <div className="bg-secondary rounded p-5">
                 <h3 className="text-uppercase mb-4" style={{ letterSpacing: '5px' }}>Leave a comment</h3>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleCreateCommentSubmit}>
                   <div className="form-group">
                     <label htmlFor="message">Message *</label>
                     <textarea
