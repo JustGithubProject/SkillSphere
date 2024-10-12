@@ -125,6 +125,7 @@ const LoginFormEN = () => {
                         useOneTap={false}
                         prompt="select_account"
                     />
+                    <a href="/forgot-password">Forgot password</a>
                 </div>
             </form>
         </GoogleOAuthProvider>

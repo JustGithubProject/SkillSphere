@@ -10,9 +10,9 @@ import SignUpPage from "./pages/SignUpPage";
 import PurchasedCoursesPage from "./pages/PurchasedCoursesPage";
 import CreateCoursePage from "./pages/CreateCoursePage";
 import MyCreatedCoursesPage from './pages/MyCreatedCoursesPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import AuthPage from './pages/AuthPageEN';
 
 
 function App() {
@@ -43,6 +43,7 @@ function App() {
           <Route path="/signup" element={<SignUpPage/>} />
           <Route path="/create-course" element={<CreateCoursePage/>} />
           <Route path="/my-created-courses" element={<MyCreatedCoursesPage/>} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
         </Routes>
     </Router>
   );

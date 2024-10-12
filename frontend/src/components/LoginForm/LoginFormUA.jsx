@@ -115,6 +115,7 @@ const LoginFormUA = () => {
                         className="btn btn-primary btn-pill"
                         value="Увійти"
                     />
+                    
                 </div>
                 <div className="form-group">
                     <GoogleLogin
@@ -123,6 +124,7 @@ const LoginFormUA = () => {
                         useOneTap={false}
                         prompt="select_account"
                     />
+                    <a href="/forgot-password">Забули пароль</a>
                 </div>
             </form>
         </GoogleOAuthProvider>
