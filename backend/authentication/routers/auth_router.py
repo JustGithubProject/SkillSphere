@@ -17,7 +17,8 @@ from authentication.schemas import (
     TokenInfo,
     UserIn,
     UserOut,
-    UserWithCode
+    UserWithCode,
+    ChangePasswordRequest
 )
 
 from authentication.custom_exceptions import (
@@ -239,8 +240,7 @@ async def forgot_password(
 @router.post("/change/password/{url_code}/", status_code=status.HTTP_204_NO_CONTENT)
 async def change_password(
     url_code: str,
-    new_password: str,
-    new_password_repeat: str,
+    change_password_request: ChangePasswordRequest,
     redis_helper: Annotated[RedisCache, Depends(get_redis_helper)],
     user_service: Annotated[UserService, Depends(get_user_service)],
     session: Annotated[AsyncSession, Depends(session_getter)],
@@ -249,6 +249,6 @@ async def change_password(
         url_code=url_code,
         redis_helper=redis_helper,
         session=session,
-        new_password=new_password,
-        new_password_repeat=new_password_repeat,
+        new_password=change_password_request.new_password,
+        new_password_repeat=change_password_request.new_password_repeat,
     )

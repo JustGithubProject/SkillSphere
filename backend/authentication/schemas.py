@@ -17,6 +17,10 @@ class UserIn(UserBase):
 
 class UserWithCode(UserBase):
     code: str
+    
+class ChangePasswordRequest(BaseModel):
+    new_password: str
+    new_password_repeat: str
 
 
 class UserOut(UserBase):
