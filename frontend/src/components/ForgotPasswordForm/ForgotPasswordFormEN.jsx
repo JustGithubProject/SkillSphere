@@ -31,12 +31,12 @@ const ForgotPasswordFormEN = () => {
     }
 
     return (
-        <form onSumbit={handleForgotPasswordForm} className="form-box">
-            <h3 className="h4 text-black mb-4">Change password</h3>
+        <form onSubmit={handleForgotPasswordForm} className="form-box">
+            <h3 className="h4 text-black mb-4">Enter your email address to receive an email with further instructions</h3>
             <div className="form-group">
                 <label htmlFor="email">Email:</label>
                 <input
-                    type="text"
+                    type="email"
                     className="form-control"
                     placeholder="Email"
                     value={email}

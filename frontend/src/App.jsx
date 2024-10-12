@@ -11,6 +11,7 @@ import PurchasedCoursesPage from "./pages/PurchasedCoursesPage";
 import CreateCoursePage from "./pages/CreateCoursePage";
 import MyCreatedCoursesPage from './pages/MyCreatedCoursesPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ChangePasswordPage from './pages/ChangePasswordPage';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/create-course" element={<CreateCoursePage/>} />
           <Route path="/my-created-courses" element={<MyCreatedCoursesPage/>} />
           <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
+          <Route path="/change-password/:id" element={<ChangePasswordPage/>} />
         </Routes>
     </Router>
   );
