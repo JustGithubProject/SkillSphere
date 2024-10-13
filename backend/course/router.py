@@ -29,6 +29,8 @@ router = APIRouter(
     tags=["Course Operations"]
 )
 
+logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
 
 @router.get("/", response_model=list[CourseOutput])
 async def search_courses(
@@ -158,12 +160,13 @@ async def get_course_by_id_no_auth(
         course_id=course_id
     )
 
-@router.get("/my-created-courses/", response_model=list[CourseOutput])
+@router.get("/my/created/courses", response_model=list[CourseOutput])
 async def get_my_created_courses(
     course_service: Annotated[CourseService, Depends(get_course_service)],
     session: Annotated[AsyncSession, Depends(session_getter)],
     user: Annotated[UserOut, Depends(get_current_active_auth_user)],
 ) -> list[CourseOutput]:
+    logger.info("Fetching courses for user: %s", user.id)
     return await course_service.get_courses_created_by_user(
         session=session,
         user_id=user.id
