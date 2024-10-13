@@ -204,8 +204,18 @@ class CourseRepository:
         self,
         session: AsyncSession,
         user_id: int
-    ):
-        result = await session.execute(
-            select(Course).options(selectinload(Course.creator)).filter(Course.creator_id == user_id)
+    ) -> list[Course]:
+        stmt = (
+            select(Course)
+            .options(
+                joinedload(Course.creator),
+                selectinload(Course.instructors),
+                selectinload(Course.modules),
+                selectinload(Course.comments),
+                selectinload(Course.students)
+            )
+            .filter(Course.creator_id == user_id)
         )
+        
+        result = await session.execute(stmt)
         return result.scalars().all()

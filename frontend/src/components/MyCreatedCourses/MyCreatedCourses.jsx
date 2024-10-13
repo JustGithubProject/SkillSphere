@@ -14,7 +14,7 @@ const MyCreatedCourses = () => {
                 setIsAuthorized(true);
                 try {
                     const response = await axios.get(
-                        "http://127.0.0.1:8000/api/v1/course/my-created-courses/",
+                        "http://127.0.0.1:8000/api/v1/course/my/created/courses/",
                         {
                             headers: {
                                 'Authorization': `Bearer ${accessToken}`
