@@ -6,6 +6,37 @@ import axios from 'axios';
 const MyCreatedCourses = () => {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [myCreatedCourses, setMyCreatedCourses] = useState([]);
+    const [isModuleFormOpened, setIsModuleFormOpened] = useState(false);
+
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
+
+    const handleAddModule = () => {
+        if (isModuleFormOpened) {
+            setIsModuleFormOpened(false);
+        } else {
+            setIsModuleFormOpened(true);
+        }
+    }
+
+    const handleAddModuleForm = async (event, course_id) => {
+        event.preventDefault();
+        const accessToken = Cookies.get("access_token");
+        const response = await axios.post(
+            'http://127.0.0.1:8000/api/v1/module/',
+            {
+                title: title,
+                description: description,
+                course_id: course_id
+            },
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            }
+        )
+    }
     
     useEffect(() => {
         const fetchData = async () => {
@@ -45,6 +76,32 @@ const MyCreatedCourses = () => {
                                     : course.description}
                             </p>
                             <span className="course-price">{course.price}$</span>
+                            <button onClick={() => handleAddModule()}>Add Module</button>
+                            {isModuleFormOpened ? (
+                                <>
+                                <form onSubmit={(event) => handleAddModuleForm(event, course.id)}>
+                                    <label>
+                                        Title:
+                                        <input
+                                            type="text"
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
+                                            placeholder="Enter module title"
+                                        />
+                                    </label>
+                                    <label>
+                                        Description:
+                                        <input
+                                            type="text"
+                                            value={description}
+                                            onChange={(e) => setDescription(e.target.value)}
+                                            placeholder="Enter module description"
+                                        />
+                                    </label>
+                                    <input type="submit" value="Create Module" />
+                                </form>
+                            </>
+                            ) : null}
                         </div>
                     ))}
                 </div>
