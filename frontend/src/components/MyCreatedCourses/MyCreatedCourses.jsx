@@ -2,42 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
-
 const MyCreatedCourses = () => {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [myCreatedCourses, setMyCreatedCourses] = useState([]);
-    const [isModuleFormOpened, setIsModuleFormOpened] = useState(false);
 
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-
-    const handleAddModule = () => {
-        if (isModuleFormOpened) {
-            setIsModuleFormOpened(false);
-        } else {
-            setIsModuleFormOpened(true);
-        }
+    const handleEditCourse = (course_id) => {
+        window.location.href = `/edit-course/${course_id}`;
     }
 
-    const handleAddModuleForm = async (event, course_id) => {
-        event.preventDefault();
-        const accessToken = Cookies.get("access_token");
-        const response = await axios.post(
-            'http://127.0.0.1:8000/api/v1/module/',
-            {
-                title: title,
-                description: description,
-                course_id: course_id
-            },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            }
-        )
-    }
-    
     useEffect(() => {
         const fetchData = async () => {
             const accessToken = Cookies.get("access_token");
@@ -62,51 +34,109 @@ const MyCreatedCourses = () => {
         fetchData();
     }, []);
 
+    const styles = {
+        container: {
+            padding: '30px',
+            fontFamily: 'Arial, sans-serif',
+            maxWidth: '900px',
+            margin: '0 auto',
+            backgroundColor: '#f3f4f6',
+            borderRadius: '12px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+        },
+        header: {
+            textAlign: 'center',
+            marginBottom: '25px',
+            fontSize: '2em',
+            color: '#333',
+        },
+        courseList: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gap: '20px',
+        },
+        courseCard: {
+            padding: '20px',
+            backgroundColor: '#fff',
+            border: '1px solid #e0e0e0',
+            borderRadius: '10px',
+            transition: 'transform 0.2s, box-shadow 0.2s',
+            cursor: 'pointer',
+            position: 'relative',
+            overflow: 'hidden',
+        },
+        courseCardHover: {
+            transform: 'scale(1.05)',
+            boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)',
+        },
+        title: {
+            fontSize: '1.5em',
+            marginBottom: '10px',
+            color: '#FF6600',  
+        },
+        description: {
+            color: '#555',
+            marginBottom: '10px',
+            fontSize: '1em',
+        },
+        price: {
+            fontWeight: 'bold',
+            color: '#28a745',
+            fontSize: '1.2em',
+            marginBottom: '10px',
+        },
+        button: {
+            padding: '12px 20px',
+            backgroundColor: '#FF6600',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            transition: 'background-color 0.3s, transform 0.3s',
+            fontSize: '1em',
+        },
+        buttonHover: {
+            backgroundColor: '#FF6600',
+            transform: 'scale(1.05)',
+        },
+        message: {
+            textAlign: 'center',
+            color: '#777',
+            fontSize: '1.2em',
+        },
+    };
+
     return (
-        <div className="purchased-courses">
-            <h1>My Created Courses</h1>
+        <div style={styles.container}>
+            <h1 style={styles.header}>My Created Courses</h1>
             {isAuthorized ? (
-                <div className="course-list">
+                <div style={styles.courseList}>
                     {myCreatedCourses.map(course => (
-                        <div key={course.id} className="course-card">
-                            <h2>{course.title}</h2>
-                            <p>
+                        <div 
+                            key={course.id} 
+                            style={styles.courseCard} 
+                            onMouseEnter={e => e.currentTarget.style.transform = styles.courseCardHover.transform}
+                            onMouseLeave={e => e.currentTarget.style.transform = 'none'}
+                        >
+                            <h2 style={styles.title}>{course.title}</h2>
+                            <p style={styles.description}>
                                 {course.description.length > 30 
                                     ? `${course.description.substring(0, 30)}...` 
                                     : course.description}
                             </p>
-                            <span className="course-price">{course.price}$</span>
-                            <button onClick={() => handleAddModule()}>Add Module</button>
-                            {isModuleFormOpened ? (
-                                <>
-                                <form onSubmit={(event) => handleAddModuleForm(event, course.id)}>
-                                    <label>
-                                        Title:
-                                        <input
-                                            type="text"
-                                            value={title}
-                                            onChange={(e) => setTitle(e.target.value)}
-                                            placeholder="Enter module title"
-                                        />
-                                    </label>
-                                    <label>
-                                        Description:
-                                        <input
-                                            type="text"
-                                            value={description}
-                                            onChange={(e) => setDescription(e.target.value)}
-                                            placeholder="Enter module description"
-                                        />
-                                    </label>
-                                    <input type="submit" value="Create Module" />
-                                </form>
-                            </>
-                            ) : null}
+                            <button 
+                                style={styles.button} 
+                                onMouseOver={e => e.currentTarget.style.backgroundColor = styles.buttonHover.backgroundColor}
+                                onMouseOut={e => e.currentTarget.style.backgroundColor = styles.button.backgroundColor}
+                                onClick={() => handleEditCourse(course.id)}
+                            >
+                                Edit Course
+                            </button>
                         </div>
                     ))}
                 </div>
             ) : (
-                <p>Пожалуйста, войдите в систему для просмотра ваших курсов.</p>
+                <p style={styles.message}>Пожалуйста, войдите в систему для просмотра ваших курсов.</p>
             )}
         </div>
     );
