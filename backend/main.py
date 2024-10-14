@@ -9,6 +9,7 @@ from comment.router import router as comment_router
 from google_auth.router import router as google_router
 from paypal.router import router as paypal_router
 from stripe_payment.router import router as stripe_router
+from lesson.router import router as lesson_router
 
 
 API_V1_PREFIX = "/api/v1"
@@ -55,6 +56,12 @@ app.include_router(
     router=stripe_router,
     prefix=API_V1_PREFIX
 )
+
+app.include_router(
+    router=lesson_router,
+    prefix=API_V1_PREFIX
+)
+
 
 # Allowed origins 
 origins = [
