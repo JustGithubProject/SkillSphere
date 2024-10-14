@@ -18,7 +18,7 @@ class CourseRepository:
         query = select(Course).options(
             selectinload(Course.instructors),  # Загрузка инструкторов
             selectinload(Course.creator),      # Загрузка создателя курса
-            selectinload(Course.modules)       # Загрузка модулей курса
+            selectinload(Course.modules).selectinload(Module.lessons)       # Загрузка модулей курса
         )
 
         # Поиск по полю title и description
@@ -116,7 +116,7 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules),
+                selectinload(Course.modules).selectinload(Module.lessons),
                 selectinload(Course.comments)
             )
             .limit(limit)
@@ -158,7 +158,7 @@ class CourseRepository:
             for name, value in course_update.model_dump(exclude_none=True).items():
                 setattr(course, name, value)
             await session.commit()
-            await session.refresh(course)
+            await session.refresh(course, attribute_names=["creator", "instructors", "modules", "students"])
             return course
         except Exception as e:
             await session.rollback()
@@ -191,7 +191,7 @@ class CourseRepository:
         try:
             course.instructors.append(instructor)
             await session.commit()
-            await session.refresh(course)
+            await session.refresh(course, attribute_names=["creator", "instructors", "modules", "students"])
             return course
         except Exception as e:
             await session.rollback()
@@ -210,7 +210,7 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules),
+                selectinload(Course.modules).selectinload(Module.lessons),
                 selectinload(Course.comments),
                 selectinload(Course.students)
             )
