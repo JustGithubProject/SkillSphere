@@ -60,7 +60,7 @@ async def update_module(
     user: Annotated[UserOut, Depends(get_current_active_auth_user)],
     module_update: ModuleUpdate,
     module_id: int
-) -> ModuleUpdate:
+) -> ModuleOutput:
     return await module_service.update_module(
         session=session,
         user=user,
