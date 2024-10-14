@@ -1,11 +1,13 @@
 from pydantic import BaseModel, ConfigDict
 
+from lesson.schemas import LessonOutput
+
 
 class ModuleBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     title: str
-    description: str
+    description: str | None = None
     course_id: int
 
 
@@ -15,9 +17,7 @@ class ModuleInput(ModuleBase):
 
 class ModuleOutput(ModuleInput):
     id: int
-    total_points: int
-
-    # lessons: list["LessonBase"]
+    lessons: list["LessonOutput"]
 
 
 class ModuleUpdate(BaseModel):
