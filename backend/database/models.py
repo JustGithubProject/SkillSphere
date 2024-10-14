@@ -7,7 +7,8 @@ from sqlalchemy import (
     LargeBinary, 
     String,
     UniqueConstraint, 
-    func
+    func,
+    Text
 )
 from sqlalchemy.orm import (
     Mapped,
@@ -15,10 +16,10 @@ from sqlalchemy.orm import (
     declared_attr,
     mapped_column,
     relationship,
-    backref
 )
 
-from enums import CourseLevel
+from course.enums import Category
+from course.enums import CourseLevel, Category
 
 class Base(DeclarativeBase):
     __abstract__ = True
@@ -55,12 +56,13 @@ class User(Base):
     )
 
 class Course(Base):
-    title: Mapped[str] = mapped_column(unique=True)
+    title: Mapped[str] = mapped_column(Text, unique=True)
     description: Mapped[str]
     video_url: Mapped[str | None]
     photo_url: Mapped[str | None]
     price: Mapped[int]
     level: Mapped["CourseLevel"] = mapped_column(default=CourseLevel.BEGINNER)
+    category: Mapped["Category"]
     created_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(TIMESTAMP, server_default=func.now(), onupdate=func.now())
     is_published = mapped_column(Boolean, default=False, server_default='false')

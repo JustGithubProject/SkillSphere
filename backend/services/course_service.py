@@ -6,7 +6,7 @@ from authentication.custom_exceptions import not_enough_rights_exception
 from authentication.schemas import UserOut
 from constants import COURSE, IMAGES, VIDEOS
 from services.mixins.file_action_mixin import FileActionMixin
-from enums import CourseLevel
+from course.enums import Category, CourseLevel
 from utils import check_is_user_a_course_staff
 from repositories.user_repository import UserRepository
 from repositories.course_repository import CourseRepository
@@ -102,6 +102,7 @@ class CourseService(FileActionMixin):
         level: CourseLevel,
         session: AsyncSession,
         user: UserOut,
+        category: Category,
         photo_file: str,
         video_file: str,
     ) -> CourseOutput:
@@ -112,6 +113,7 @@ class CourseService(FileActionMixin):
             level=level,
             video_url=video_file,
             photo_url=photo_file,
+            category=category,
         )
         
         course: Course = await self.course_repository.create_course(

@@ -2,9 +2,9 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
 from authentication.schemas import UserBase
-from comment.schemas import CommentOutput
+# from comment.schemas import CommentOutput
 from module.schemas import ModuleOutput
-from enums import CourseLevel
+from course.enums import Category, CourseLevel
 
 
 class CourseBase(BaseModel):
@@ -14,6 +14,7 @@ class CourseBase(BaseModel):
     description: str
     price: int
     level: "CourseLevel"
+    category: "Category"
     video_url: str | None = None
     photo_url: str | None = None
 
@@ -37,6 +38,7 @@ class CourseUpdate(BaseModel):
     description: str | None = None
     price: int | None = None
     level: CourseLevel | None = None
+    category: Category | None = None
     is_published: bool | None = None
     video_url: str | None = None
     photo_url: str | None = None

@@ -18,10 +18,11 @@ from fastapi import (
 from authentication.schemas import UserOut
 from authentication.validation import get_current_active_auth_user
 from services.course_service import CourseService, get_course_service
-from enums import CourseLevel, FileType
+from enums import FileType
 from course.schemas import CourseOutput
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import session_getter
+from course.enums import Category, CourseLevel
 
 
 router = APIRouter(
@@ -55,6 +56,7 @@ async def get_all_courses(
     limit: int = Query(default=10, ge=1),
     title: str = Query(default=None),
     level: "CourseLevel" = Query(default=None),
+    category: "Category" = Query(),
     price: int = Query(default=None),
 ) -> list[CourseOutput]:
     return await course_service.get_all_courses(
@@ -64,6 +66,7 @@ async def get_all_courses(
         title=title,
         level=level,
         price=price,
+        category=category,
         user=user,
     )
 
@@ -87,6 +90,7 @@ async def create_course(
     description: Annotated[str, Form()],
     price: Annotated[int, Form()],
     level: Annotated[CourseLevel, Form()],
+    category: Annotated[Category, Form()],
     photo_file: UploadFile | None = File(default=None),
     video_file: UploadFile | None = File(default=None)
 ) -> CourseOutput:
@@ -131,6 +135,7 @@ async def create_course(
         description=description,
         price=price,
         level=level,
+        category=category,
         photo_file=photo_path,
         video_file=video_path,
         user=user
