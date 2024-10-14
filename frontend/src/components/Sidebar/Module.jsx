@@ -27,15 +27,15 @@ const Module = ({ module }) => {
   return (
     <ModuleContainer>
       <ModuleHeader onClick={toggleOpen}>
-        {/* {module.name} */}
+        {module.title}
       </ModuleHeader>
-      {isOpen && (
+      {/* {isOpen && (
         <LessonsContainer>
-          {/* {module.lessons.map((lesson, index) => (
+          {module.lessons.map((lesson, index) => (
             <Lesson key={index} lesson={lesson} />
-          ))} */}
+          ))}
         </LessonsContainer>
-      )}
+      )} */}
     </ModuleContainer>
   );
 };

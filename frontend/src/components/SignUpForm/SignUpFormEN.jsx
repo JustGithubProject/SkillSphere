@@ -160,7 +160,7 @@ const SignUpFormEN = () => {
 
 const styles = {
     formBox: {
-        width: '500px',
+        width: '300px',
         margin: '0 auto',
         padding: '20px',
         borderRadius: '10px',
