@@ -1,25 +1,23 @@
 from pydantic import BaseModel, ConfigDict
 
-from lesson.schemas import LessonOutput
 
-
-class ModuleBase(BaseModel):
+class LessonBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     title: str
     description: str | None = None
-    course_id: int
+    module_id: int
 
 
-class ModuleInput(ModuleBase):
+class LessonInput(LessonBase):
     pass
 
 
-class ModuleOutput(ModuleInput):
+class LessonOutput(LessonBase):
     id: int
-    lessons: list["LessonOutput"]
+    # steps: list["StepOutput"]
 
 
-class ModuleUpdate(BaseModel):
+class LessonUpdate(BaseModel):
     title: str | None = None
     description: str | None = None

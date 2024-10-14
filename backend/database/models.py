@@ -105,7 +105,16 @@ class Module(Base):
     course_id: Mapped[int] = mapped_column(ForeignKey('course.id'))
 
     course = relationship('Course', back_populates="modules")
-    # lessons: Mapped[list["Lesson"]] = relationship("Lesson", back_populates="module")
+    lessons: Mapped[list["Lesson"]] = relationship("Lesson", back_populates="module")
+
+
+class Lesson(Base):
+    title: Mapped[str] = mapped_column(unique=True)
+    description: Mapped[str | None]
+    module_id: Mapped[int] = mapped_column(ForeignKey('module.id'))
+
+    module = relationship('Module', back_populates='lessons')
+    # steps = relationship('Step', back_populates="lesson")
 
 
 class ContactUs(Base):
