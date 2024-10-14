@@ -17,7 +17,7 @@ class ModuleRepository:
             select(Module)
             .filter_by(course_id=course_id) 
             .options(
-                # selectinload(Module.lessons),
+                selectinload(Module.lessons),
             )
         )
         return modules.all()
@@ -27,7 +27,13 @@ class ModuleRepository:
         session: AsyncSession,
         module_id: int
     ) -> Module:
-        module: Module = await session.scalar(select(Module).where(Module.id == module_id))
+        module: Module = await session.scalar(
+            select(Module)
+            .where(Module.id == module_id)
+            .options(
+                selectinload(Module.lessons),
+            )
+        )
         if module:
             return module
         raise HTTPException(
@@ -44,6 +50,7 @@ class ModuleRepository:
             module: Module = Module(**module_input.model_dump())
             session.add(module)
             await session.commit()
+            await session.refresh(module, attribute_names=["lessons"])
             return module
         except Exception as e:
             await session.rollback()
@@ -64,7 +71,7 @@ class ModuleRepository:
                 for name, value in module_update.model_dump(exclude_none=True).items():
                     setattr(module, name, value)
                 await session.commit()
-                await session.refresh(module)
+                await session.refresh(module, attribute_names=['lessons'])
                 return module
             except Exception as e:
                 await session.rollback()
