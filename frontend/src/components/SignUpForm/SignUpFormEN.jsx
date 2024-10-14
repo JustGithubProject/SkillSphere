@@ -69,6 +69,7 @@ const SignUpFormEN = () => {
     <div>
       {step === 'signup' ? (
         <form onSubmit={handleSubmit} className="form-box">
+          <h3 className="h4 text-black mb-4">Sign up</h3>
           <div className="form-group">
             <input
               type="text"
@@ -126,13 +127,14 @@ const SignUpFormEN = () => {
           <div className="form-group">
             <input
               type="submit"
-              className="btn btn-warning btn-pill"
+              className="btn btn-primary btn-pill"
               value="Sign up"
             />
           </div>
         </form>
       ) : (
         <form onSubmit={handleVerification} className="form-box">
+          <h3 className="h4 text-black mb-4">Verify your account</h3>
           <div className="form-group">
             <input
               type="text"
@@ -145,7 +147,7 @@ const SignUpFormEN = () => {
           <div className="form-group">
             <input
               type="submit"
-              className="btn btn-warning btn-pill"
+              className="btn btn-primary btn-pill"
               value="Verify"
             />
           </div>

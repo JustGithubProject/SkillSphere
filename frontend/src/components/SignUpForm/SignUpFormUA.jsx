@@ -59,7 +59,7 @@ const SignUpFormUA = () => {
       });
 
       console.log('Верифікація успішна:', response.data);
-      window.location.href = "/login"
+      window.location.href = "/login";
     } catch (error) {
       console.error('Помилка верифікації коду:', error);
     }
