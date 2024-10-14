@@ -15,7 +15,7 @@ class ModuleInput(ModuleBase):
 
 class ModuleOutput(ModuleInput):
     id: int
-    total_points: int
+    # total_points: int TODO: UNCOMMENT IF NEEDEED
 
     # lessons: list["LessonBase"]
 
