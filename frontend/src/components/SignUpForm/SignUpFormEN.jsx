@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 const SignUpFormEN = () => {
   const [email, setEmail] = useState('');
@@ -66,88 +67,88 @@ const SignUpFormEN = () => {
   };
 
   return (
-    <div>
+    <div style={styles.formBox}>
       {step === 'signup' ? (
-        <form onSubmit={handleSubmit} className="form-box">
-          <h3 className="h4 text-black mb-4">Sign up</h3>
-          <div className="form-group">
+        <form onSubmit={handleSubmit}>
+          <h3 style={styles.title}>Sign up</h3>
+          <div style={styles.formGroup}>
             <input
               type="text"
-              className="form-control"
+              style={styles.input}
               placeholder="Email Address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div style={styles.formGroup}>
             <input
               type="text"
-              className="form-control"
+              style={styles.input}
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div style={styles.formGroup}>
             <input
               type="text"
-              className="form-control"
+              style={styles.input}
               placeholder="First name"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div style={styles.formGroup}>
             <input
               type="text"
-              className="form-control"
+              style={styles.input}
               placeholder="Last name"
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div style={styles.formGroup}>
             <input
               type="password"
-              className="form-control"
+              style={styles.input}
               placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div className="form-group mb-4">
+          <div style={styles.formGroup}>
             <input
               type="password"
-              className="form-control"
+              style={styles.input}
               placeholder="Re-type Password"
               value={retypePassword}
               onChange={(e) => setRetypePassword(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div style={styles.formGroup}>
             <input
               type="submit"
-              className="btn btn-primary btn-pill"
+              style={styles.button}
               value="Sign up"
             />
           </div>
         </form>
       ) : (
-        <form onSubmit={handleVerification} className="form-box">
-          <h3 className="h4 text-black mb-4">Verify your account</h3>
-          <div className="form-group">
+        <form onSubmit={handleVerification}>
+          <h3 style={styles.title}>Verify your account</h3>
+          <div style={styles.formGroup}>
             <input
               type="text"
-              className="form-control"
+              style={styles.input}
               placeholder="Verification Code"
               value={verificationCode}
               onChange={(e) => setVerificationCode(e.target.value)}
             />
           </div>
-          <div className="form-group">
+          <div style={styles.formGroup}>
             <input
               type="submit"
-              className="btn btn-primary btn-pill"
+              style={styles.button}
               value="Verify"
             />
           </div>
@@ -155,6 +156,41 @@ const SignUpFormEN = () => {
       )}
     </div>
   );
+};
+
+const styles = {
+    formBox: {
+        width: '500px',
+        margin: '0 auto',
+        padding: '20px',
+        borderRadius: '10px',
+        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+        backgroundColor: '#fff',
+        boxSizing: 'border-box',
+    },
+    title: {
+        textAlign: 'center',
+        marginBottom: '20px',
+        color: '#333',
+    },
+    formGroup: {
+        marginBottom: '15px',
+    },
+    input: {
+        width: '100%',
+        padding: '10px',
+        borderRadius: '5px',
+        border: '1px solid #ccc',
+    },
+    button: {
+        width: '100%',
+        padding: '10px',
+        borderRadius: '5px',
+        border: 'none',
+        backgroundColor: '#FF6600',
+        color: '#fff',
+        cursor: 'pointer',
+    },
 };
 
 export default SignUpFormEN;

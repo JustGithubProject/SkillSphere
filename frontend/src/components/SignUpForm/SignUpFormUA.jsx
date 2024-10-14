@@ -10,14 +10,19 @@ const SignUpFormUA = () => {
   const [lastName, setLastName] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
   const [step, setStep] = useState('signup');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+    
     if (password !== retypePassword) {
       alert('Паролі не збігаються');
       return;
     }
+
+    setLoading(true);
+    setError('');
 
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/v1/jwt/auth/signup/', {
@@ -36,12 +41,17 @@ const SignUpFormUA = () => {
       console.log('Код верифікації надіслано:', response.data);
       setStep('verify');
     } catch (error) {
-      console.error('Помилка створення користувача:', error);
+      setError('Помилка створення користувача: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleVerification = async (event) => {
     event.preventDefault();
+    
+    setLoading(true);
+    setError('');
 
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/v1/jwt/auth/confirm/code/', {
@@ -61,94 +71,121 @@ const SignUpFormUA = () => {
       console.log('Верифікація успішна:', response.data);
       window.location.href = "/login";
     } catch (error) {
-      console.error('Помилка верифікації коду:', error);
+      setError('Помилка верифікації коду: ' + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
     }
   };
 
+  const styles = {
+    formBox: {
+      width: '500px',
+      margin: '0 auto',
+      padding: '20px',
+      borderRadius: '10px',
+      boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+      backgroundColor: '#fff',
+      boxSizing: 'border-box',
+    },
+    alert: {
+      color: 'red',
+      textAlign: 'center',
+      marginBottom: '20px',
+    },
+    input: {
+      width: '100%',
+      padding: '10px',
+      borderRadius: '5px',
+      border: '1px solid #ccc',
+      marginBottom: '15px',
+    },
+    button: {
+      width: '100%',
+      padding: '10px',
+      borderRadius: '5px',
+      border: 'none',
+      backgroundColor: '#FF6600',
+      color: '#fff',
+      cursor: 'pointer',
+    },
+  };
+
   return (
-    <div>
+    <div style={styles.formBox}>
+      {error && <div style={styles.alert}>{error}</div>}
       {step === 'signup' ? (
-        <form onSubmit={handleSubmit} className="form-box">
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Електронна адреса"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Ім'я користувача"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Ім'я"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Прізвище"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="password"
-              className="form-control"
-              placeholder="Пароль"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <div className="form-group mb-4">
-            <input
-              type="password"
-              className="form-control"
-              placeholder="Повторіть пароль"
-              value={retypePassword}
-              onChange={(e) => setRetypePassword(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="submit"
-              className="btn btn-warning btn-pill"
-              value="Зареєструватися"
-            />
-          </div>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            style={styles.input}
+            placeholder="Електронна адреса"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            style={styles.input}
+            placeholder="Ім'я користувача"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            style={styles.input}
+            placeholder="Ім'я"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+          <input
+            type="text"
+            style={styles.input}
+            placeholder="Прізвище"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            style={styles.input}
+            placeholder="Пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            style={styles.input}
+            placeholder="Повторіть пароль"
+            value={retypePassword}
+            onChange={(e) => setRetypePassword(e.target.value)}
+            required
+          />
+          <input
+            type="submit"
+            style={styles.button}
+            value={loading ? 'Зачекайте...' : 'Зареєструватися'}
+            disabled={loading}
+          />
         </form>
       ) : (
-        <form onSubmit={handleVerification} className="form-box">
-          <div className="form-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Код верифікації"
-              value={verificationCode}
-              onChange={(e) => setVerificationCode(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <input
-              type="submit"
-              className="btn btn-warning btn-pill"
-              value="Верифікувати"
-            />
-          </div>
+        <form onSubmit={handleVerification}>
+          <input
+            type="text"
+            style={styles.input}
+            placeholder="Код верифікації"
+            value={verificationCode}
+            onChange={(e) => setVerificationCode(e.target.value)}
+            required
+          />
+          <input
+            type="submit"
+            style={styles.button}
+            value={loading ? 'Зачекайте...' : 'Верифікувати'}
+            disabled={loading}
+          />
         </form>
       )}
     </div>
