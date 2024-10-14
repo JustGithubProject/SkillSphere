@@ -48,7 +48,7 @@ class LessonService:
         session: AsyncSession,
         lesson_input: LessonInput
     ) -> LessonOutput:
-        lesson: Lesson = await self.lesson_repository.create_module(
+        lesson: Lesson = await self.lesson_repository.create_lesson(
             session=session,
             lesson_input=lesson_input
         )

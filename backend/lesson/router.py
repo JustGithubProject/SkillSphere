@@ -47,9 +47,8 @@ async def create_lesson_in_module(
     user: Annotated[UserOut, Depends(get_current_active_auth_user)],
     lesson_input: LessonInput
 ) -> LessonOutput:
-    return lesson_service.create_lesson(
+    return await lesson_service.create_lesson(
         session=session,
-        user=user,
         lesson_input=lesson_input
     )
 

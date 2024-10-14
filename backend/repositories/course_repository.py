@@ -4,7 +4,7 @@ from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import func, or_, select
 from course.schemas import CourseInput, CourseUpdate
-from database.models import Course, Module, User
+from database.models import Course, Lesson, Module, User
 
 
 class CourseRepository:
@@ -89,7 +89,7 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules),
+                selectinload(Course.modules).selectinload(Module.lessons),
                 selectinload(Course.comments),
                 selectinload(Course.students)
             )

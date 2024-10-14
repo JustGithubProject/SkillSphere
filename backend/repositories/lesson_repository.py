@@ -19,7 +19,12 @@ class LessonRepository:
                 # selectinload(Lesson.steps)
             )
         )
-        return lesson.all()
+        if lesson:
+            return lesson
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Lesson not found"
+        )
     
     async def create_lesson(
         self,
@@ -30,7 +35,7 @@ class LessonRepository:
             lesson: Lesson = Lesson(**lesson_input.model_dump())
             session.add(lesson)
             await session.commit()
-            await session.refresh(lesson, attribute_names=["steps"])
+            await session.refresh(lesson) #, attribute_names=["steps"])
             return lesson
         except Exception as e:
             await session.rollback()
@@ -50,7 +55,7 @@ class LessonRepository:
             for name, value in lesson_update.model_dump(exclude_none=True).items():
                 setattr(lesson, name, value)
             await session.commit()
-            await session.refresh(lesson, attribute_names=['steps'])
+            await session.refresh(lesson) #, attribute_names=['steps'])
             return lesson
         except Exception as e:
             await session.rollback()
