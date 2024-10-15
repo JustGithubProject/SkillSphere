@@ -145,7 +145,6 @@ const RemoveButton = styled.button`
   border: none;
   padding: 5px 10px;
   cursor: pointer;
-  margin-left: 10px;
 
   &:hover {
     background-color: darkred;
