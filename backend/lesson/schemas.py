@@ -1,5 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 
+from step.schemas import StepOutput
+
 
 class LessonBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -15,7 +17,7 @@ class LessonInput(LessonBase):
 
 class LessonOutput(LessonBase):
     id: int
-    # steps: list["StepOutput"]
+    steps: list[StepOutput]
 
 
 class LessonUpdate(BaseModel):

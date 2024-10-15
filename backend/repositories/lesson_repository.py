@@ -3,7 +3,8 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from database.models import Lesson
-from lesson.schemas import LessonInput, LessonOutput, LessonUpdate
+from lesson.schemas import LessonInput, LessonUpdate
+from sqlalchemy.orm import selectinload
 
 
 class LessonRepository:
@@ -16,7 +17,7 @@ class LessonRepository:
             select(Lesson)
             .where(Lesson.id==lesson_id)
             .options(
-                # selectinload(Lesson.steps)
+                selectinload(Lesson.steps)
             )
         )
         if lesson:
@@ -35,7 +36,7 @@ class LessonRepository:
             lesson: Lesson = Lesson(**lesson_input.model_dump())
             session.add(lesson)
             await session.commit()
-            await session.refresh(lesson) #, attribute_names=["steps"])
+            await session.refresh(lesson, attribute_names=["steps"])
             return lesson
         except Exception as e:
             await session.rollback()
@@ -51,11 +52,11 @@ class LessonRepository:
         lesson_id: int
     ) -> Lesson:
         try:
-            lesson = await session.get(Lesson, lesson_id)
+            lesson: Lesson = await session.get(Lesson, lesson_id)
             for name, value in lesson_update.model_dump(exclude_none=True).items():
                 setattr(lesson, name, value)
             await session.commit()
-            await session.refresh(lesson) #, attribute_names=['steps'])
+            await session.refresh(lesson, attribute_names=['steps'])
             return lesson
         except Exception as e:
             await session.rollback()
@@ -70,7 +71,7 @@ class LessonRepository:
         lesson_id: int
     ) -> None:
         try:
-            lesson = await session.get(Lesson, lesson_id)
+            lesson: Lesson = await session.get(Lesson, lesson_id)
             await session.delete(lesson)
             await session.commit()
         except Exception as e:

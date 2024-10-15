@@ -56,6 +56,7 @@ async def create_lesson_in_module(
 async def update_lesson(
     lesson_service: Annotated[LessonService, Depends(get_lesson_service)],
     session: Annotated[AsyncSession, Depends(session_getter)],
+    user: Annotated[UserOut, Depends(get_current_active_auth_user)],
     lesson_update: LessonUpdate,
     lesson_id: int
 ) -> LessonOutput:
@@ -69,6 +70,7 @@ async def update_lesson(
 async def delete_lesson(
     lesson_service: Annotated[LessonService, Depends(get_lesson_service)],
     session: Annotated[AsyncSession, Depends(session_getter)],
+    user: Annotated[UserOut, Depends(get_current_active_auth_user)],
     lesson_id: int
 ) -> None:
     return await lesson_service.delete_lesson(

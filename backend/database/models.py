@@ -120,8 +120,10 @@ class Lesson(Base):
 class Step(Base):
     video_path: Mapped[str | None]
     text: Mapped[str]
+    lesson_id: Mapped[int] = mapped_column(ForeignKey('lesson.id'))
 
     test = relationship('Test', back_populates="step", uselist=False)
+    lesson = relationship('Lesson', back_populates='steps')
 
 
 class Test(Base):

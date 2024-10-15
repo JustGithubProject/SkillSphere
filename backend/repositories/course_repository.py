@@ -18,7 +18,7 @@ class CourseRepository:
         query = select(Course).options(
             selectinload(Course.instructors),  # Загрузка инструкторов
             selectinload(Course.creator),      # Загрузка создателя курса
-            selectinload(Course.modules).selectinload(Module.lessons)       # Загрузка модулей курса
+            selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps)       # Загрузка модулей курса
         )
 
         # Поиск по полю title и description
@@ -64,7 +64,7 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules).selectinload(Module.lessons),
+                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps),
                 selectinload(Course.comments),
                 selectinload(Course.students)
             )
@@ -89,7 +89,7 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules).selectinload(Module.lessons),
+                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps),
                 selectinload(Course.comments),
                 selectinload(Course.students)
             )
@@ -116,7 +116,7 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules).selectinload(Module.lessons),
+                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps),
                 selectinload(Course.comments)
             )
             .limit(limit)
@@ -210,7 +210,7 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules).selectinload(Module.lessons),
+                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps),
                 selectinload(Course.comments),
                 selectinload(Course.students)
             )
