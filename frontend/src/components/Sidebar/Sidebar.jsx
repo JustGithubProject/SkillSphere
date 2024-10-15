@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Module from './Module';
-
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
@@ -26,25 +25,32 @@ const FormContainer = styled.form`
   padding: 20px;
   background-color: #2c3e50;
   border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 `;
 
 const InputField = styled.input`
   margin-bottom: 10px;
-  padding: 10px;
+  padding: 12px;
   border: none;
   border-radius: 5px;
   font-size: 16px;
-  color: #2c3e50;
+  color: #34495e;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  &:focus {
+    outline: none;
+    border: 1px solid #3498db;
+  }
 `;
 
 const SubmitButton = styled.input`
-  padding: 10px;
+  padding: 12px;
   background-color: #3498db;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color 0.3s ease;
 
   &:hover {
     background-color: #2980b9;
@@ -64,6 +70,11 @@ const ModuleButton = styled.button`
   transition: background-color 0.3s ease;
   border-radius: 5px;
 
+  ${({ isActive }) => isActive && `
+    background-color: #3d566e; 
+    font-weight: bold; 
+  `}
+
   &:hover {
     background-color: #3d566e;
   }
@@ -72,8 +83,9 @@ const ModuleButton = styled.button`
 const MainContent = styled.div`
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100%;
   background-color: #ecf0f1;
   padding: 20px;
@@ -85,30 +97,69 @@ const LessonsContainer = styled.div`
   color: #2c3e50;
   border-radius: 10px;
   width: 80%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
 `;
 
 const LessonItem = styled.div`
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  font-size: 16px;
+  padding: 15px;
+  border: 1px solid #ddd; 
+  border-radius: 5px; 
+  margin-bottom: 10px; 
+  transition: background-color 0.3s ease;
+  cursor: pointer;
 
-  &:last-child {
-    border-bottom: none;
+  &:hover {
+    background-color: #f1c40f; 
+  }
+`;
+
+const LessonTitle = styled.h2`
+  margin: 0;
+  font-size: 18px;
+  color: #34495e;
+`;
+
+const LessonDescription = styled.p`
+  font-size: 14px;
+  color: #7f8c8d;
+`;
+
+const StepContainer = styled.div`
+  margin-left: 20px;
+  padding: 10px;
+  background-color: #ecf0f1;
+  border-radius: 5px;
+`;
+
+const StepItem = styled.div`
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #bdc3c7;
+  border-radius: 5px;
+`;
+
+const RemoveButton = styled.button`
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: darkred;
   }
 `;
 
 const Sidebar = ({ course_id }) => {
   const [modules, setModules] = useState([]);
-  const [lessons, setLessons] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-
   const [isOpen, setIsOpen] = useState(false);
   const [currentModule, setCurrentModule] = useState(null);
-
   const [lessonTitle, setLessonTitle] = useState('');
   const [lessonDescription, setLessonDescription] = useState('');
+  const [openLessons, setOpenLessons] = useState({});
 
   useEffect(() => {
     const accessToken = Cookies.get('access_token');
@@ -130,29 +181,6 @@ const Sidebar = ({ course_id }) => {
 
     fetchModulesOfCourse();
   }, [course_id]);
-
-  useEffect(() => {
-    const fetchLessonsOfModule = async () => {
-      if (currentModule) {
-        try {
-          const accessToken = Cookies.get("access_token");
-          const response = await axios.get(
-            `http://127.0.0.1:8000/api/v1/lesson/all/${currentModule.id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`
-              }
-            }
-          )
-          setLessons(response.data);
-        } catch(error) {
-          console.log("Error fetching lessons: ", error);
-        }
-      }
-    }
-
-    fetchLessonsOfModule();
-  }, [currentModule]);
 
   const handleCreateModule = async (e) => {
     e.preventDefault();
@@ -183,7 +211,7 @@ const Sidebar = ({ course_id }) => {
     }
   };
 
-  const handleCreateLesson = async () => {
+  const handleCreateLesson = async (module_id) => {
     try {
       const accessToken = Cookies.get("access_token");
       await axios.post(
@@ -191,7 +219,7 @@ const Sidebar = ({ course_id }) => {
         {
           title: lessonTitle,
           description: lessonDescription,
-          module_id: currentModule.id,
+          module_id: module_id,
         },
         {
           headers: {
@@ -200,7 +228,10 @@ const Sidebar = ({ course_id }) => {
           }
         }
       )
+      setLessonTitle(''); 
+      setLessonDescription(''); 
       window.location.reload();
+      
     } catch(error) {
       console.log("Failed to create lesson: ", error);
     }
@@ -211,11 +242,36 @@ const Sidebar = ({ course_id }) => {
     setCurrentModule(module);
   };
 
+  const handleToggleLesson = (lessonId) => {
+    setOpenLessons((prevOpenLessons) => ({
+      ...prevOpenLessons,
+      [lessonId]: !prevOpenLessons[lessonId],
+    }));
+  };
+
+  const handleRemoveLesson = async (lesson_id) => {
+    const accessToken = Cookies.get("access_token");
+    try {
+      await axios.delete(
+        `http://127.0.0.1:8000/api/v1/lesson/${lesson_id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        }
+      )
+      window.location.reload();
+    } catch(error) {
+      console.log("Failed to remove lesson: ", error);
+    }
+  }
+
   return (
     <Container>
       <SidebarContainer>
+        <h1>Modules of course</h1>
         {modules.map((module, index) => (
-          <ModuleButton key={index} onClick={() => handleOpenLessons(module)}>
+          <ModuleButton key={index} onClick={() => handleOpenLessons(module)} isActive={currentModule?.id === module.id}>
             <Module module={module} />
           </ModuleButton>
         ))}
@@ -241,12 +297,34 @@ const Sidebar = ({ course_id }) => {
         {isOpen && currentModule && (
           <>
             <LessonsContainer>
-              <h1>Lessons for {currentModule.title} module</h1>
-              {lessons.map((lesson, index) => (
-                <LessonItem key={index}>{lesson.title}</LessonItem>
-              ))}
+            <h1 style={{ color: '#2c3e50', marginBottom: '20px', textAlign: 'center' }}>
+              Lessons for {currentModule.title} module
+            </h1>
+              {currentModule.lessons.length === 0 ? (
+                <p>The module is empty</p>
+              ) : (
+                currentModule.lessons.map((lesson, index) => (
+                  <div key={index}>
+                    <LessonItem onClick={() => handleToggleLesson(lesson.id)}>
+                      <LessonTitle>{lesson.title}</LessonTitle>
+                      <LessonDescription>{lesson.description}</LessonDescription>
+                      <RemoveButton onClick={() => handleRemoveLesson(lesson.id)}>Remove</RemoveButton>
+                    </LessonItem>
+                    {openLessons[lesson.id] && (
+                      <StepContainer>
+                        {/* {lesson.steps.map((step, stepIndex) => ( */}
+                        {/* <StepItem >{step}</StepItem>   */}
+                        {/* // ))} */}
+                      </StepContainer>
+                    )}
+                  </div>
+                ))
+              )}
             </LessonsContainer>
-            <FormContainer onSubmit={handleCreateLesson}>
+            <FormContainer onSubmit={(e) => {
+              e.preventDefault();
+              handleCreateLesson(currentModule.id);
+            }}>
               <InputField
                 type="text"
                 placeholder="Lesson Title"
@@ -261,6 +339,7 @@ const Sidebar = ({ course_id }) => {
                 onChange={(e) => setLessonDescription(e.target.value)}
                 className="form-field"
               />
+              <SubmitButton type="submit" value="Create Lesson" />
             </FormContainer>
           </>
         )}

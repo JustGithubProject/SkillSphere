@@ -37,18 +37,19 @@ const MyCreatedCourses = () => {
     const styles = {
         container: {
             padding: '30px',
-            fontFamily: 'Arial, sans-serif',
-            maxWidth: '900px',
+            fontFamily: "'Roboto', sans-serif",
+            maxWidth: '1200px',
             margin: '0 auto',
-            backgroundColor: '#f3f4f6',
+            backgroundColor: '#f9fafb',
             borderRadius: '12px',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
         },
         header: {
             textAlign: 'center',
-            marginBottom: '25px',
-            fontSize: '2em',
+            marginBottom: '30px',
+            fontSize: '2.5em',
             color: '#333',
+            fontWeight: 'bold',
         },
         courseList: {
             display: 'grid',
@@ -60,30 +61,33 @@ const MyCreatedCourses = () => {
             backgroundColor: '#fff',
             border: '1px solid #e0e0e0',
             borderRadius: '10px',
-            transition: 'transform 0.2s, box-shadow 0.2s',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
             cursor: 'pointer',
             position: 'relative',
             overflow: 'hidden',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         },
         courseCardHover: {
-            transform: 'scale(1.05)',
-            boxShadow: '0 8px 20px rgba(0, 0, 0, 0.15)',
+            transform: 'translateY(-10px)',
+            boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)',
         },
         title: {
             fontSize: '1.5em',
             marginBottom: '10px',
             color: '#FF6600',  
+            fontWeight: 'bold',
         },
         description: {
             color: '#555',
-            marginBottom: '10px',
+            marginBottom: '20px',
             fontSize: '1em',
+            lineHeight: '1.4',
         },
         price: {
             fontWeight: 'bold',
             color: '#28a745',
             fontSize: '1.2em',
-            marginBottom: '10px',
+            marginBottom: '20px',
         },
         button: {
             padding: '12px 20px',
@@ -92,12 +96,12 @@ const MyCreatedCourses = () => {
             border: 'none',
             borderRadius: '5px',
             cursor: 'pointer',
-            transition: 'background-color 0.3s, transform 0.3s',
+            transition: 'background-color 0.3s ease, transform 0.3s ease',
             fontSize: '1em',
         },
         buttonHover: {
-            backgroundColor: '#FF6600',
-            transform: 'scale(1.05)',
+            backgroundColor: '#e05d00',
+            transform: 'translateY(-2px)',
         },
         message: {
             textAlign: 'center',
@@ -117,18 +121,18 @@ const MyCreatedCourses = () => {
                             style={styles.courseCard} 
                             onMouseEnter={e => e.currentTarget.style.transform = styles.courseCardHover.transform}
                             onMouseLeave={e => e.currentTarget.style.transform = 'none'}
+                            onClick={() => handleEditCourse(course.id)}
                         >
                             <h2 style={styles.title}>{course.title}</h2>
                             <p style={styles.description}>
-                                {course.description.length > 30 
-                                    ? `${course.description.substring(0, 30)}...` 
+                                {course.description.length > 60 
+                                    ? `${course.description.substring(0, 60)}...` 
                                     : course.description}
                             </p>
                             <button 
                                 style={styles.button} 
                                 onMouseOver={e => e.currentTarget.style.backgroundColor = styles.buttonHover.backgroundColor}
                                 onMouseOut={e => e.currentTarget.style.backgroundColor = styles.button.backgroundColor}
-                                onClick={() => handleEditCourse(course.id)}
                             >
                                 Edit Course
                             </button>
