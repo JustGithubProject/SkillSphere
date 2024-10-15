@@ -114,7 +114,30 @@ class Lesson(Base):
     module_id: Mapped[int] = mapped_column(ForeignKey('module.id'))
 
     module = relationship('Module', back_populates='lessons')
-    # steps = relationship('Step', back_populates="lesson")
+    steps = relationship('Step', back_populates="lesson")
+
+
+class Step(Base):
+    video_path: Mapped[str | None]
+    text: Mapped[str]
+
+    test = relationship('Test', back_populates="step", uselist=False)
+
+
+class Test(Base):
+    count_correct_answers: Mapped[int] = mapped_column(default=1, server_default='1')
+    step_id: Mapped[int] = mapped_column(ForeignKey('step.id'), unique=True)
+    step = relationship('Step', back_populates='test')
+
+    answers = relationship('Answer', back_populates="test")
+
+
+class Answer(Base):
+    text: Mapped[str]
+    is_correct: Mapped[bool] = mapped_column(default=False, server_default="false")
+    test_id: Mapped[int] = mapped_column(ForeignKey("test.id"))
+    
+    test = relationship('Test', back_populates='answers')
 
 
 class ContactUs(Base):
