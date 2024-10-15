@@ -158,7 +158,7 @@ class CourseRepository:
             for name, value in course_update.model_dump(exclude_none=True).items():
                 setattr(course, name, value)
             await session.commit()
-            await session.refresh(course, attribute_names=["creator", "instructors", "modules", "students"])
+            await session.refresh(course, attribute_names=["creator", "instructors", "modules", "students", "updated_at"])
             return course
         except Exception as e:
             await session.rollback()

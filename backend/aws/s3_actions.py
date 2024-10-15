@@ -80,6 +80,8 @@ class S3Client:
         self,
         key: str,
     ) -> None:
+        if key is None:
+            return None
         logging.info(f'Deleting {key} from s3')
         response = self.bucket.delete_objects(
             Delete={
