@@ -1,5 +1,9 @@
+import os
+import uuid
+import shutil
 from typing import Annotated
-from fastapi import APIRouter, Depends, status
+
+from fastapi import APIRouter, Depends, File, UploadFile, status, Form
 from authentication.validation import get_current_active_auth_user
 from database.database import session_getter
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -38,17 +42,49 @@ async def get_step_by_id(
         session=session,
         step_id=step_id
     )
+    
+"""
+
+    category: Annotated[Category, Form()],
+    photo_file: UploadFile | None = File(default=None),
+    video_file: UploadFile | None = File(default=None)
+
+
+"""
 
 @router.post("/", response_model=StepOutput, status_code=status.HTTP_201_CREATED)
 async def create_step_in_lesson(
     step_service: Annotated[StepService, Depends(get_step_service)],
     session: Annotated[AsyncSession, Depends(session_getter)],
     user: Annotated[UserOut, Depends(get_current_active_auth_user)],
-    step_input: StepInput
+    text: Annotated[str, Form()],
+    lesson_id: Annotated[int, Form()],
+    video_path: UploadFile | None = File(default=None),
 ) -> StepOutput:
+    
+    SHARED_DIRECTORY_PATH = "/shared_data/uploads"
+    VIDEO_DIRECTORY = os.path.join(SHARED_DIRECTORY_PATH, "videos_of_steps")
+    
+    # Creating directories if they don't exist
+    os.makedirs(VIDEO_DIRECTORY, exist_ok=True)
+    
+    if video_path:
+        random_uuid_string = uuid.uuid4()
+        file_extension = video_path.filename.split(".")[-1]
+        result_video_path = os.path.join(
+            VIDEO_DIRECTORY,
+            f"{random_uuid_string}.{file_extension}"
+        )
+        with open(result_video_path, "wb") as buffer:
+            shutil.copyfileobj(video_path.file, buffer)
+    
     return await step_service.create_step(
         session=session,
-        step_input=step_input
+        step_input=StepInput(
+            text=text,
+            lesson_id=lesson_id,
+            video_path=result_video_path
+        )
     )
 
 @router.patch("/{step_id}/", response_model=StepOutput, status_code=status.HTTP_202_ACCEPTED)
