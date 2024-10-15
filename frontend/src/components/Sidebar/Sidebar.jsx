@@ -4,153 +4,224 @@ import Module from './Module';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
+// Global Styles and Color Palette
+const theme = {
+  primary: '#1abc9c',
+  secondary: '#34495e',
+  background: '#1e1e1e',
+  sidebarBg: '#2c3e50',
+  highlight: '#f1c40f',
+  accent: '#e74c3c',
+  shadow: 'rgba(0, 0, 0, 0.3)',
+  textPrimary: '#ecf0f1',
+  textSecondary: '#bdc3c7',
+};
+
 const Container = styled.div`
   display: flex;
   height: 100vh;
+  background: linear-gradient(145deg, ${theme.background}, ${theme.sidebarBg});
+  color: ${theme.textPrimary};
 `;
 
 const SidebarContainer = styled.div`
-  width: 300px;
+  width: 320px;
   height: 100%;
-  background-color: #34495e;
-  color: #ecf0f1;
-  padding: 20px;
-  overflow-y: auto;
+  background-color: ${theme.sidebarBg};
+  padding: 25px;
+  box-shadow: 5px 0 20px ${theme.shadow};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 2px solid ${theme.primary};
+`;
+
+const Heading = styled.h1`
+  font-size: 26px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  color: ${theme.primary};
+  letter-spacing: 1.5px;
 `;
 
 const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-  margin-top: 20px;
+  background-color: ${theme.secondary};
+  border-radius: 16px;
   padding: 20px;
-  background-color: #2c3e50;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-`;
+  box-shadow: 0 10px 30px ${theme.shadow};
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 
-const InputField = styled.input`
-  margin-bottom: 10px;
-  padding: 12px;
-  border: none;
-  border-radius: 5px;
-  font-size: 16px;
-  color: #34495e;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  &:focus {
-    outline: none;
-    border: 1px solid #3498db;
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 12px 40px ${theme.shadow};
   }
 `;
 
-const SubmitButton = styled.input`
-  padding: 12px;
-  background-color: #3498db;
-  color: white;
+const InputField = styled.input`
+  background-color: ${theme.sidebarBg};
+  color: ${theme.textPrimary};
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 10px;
   font-size: 16px;
-  transition: background-color 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 2px 5px ${theme.shadow};
+
+  &:focus {
+    outline: none;
+    border: 2px solid ${theme.highlight};
+    background-color: ${theme.primary};
+    color: ${theme.textPrimary};
+  }
+`;
+
+const SubmitButton = styled.button`
+  background-color: ${theme.primary};
+  color: ${theme.textPrimary};
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 18px;
+  transition: all 0.3s ease;
+  cursor: pointer;
 
   &:hover {
-    background-color: #2980b9;
+    background-color: ${theme.highlight};
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px ${theme.shadow};
   }
 `;
 
 const ModuleButton = styled.button`
-  display: block;
   width: 100%;
   background: none;
-  color: inherit;
+  color: ${theme.textPrimary};
   border: none;
-  padding: 15px 10px;
+  padding: 18px;
   text-align: left;
   cursor: pointer;
   font-size: 18px;
-  transition: background-color 0.3s ease;
-  border-radius: 5px;
+  transition: background-color 0.3s ease, transform 0.2s, box-shadow 0.3s ease;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px ${theme.shadow};
 
-  ${({ isActive }) => isActive && `
-    background-color: #3d566e; 
-    font-weight: bold; 
+  ${({ isActive }) =>
+    isActive &&
+    `
+    background-color: ${theme.primary}; 
+    font-weight: bold;
+    transform: scale(1.05);
   `}
 
   &:hover {
-    background-color: #3d566e;
+    background-color: ${theme.secondary};
+    box-shadow: 0 8px 20px ${theme.shadow};
+    transform: translateY(-3px);
   }
 `;
 
 const MainContent = styled.div`
   flex: 1;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  height: 100%;
-  background-color: #ecf0f1;
-  padding: 20px;
+  justify-content: space-between;
+  padding: 40px;
+  background: radial-gradient(circle, ${theme.background}, ${theme.sidebarBg});
+  color: ${theme.textPrimary};
 `;
 
 const LessonsContainer = styled.div`
-  padding: 20px;
-  background-color: #fff;
-  color: #2c3e50;
-  border-radius: 10px;
-  width: 80%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-top: 20px;
+  background-color: ${theme.secondary};
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px ${theme.shadow};
+  width: 65%;
+`;
+
+const FormSideContainer = styled.div`
+  background-color: ${theme.secondary};
+  padding: 25px;
+  border-radius: 20px;
+  width: 30%;
+  box-shadow: 0 10px 25px ${theme.shadow};
 `;
 
 const LessonItem = styled.div`
-  padding: 15px;
-  border: 1px solid #ddd; 
-  border-radius: 5px; 
-  margin-bottom: 10px; 
-  transition: background-color 0.3s ease;
+  padding: 20px;
+  background-color: ${theme.sidebarBg};
+  border-radius: 12px;
+  margin-bottom: 20px;
+  transition: background-color 0.3s ease, transform 0.2s, box-shadow 0.3s ease;
   cursor: pointer;
+  box-shadow: 0 6px 15px ${theme.shadow};
 
   &:hover {
-    background-color: #f1c40f; 
+    background-color: ${theme.primary};
+    box-shadow: 0 8px 25px ${theme.shadow};
+    transform: translateY(-3px);
   }
 `;
 
 const LessonTitle = styled.h2`
-  margin: 0;
-  font-size: 18px;
-  color: #34495e;
+  font-size: 22px;
+  font-weight: bold;
+  color: ${theme.textPrimary};
+  margin-bottom: 10px;
 `;
 
 const LessonDescription = styled.p`
-  font-size: 14px;
-  color: #7f8c8d;
+  font-size: 16px;
+  color: ${theme.textSecondary};
+`;
+
+const RemoveButton = styled.button`
+  background-color: ${theme.accent};
+  color: ${theme.textPrimary};
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #c0392b;
+  }
 `;
 
 const StepContainer = styled.div`
   margin-left: 20px;
-  padding: 10px;
-  background-color: #ecf0f1;
-  border-radius: 5px;
+  padding: 15px;
+  background-color: ${theme.sidebarBg};
+  border-radius: 10px;
+  box-shadow: 0 4px 15px ${theme.shadow};
 `;
 
 const StepItem = styled.div`
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: #bdc3c7;
-  border-radius: 5px;
-`;
-
-const RemoveButton = styled.button`
-  background-color: red;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
+  margin-bottom: 15px;
+  padding: 15px;
+  background-color: ${theme.secondary};
+  border-radius: 10px;
+  box-shadow: 0 4px 10px ${theme.shadow};
+  color: ${theme.textPrimary};
+  transition: background-color 0.3s ease, transform 0.2s;
 
   &:hover {
-    background-color: darkred;
+    background-color: ${theme.highlight};
+    transform: scale(1.03);
   }
 `;
 
+const EmptyMessage = styled.p`
+  text-align: center;
+  font-size: 24px;  // Increased font size
+  font-weight: bold; // Bold text for emphasis
+  color: ${theme.textSecondary}; // Use a contrasting color
+  margin: 20px 0;  // Add margin for spacing
+`;
+
+// Sidebar Component
 const Sidebar = ({ course_id }) => {
   const [modules, setModules] = useState([]);
   const [title, setTitle] = useState('');
@@ -266,10 +337,14 @@ const Sidebar = ({ course_id }) => {
     }
   }
 
+  const handleCreateStep = () => {
+    console.log("Empty for a while");
+  }
+
   return (
     <Container>
       <SidebarContainer>
-        <h1>Modules of course</h1>
+        <Heading>Modules of course</Heading>
         {modules.map((module, index) => (
           <ModuleButton key={index} onClick={() => handleOpenLessons(module)} isActive={currentModule?.id === module.id}>
             <Module module={module} />
@@ -290,18 +365,18 @@ const Sidebar = ({ course_id }) => {
             onChange={(e) => setDescription(e.target.value)}
             className="form-field"
           />
-          <SubmitButton type="submit" value="Create Module" />
+          <SubmitButton type="submit">Create Module</SubmitButton>
         </FormContainer>
       </SidebarContainer>
       <MainContent>
         {isOpen && currentModule && (
           <>
             <LessonsContainer>
-            <h1 style={{ color: '#2c3e50', marginBottom: '20px', textAlign: 'center' }}>
-              Lessons for {currentModule.title} module
-            </h1>
+              <h1 style={{ marginBottom: '20px', textAlign: 'center', color: theme.primary }}>
+                Lessons
+              </h1>
               {currentModule.lessons.length === 0 ? (
-                <p>The module is empty</p>
+                <EmptyMessage>The module is empty</EmptyMessage>
               ) : (
                 currentModule.lessons.map((lesson, index) => (
                   <div key={index}>
@@ -312,35 +387,57 @@ const Sidebar = ({ course_id }) => {
                     </LessonItem>
                     {openLessons[lesson.id] && (
                       <StepContainer>
-                        {/* {lesson.steps.map((step, stepIndex) => ( */}
-                        {/* <StepItem >{step}</StepItem>   */}
-                        {/* // ))} */}
+                        {lesson.steps.map((step, stepIndex) => (
+                        <StepItem key={stepIndex}>{step.text}</StepItem>  
+                        ))}
                       </StepContainer>
                     )}
                   </div>
                 ))
               )}
             </LessonsContainer>
-            <FormContainer onSubmit={(e) => {
-              e.preventDefault();
-              handleCreateLesson(currentModule.id);
-            }}>
-              <InputField
-                type="text"
-                placeholder="Lesson Title"
-                value={lessonTitle}
-                onChange={(e) => setLessonTitle(e.target.value)}
-                className="form-field"
-              />
-              <InputField
-                type="text"
-                placeholder="Lesson Description"
-                value={lessonDescription}
-                onChange={(e) => setLessonDescription(e.target.value)}
-                className="form-field"
-              />
-              <SubmitButton type="submit" value="Create Lesson" />
-            </FormContainer>
+            <FormSideContainer>
+              <FormContainer onSubmit={(e) => {
+                e.preventDefault();
+                handleCreateLesson(currentModule.id);
+              }}>
+                <InputField
+                  type="text"
+                  placeholder="Lesson Title"
+                  value={lessonTitle}
+                  onChange={(e) => setLessonTitle(e.target.value)}
+                  className="form-field"
+                />
+                <InputField
+                  type="text"
+                  placeholder="Lesson Description"
+                  value={lessonDescription}
+                  onChange={(e) => setLessonDescription(e.target.value)}
+                  className="form-field"
+                />
+                <SubmitButton type="submit">Create Lesson</SubmitButton>
+              </FormContainer>
+              <FormContainer onSubmit={(e) => {
+                e.preventDefault();
+                handleCreateStep();
+              }}>
+                <InputField
+                  type="text"
+                  placeholder="Step Video Path"
+                  value={lessonTitle}
+                  onChange={(e) => setLessonTitle(e.target.value)}
+                  className="form-field"
+                />
+                <InputField
+                  type="text"
+                  placeholder="Step Text"
+                  value={lessonDescription}
+                  onChange={(e) => setLessonDescription(e.target.value)}
+                  className="form-field"
+                />
+                <SubmitButton type="submit">Create Step</SubmitButton>
+              </FormContainer>
+            </FormSideContainer>
           </>
         )}
       </MainContent>
