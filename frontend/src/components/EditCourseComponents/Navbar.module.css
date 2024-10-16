@@ -1,0 +1,52 @@
+#main-navbar {
+    grid-row: 2;
+    grid-column: 1;
+  }
+  
+  .navbar {
+    display: flex;
+    height: 50px;
+    padding: 4px 24px;
+    align-items: center;
+    background-color: #222;
+  }
+  
+  .navbarLogo { 
+    height: 40px;
+  }
+  
+  .navbarLinks { 
+    display: flex;
+    list-style: none;
+  }
+  
+  .navbarMenuItem { 
+    margin-right: 20px;
+  }
+  
+  .navbarSearchForm { 
+    margin-left: auto;
+  }
+  
+  .navbarSearchInput { 
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .navbarUserControls { 
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbarProfileToggler { 
+    display: flex;
+    align-items: center;
+  }
+  
+  .navbarProfileImg { 
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+  }
+  
