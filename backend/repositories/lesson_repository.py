@@ -2,7 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from database.models import Lesson
+from database.models import Lesson, Step
 from lesson.schemas import LessonInput, LessonUpdate
 from sqlalchemy.orm import selectinload
 
@@ -17,7 +17,7 @@ class LessonRepository:
             select(Lesson)
             .where(Lesson.id==lesson_id)
             .options(
-                selectinload(Lesson.steps)
+                selectinload(Lesson.steps).joinedload(Step.test)
             )
         )
         if lesson:

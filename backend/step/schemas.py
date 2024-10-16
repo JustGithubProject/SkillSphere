@@ -1,5 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 
+from test.schemas import TestOutput
+
 
 class StepBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -15,7 +17,7 @@ class StepInput(StepBase):
 
 class StepOutput(StepInput):
     id: int
-    # test: list['TestOutput']
+    test: TestOutput | None = None
 
 
 class StepUpdate(BaseModel):

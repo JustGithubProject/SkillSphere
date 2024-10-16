@@ -2,7 +2,6 @@ from database.models import Step
 from lesson.schemas import LessonOutput
 from step.schemas import StepInput, StepOutput, StepUpdate
 from services.lesson_service import get_lesson_service, LessonService
-from authentication.schemas import UserOut
 from sqlalchemy.ext.asyncio import AsyncSession
 from repositories.step_repository import StepRepository
 
@@ -22,7 +21,6 @@ class StepService:
     async def get_all_steps_by_lesson_id(
         self,
         session: AsyncSession,
-        user: UserOut,
         lesson_id: int
     ) -> list[StepOutput]:
         lesson: LessonOutput = await self.lesson_service.get_lesson_by_id(

@@ -16,7 +16,7 @@ class StepRepository:
             select(Step)
             .where(Step.id==step_id)
             .options(
-                # joinedload(Step.test)
+                joinedload(Step.test)
             )
         )
         if step:
@@ -35,7 +35,7 @@ class StepRepository:
             step: Step = Step(**step_input.model_dump())
             session.add(step)
             await session.commit()
-            await session.refresh(step) #, attributes_name=["test"])
+            await session.refresh(step, attributes_name=["test"])
             return step
         except Exception as e:
             await session.rollback()
@@ -55,7 +55,7 @@ class StepRepository:
             for name, value in step_update.model_dump(exclude_none=True).items():
                 setattr(step, name, value)
             await session.commit()
-            await session.refresh(step) #, attributes_name=["test"])
+            await session.refresh(step, attributes_name=["test"])
             return step
         except Exception as e:
             await session.rollback()

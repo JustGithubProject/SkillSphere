@@ -4,7 +4,7 @@ from sqlalchemy.orm import joinedload, selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import func, or_, select
 from course.schemas import CourseInput, CourseUpdate
-from database.models import Course, Lesson, Module, User
+from database.models import Course, Lesson, Module, Step, User
 
 
 class CourseRepository:
@@ -18,7 +18,7 @@ class CourseRepository:
         query = select(Course).options(
             selectinload(Course.instructors),  # Загрузка инструкторов
             selectinload(Course.creator),      # Загрузка создателя курса
-            selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps)       # Загрузка модулей курса
+            selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps).joinedload(Step.test)       # Загрузка модулей курса
         )
 
         # Поиск по полю title и description
@@ -64,7 +64,7 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps),
+                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps).joinedload(Step.test),
                 selectinload(Course.comments),
                 selectinload(Course.students)
             )
@@ -89,7 +89,7 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps),
+                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps).joinedload(Step.test),
                 selectinload(Course.comments),
                 selectinload(Course.students)
             )
@@ -116,7 +116,7 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps),
+                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps).joinedload(Step.test),
                 selectinload(Course.comments)
             )
             .limit(limit)
@@ -210,7 +210,7 @@ class CourseRepository:
             .options(
                 joinedload(Course.creator),
                 selectinload(Course.instructors),
-                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps),
+                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps).joinedload(Step.test),
                 selectinload(Course.comments),
                 selectinload(Course.students)
             )

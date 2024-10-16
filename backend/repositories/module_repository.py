@@ -4,7 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from module.schemas import ModuleInput, ModuleUpdate
-from database.models import Module
+from database.models import Lesson, Module, Step
 
 
 class ModuleRepository:
@@ -17,7 +17,7 @@ class ModuleRepository:
             select(Module)
             .filter_by(course_id=course_id) 
             .options(
-                selectinload(Module.lessons),
+                selectinload(Module.lessons).selectinload(Lesson.steps).joinedload(Step.test),
             )
         )
         return modules.all()
@@ -31,7 +31,7 @@ class ModuleRepository:
             select(Module)
             .where(Module.id == module_id)
             .options(
-                selectinload(Module.lessons),
+                selectinload(Module.lessons).selectinload(Lesson.steps).joinedload(Step.test),
             )
         )
         if module:

@@ -11,6 +11,7 @@ from paypal.router import router as paypal_router
 from stripe_payment.router import router as stripe_router
 from lesson.router import router as lesson_router
 from step.router import router as step_router
+from test.router import router as test_router
 
 
 API_V1_PREFIX = "/api/v1"
@@ -65,6 +66,11 @@ app.include_router(
 
 app.include_router(
     router=step_router,
+    prefix=API_V1_PREFIX
+)
+
+app.include_router(
+    router=test_router,
     prefix=API_V1_PREFIX
 )
 

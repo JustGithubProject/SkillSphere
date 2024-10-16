@@ -27,7 +27,6 @@ async def get_all_steps_by_lesson_id(
 ) -> list[StepOutput]:
     return await step_service.get_all_steps_by_lesson_id(
         session=session,
-        user=user,
         lesson_id=lesson_id
     )
 
