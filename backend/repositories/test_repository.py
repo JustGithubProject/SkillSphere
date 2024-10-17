@@ -16,7 +16,7 @@ class TestRepository:
             select(Test)
             .where(Test.step_id==step_id)
             .options(
-                # selectinload(Test.answers)
+                selectinload(Test.answers)
             )
         )
         if test:
@@ -35,7 +35,7 @@ class TestRepository:
             select(Test)
             .where(Test.id==test_id)
             .options(
-                # selectinload(Test.answers)
+                selectinload(Test.answers)
             )
         )
         if test:
@@ -62,7 +62,26 @@ class TestRepository:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Can not add test. Error: {e}"
             )
-        
+
+    async def update_test_answers_count(
+        self,
+        session: AsyncSession,
+        test_id: int,
+        change: int 
+    ) -> Test:
+        try:
+            test: Test = await session.get(Test, test_id)
+            test.count_correct_answers += change
+            await session.commit()
+            await session.refresh(test, attribute_names=["answers", "count_correct_answers"])
+            return test
+        except Exception as e:
+            await session.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Can not update test. Error: {e}"
+            )
+
     async def delete_test(
         self,
         session: AsyncSession,

@@ -1,5 +1,5 @@
 from step.schemas import StepInput, StepUpdate
-from database.models import Step
+from database.models import Step, Test
 from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,7 +16,7 @@ class StepRepository:
             select(Step)
             .where(Step.id==step_id)
             .options(
-                joinedload(Step.test)
+                joinedload(Step.test).selectinload(Test.answers)
             )
         )
         if step:
