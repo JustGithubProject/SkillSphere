@@ -100,6 +100,8 @@ class ModuleRepository:
                 )
 
             for lesson in module.lessons:
+                for step in lesson.steps:
+                    await session.delete(step)
                 await session.delete(lesson)
             
             await session.delete(module)
