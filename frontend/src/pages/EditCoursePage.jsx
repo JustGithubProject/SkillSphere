@@ -10,9 +10,9 @@ const EditCoursePage = () => {
 
     return (
         <div className={styles.container}>
-            <div className={styles.navbar}>
+            {/* <div className={styles.navbar}>
                 <Navbar course_id={id}/>
-            </div>
+            </div> */}
             <div className={styles.mainContent}>
                 <Sidebar course_id={id} />
                 {/* <main className={styles.content}>

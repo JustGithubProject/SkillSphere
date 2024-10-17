@@ -72,6 +72,18 @@ class LessonRepository:
     ) -> None:
         try:
             lesson: Lesson = await session.get(Lesson, lesson_id)
+            if not lesson:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Lesson with id {lesson_id} not found"
+                )
+            stmt = select(Step).where(Step.lesson_id == lesson_id)
+            result = await session.execute(stmt)
+            steps = result.scalars().all()
+            
+            for step in steps:
+                await session.delete(step)
+            
             await session.delete(lesson)
             await session.commit()
         except Exception as e:
