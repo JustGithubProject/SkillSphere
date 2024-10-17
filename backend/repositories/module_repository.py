@@ -86,7 +86,24 @@ class ModuleRepository:
         module_id: int
     ) -> None:
         try:
-            module = await session.get(Module, module_id)
+            module: Module = await session.scalar(
+                select(Module)
+                .where(Module.id == module_id)
+                .options(
+                    selectinload(Module.lessons).selectinload(Lesson.steps).joinedload(Step.test),
+                )
+            )
+            if not module:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail=f"Module with {module_id} not found"
+                )
+
+            for lesson in module.lessons:
+                for step in lesson.steps:
+                    await session.delete(step)
+                await session.delete(lesson)
+            
             await session.delete(module)
             await session.commit()
         except Exception as e:
