@@ -3,12 +3,14 @@ import styles from './Sidebar.module.css';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import '@fortawesome/fontawesome-free/css/all.css';
+import ModuleForm from './ModuleForm';
 
 const Sidebar = ({ course_id }) => {
   const [modules, setModules] = useState([]);
   const [openedModuleId, setOpenedModuleId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(null);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     const accessToken = Cookies.get('access_token');
@@ -85,6 +87,14 @@ const Sidebar = ({ course_id }) => {
     }
   };
 
+  const handleShowFormClick = () => {
+    if (showForm) {
+      setShowForm(false);
+    } else {
+      setShowForm(true);
+    }
+  }
+
   return (
     <aside className={styles.sidebar}>
       <h2>Modules</h2>
@@ -130,6 +140,41 @@ const Sidebar = ({ course_id }) => {
           ))}
         </ul>
       )}
+       <div onClick={handleShowFormClick} className={styles.addModuleIcon}>
+        <svg
+          height="20px"  
+          width="20px"
+          version="1.1"
+          id="Layer_1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlnsXlink="http://www.w3.org/1999/xlink"
+          viewBox="0 0 512 512"
+          xmlSpace="preserve"
+          fill="#000000"
+        >
+          <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+          <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
+          <g id="SVGRepo_iconCarrier">
+            <path
+              style={{ fill: '#A4E276' }}
+              d="M488.727,186.182H325.818V23.273C325.818,10.418,315.398,0,302.545,0H256h-46.545
+              c-12.853,0-23.273,10.418-23.273,23.273v162.909H23.273C10.42,186.182,0,196.6,0,209.455v93.091
+              c0,12.853,10.42,23.273,23.273,23.273h162.909v162.909c0,12.853,10.42,23.273,23.273,23.273H256h46.545
+              c12.853,0,23.273-10.42,23.273-23.273V325.818h162.909c12.853,0,23.273-10.42,23.273-23.273v-93.091
+              C512,196.6,501.58,186.182,488.727,186.182z"
+            ></path>
+            <path
+              style={{ fill: '#64C37D' }}
+              d="M209.455,0c-12.853,0-23.273,10.418-23.273,23.273v162.909H23.273C10.42,186.182,0,196.6,0,209.455
+              v93.091c0,12.853,10.42,23.273,23.273,23.273h162.909v162.909c0,12.853,10.42,23.273,23.273,23.273H256V0H209.455z"
+            ></path>
+          </g>
+        </svg>
+      </div>
+      {showForm ? (
+        <ModuleForm course_id={course_id}/>
+      ) : null}
+
     </aside>
   );
 };
