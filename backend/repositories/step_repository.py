@@ -3,7 +3,7 @@ from database.models import Step, Test
 from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload
+from sqlalchemy.orm import joinedload, selectinload
 
 
 class StepRepository:
@@ -35,7 +35,8 @@ class StepRepository:
             step: Step = Step(**step_input.model_dump())
             session.add(step)
             await session.commit()
-            await session.refresh(step, attributes_name=["test"])
+            # await session.refresh(step, attributes_name=["test"])
+            await session.refresh(step, options=[selectinload(Step.test), selectinload(Step.lesson)])
             return step
         except Exception as e:
             await session.rollback()

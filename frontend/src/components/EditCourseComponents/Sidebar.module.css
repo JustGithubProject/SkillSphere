@@ -1,9 +1,9 @@
 .lessonItem {
     color: #eee;
-    padding: 8px 15px; 
+    padding: 5px 20px; 
     margin-bottom: 5px; 
     background-color: #333; 
-    border-radius: 5px; 
+    border-radius: 0px; 
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
@@ -79,7 +79,7 @@
 .sidebar ul li {
     margin-bottom: 40px;
     padding: 25px;
-    border-radius: 15px;
+    border-radius: 0px;
     background: linear-gradient(145deg, #222, #333);
     box-shadow: 
         10px 10px 20px rgba(0, 0, 0, 0.4), 
