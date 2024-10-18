@@ -36,7 +36,7 @@ const Sidebar = ({ course_id }) => {
       } finally {
         setLoading(false);
       }
-    };
+  };
 
     const fetchCourseById = async () => {
       try {
@@ -61,6 +61,14 @@ const Sidebar = ({ course_id }) => {
   const handleModuleClick = (moduleId) => {
     setOpenedModuleId(openedModuleId === moduleId ? null : moduleId);
   };
+
+  const handleGetStepsOfLesson = (lesson) => {
+    const result = localStorage.getItem("steps_of_lesson");
+    if (result) {
+      localStorage.removeItem("steps_of_lesson");
+    }
+    localStorage.setItem("steps_of_lesson", JSON.stringify(lesson.steps));
+  }
 
   const handleRemoveLesson = async (lesson_id) => {
     if (!window.confirm('Are you sure you want to delete this lesson?')) return;
@@ -138,6 +146,11 @@ const Sidebar = ({ course_id }) => {
                   className={`fas fa-times ${styles.removeIcon}`}
                   style={{ color: 'red', marginLeft: '10px' }}
                 ></i>
+                <i
+                  onClick={() => handleModuleClick(module.id)}
+                  className={`fas ${openedModuleId === module.id ? 'fa-chevron-up' : 'fa-chevron-down'} ${styles.toggleIcon}`}
+                  style={{ marginLeft: '10px', cursor: 'pointer' }}
+                ></i>
               </div>
               {openedModuleId === module.id && (
                 <ul className={styles.lessonList}>
@@ -147,7 +160,7 @@ const Sidebar = ({ course_id }) => {
                     module.lessons.map((lesson, l_index) => (
                       <li key={lesson.id} className={styles.lessonItem}>
                         {l_index + 1}.{' '}
-                        <a className={styles.noLessonText} href="#">{lesson.title}</a>
+                        <button onClick={() => handleGetStepsOfLesson(lesson)} className={styles.noLessonText}>{lesson.title}</button>
                         <i
                           onClick={() => handleRemoveLesson(lesson.id)}
                           className={`fas fa-times ${styles.removeIcon}`}

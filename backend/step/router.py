@@ -60,7 +60,7 @@ async def create_step_in_lesson(
     lesson_id: Annotated[int, Form()],
     video_path: UploadFile | None = File(default=None),
 ) -> StepOutput:
-    
+    result_video_path = None
     SHARED_DIRECTORY_PATH = "/shared_data/uploads"
     VIDEO_DIRECTORY = os.path.join(SHARED_DIRECTORY_PATH, "videos_of_steps")
     
