@@ -199,7 +199,7 @@ const CourseSingleComponent = ({ course_id }) => {
               </div>
             </div>
 
-            <div className="col-lg-4 mt-5 mt-lg-0">
+            {/* <div className="col-lg-4 mt-5 mt-lg-0">
               <div className="d-flex flex-column text-center bg-secondary rounded mb-5 py-5 px-4">
                 <h3 className="text-primary mb-3">About Course</h3>
                 <a href="" className="text-black mb-2">Price: {course && course.price}$</a>
@@ -208,7 +208,7 @@ const CourseSingleComponent = ({ course_id }) => {
                   <PayPalForm price={course && course.price} course_id={course_id} />
                 ): null}
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
