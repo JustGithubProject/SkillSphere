@@ -7,10 +7,15 @@ import ModuleForm from './ModuleForm';
 
 const Sidebar = ({ course_id }) => {
   const [modules, setModules] = useState([]);
+  const [course, setCourse] = useState();
   const [openedModuleId, setOpenedModuleId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState(null);
   const [showForm, setShowForm] = useState(false);
+
+  const API_BASE = "http://127.0.0.1:8000";
+  
+  // TODO: get the course name using course_id and display it in h2 tag instread of "Modules"
 
   useEffect(() => {
     const accessToken = Cookies.get('access_token');
@@ -18,7 +23,7 @@ const Sidebar = ({ course_id }) => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/v1/module/all/${course_id}`,
+          `${API_BASE}/api/v1/module/all/${course_id}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -33,7 +38,24 @@ const Sidebar = ({ course_id }) => {
       }
     };
 
+    const fetchCourseById = async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE}/api/v1/course/${course_id}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${accessToken}`
+            }
+          }
+        )
+        setCourse(response.data);
+      } catch(error) {
+        console.log("Error fetching course by id", error);
+      }
+    }
+
     fetchModulesOfCourse();
+    fetchCourseById();
   }, [course_id]);
 
   const handleModuleClick = (moduleId) => {
@@ -97,7 +119,9 @@ const Sidebar = ({ course_id }) => {
 
   return (
     <aside className={styles.sidebar}>
-      <h2>Modules</h2>
+    <h2 style={{ marginBottom: '50px' }}>
+      {course && course.title ? course.title : 'Modules'}
+    </h2>
       {loading ? (
         <p>Loading modules...</p>
       ) : (
@@ -123,7 +147,7 @@ const Sidebar = ({ course_id }) => {
                     module.lessons.map((lesson, l_index) => (
                       <li key={lesson.id} className={styles.lessonItem}>
                         {l_index + 1}.{' '}
-                        <a href="#">{lesson.title}</a>
+                        <a className={styles.noLessonText} href="#">{lesson.title}</a>
                         <i
                           onClick={() => handleRemoveLesson(lesson.id)}
                           className={`fas fa-times ${styles.removeIcon}`}
