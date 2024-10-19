@@ -35,8 +35,11 @@ class StepRepository:
             step: Step = Step(**step_input.model_dump())
             session.add(step)
             await session.commit()
-            # await session.refresh(step, attributes_name=["test"])
-            await session.refresh(step, options=[selectinload(Step.test), selectinload(Step.lesson)])
+            
+            query = select(Step).options(selectinload(Step.text), selectinload(Step.lesson)).where(Step.id == step.id)
+            result = await session.execute(query)
+            step = result.scalars().one()
+
             return step
         except Exception as e:
             await session.rollback()
@@ -44,6 +47,8 @@ class StepRepository:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Can not add step. Error: {e}"
             )
+        finally:
+            await session.close()
     
     async def update_step(
         self,
