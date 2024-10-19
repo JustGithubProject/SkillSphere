@@ -28,10 +28,15 @@ const EditCoursePage = () => {
                             {steps.map((step, index) => (
                                 <>
                                     <p>{step.text}</p>
-                                    <video className="video-fluid rounded w-100 mb-4" width="800" controls>
-                                        <source src={`http://127.0.0.1:8080${step.video_path}`} type="video/mp4" />
-                                        Your browser does not support the video tag.
-                                    </video>
+                                    {step.video_path ? (
+                                        <div className={styles.videoContainer}>
+                                        <video className={styles.videoFluid} controls>
+                                            <source src={`http://127.0.0.1:8080${step.video_path}`} type="video/mp4" />
+                                                Your browser does not support the video tag.
+                                        </video>
+                                        </div>
+                                    ): null}
+                      
                                 </>
                             ))}
                         </>

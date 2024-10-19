@@ -160,7 +160,7 @@ const Sidebar = ({ course_id }) => {
                     module.lessons.map((lesson, l_index) => (
                       <li key={lesson.id} className={styles.lessonItem}>
                         {l_index + 1}.{' '}
-                        <button onClick={() => handleGetStepsOfLesson(lesson)} className={styles.noLessonText}>{lesson.title}</button>
+                        <p onClick={() => handleGetStepsOfLesson(lesson)} className={styles.noLessonText}>{lesson.title}</p>
                         <i
                           onClick={() => handleRemoveLesson(lesson.id)}
                           className={`fas fa-times ${styles.removeIcon}`}
