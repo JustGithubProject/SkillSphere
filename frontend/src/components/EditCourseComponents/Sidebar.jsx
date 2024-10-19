@@ -76,7 +76,7 @@ const Sidebar = ({ course_id }) => {
     setDeleting(lesson_id);
     try {
       await axios.delete(
-        `http://127.0.0.1:8000/api/v1/lesson/${lesson_id}`,
+        `${API_BASE}/api/v1/lesson/${lesson_id}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -102,7 +102,7 @@ const Sidebar = ({ course_id }) => {
     setDeleting(module_id);
     try {
       await axios.delete(
-        `http://127.0.0.1:8000/api/v1/module/${module_id}`,
+        `${API_BASE}/api/v1/module/${module_id}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
