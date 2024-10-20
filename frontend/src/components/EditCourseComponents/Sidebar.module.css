@@ -21,7 +21,7 @@
 }
 
 .noLessonText {
-    color: #999;
+    color: #eee;
 }
 
 .container {
@@ -157,15 +157,42 @@
 }
 
 .videoContainer {
-    width: 600px;
+    width: 800px;
     height: 400px;
     overflow: hidden; 
     border-radius: 10px;
-    margin-left: 500px;
+    margin-left: 450px;
 }
 
 .videoFluid {
     width: 100%;
     height: 100%;
     object-fit: cover; 
+}
+
+.navigationButtons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.navButton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.navButton:hover {
+    background-color: #0056b3;
+}
+
+.navButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
 }

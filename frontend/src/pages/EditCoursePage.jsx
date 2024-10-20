@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/EditCourseComponents/Navbar';
 import Sidebar from '../components/EditCourseComponents/Sidebar';
+import StepForm from '../components/EditCourseComponents/StepForm';
 import styles from '../components/EditCourseComponents/Sidebar.module.css';
 import { useParams } from 'react-router-dom';
 
@@ -44,7 +45,7 @@ const EditCoursePage = () => {
                             <div>
                                 {steps[currentStepIndex].video_path ? (
                                     <div className={styles.videoContainer}>
-                                        <video className={styles.videoFluid} controls>
+                                        <video key={steps[currentStepIndex].video_path} className={styles.videoFluid} controls>
                                             <source src={`${BASE_NGINX_URL}${steps[currentStepIndex].video_path}`} type="video/mp4" />
                                                 Your browser does not support the video tag.
                                         </video>
@@ -59,16 +60,23 @@ const EditCoursePage = () => {
                             </div>
 
                             <div className={styles.navigationButtons}>
-                                <button onClick={handleBack} disabled={currentStepIndex === 0}>
+                                <button 
+                                    onClick={handleBack} 
+                                    disabled={currentStepIndex === 0} 
+                                    className={styles.navButton}
+                                >
                                     Back
                                 </button>
-                                <button onClick={handleNext} disabled={currentStepIndex === steps.length - 1}>
+                                <button 
+                                    onClick={handleNext} 
+                                    disabled={currentStepIndex === steps.length - 1} 
+                                    className={styles.navButton}
+                                >
                                     Next
                                 </button>
                             </div>
-
                             <div>
-                                // TODO: here must be form to update text for step
+                                <StepForm step_id={steps[currentStepIndex].id}/>
                             </div>
                         </>
                     ) : (

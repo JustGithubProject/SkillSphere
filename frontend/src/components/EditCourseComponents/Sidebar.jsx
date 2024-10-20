@@ -68,6 +68,7 @@ const Sidebar = ({ course_id }) => {
       localStorage.removeItem("steps_of_lesson");
     }
     localStorage.setItem("steps_of_lesson", JSON.stringify(lesson.steps));
+    window.location.reload();
   }
 
   const handleRemoveLesson = async (lesson_id) => {
