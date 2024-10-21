@@ -63,11 +63,19 @@ const Sidebar = ({ course_id }) => {
   };
 
   const handleGetStepsOfLesson = (lesson) => {
-    const result = localStorage.getItem("steps_of_lesson");
-    if (result) {
+    const receivedStepsOfLesson = localStorage.getItem("steps_of_lesson");
+
+    if (receivedStepsOfLesson) {
       localStorage.removeItem("steps_of_lesson");
     }
+
+    const receivedLessonId = localStorage.getItem("lesson_id");
+    if (receivedLessonId) {
+      localStorage.removeItem("lesson_id");
+    }
+
     localStorage.setItem("steps_of_lesson", JSON.stringify(lesson.steps));
+    localStorage.setItem("lesson_id", lesson.id);
     window.location.reload();
   }
 

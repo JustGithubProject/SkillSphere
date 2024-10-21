@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from '../components/EditCourseComponents/Navbar';
 import Sidebar from '../components/EditCourseComponents/Sidebar';
-import StepForm from '../components/EditCourseComponents/StepForm';
+import StepFormUpdate from '../components/EditCourseComponents/StepFormUpdate';
+import StepFormCreate from '../components/EditCourseComponents/StepFormCreate';
 import styles from '../components/EditCourseComponents/Sidebar.module.css';
 import { useParams } from 'react-router-dom';
 
 const EditCoursePage = () => {
     const [steps, setSteps] = useState([]);
+    const [lessonID, setLessonID] = useState();
     const [currentStepIndex, setCurrentStepIndex] = useState(0); 
+    const [showFormUpdate, setShowFormUpdate] = useState(true);
     const { id } = useParams();
+
 
     useEffect(() => {
         const storedSteps = JSON.parse(localStorage.getItem("steps_of_lesson"));
+        setLessonID(localStorage.getItem("lesson_id"));
         setSteps(storedSteps || []); 
     }, []);
 
@@ -29,13 +33,18 @@ const EditCoursePage = () => {
         }
     };
 
+    const handleShowUpdateForm = () => {
+        setShowFormUpdate(true);
+    }
+
+    const handleShowCreateForm = () => {
+        setShowFormUpdate(false);
+    }
+
     const BASE_NGINX_URL = `http://127.0.0.1:8080`;
 
     return (
         <div className={styles.container}>
-            {/* <div className={styles.navbar}>
-                <Navbar course_id={id} />
-            </div> */}
             <div className={styles.mainContent}>
                 <Sidebar course_id={id} />
                 <main className={styles.content}>
@@ -75,8 +84,45 @@ const EditCoursePage = () => {
                                     Next
                                 </button>
                             </div>
-                            <div>
-                                <StepForm step_id={steps[currentStepIndex].id}/>
+
+                            {/* Toggle between Update and Create forms */}
+                            <div style={{ textAlign: 'center', margin: '20px 0' }}>
+                                <button 
+                                    onClick={handleShowUpdateForm}
+                                    style={{
+                                        padding: '10px 20px',
+                                        marginRight: '10px',
+                                        backgroundColor: showFormUpdate ? '#4CAF50' : '#f1f1f1',
+                                        color: showFormUpdate ? '#fff' : '#000',
+                                        border: 'none',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    Show Update Form
+                                </button>
+                                <button 
+                                    onClick={handleShowCreateForm}
+                                    style={{
+                                        padding: '10px 20px',
+                                        backgroundColor: !showFormUpdate ? '#4CAF50' : '#f1f1f1',
+                                        color: !showFormUpdate ? '#fff' : '#000',
+                                        border: 'none',
+                                        borderRadius: '5px',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    Show Create Form
+                                </button>
+                            </div>
+
+                            {/* Show either Update or Create form */}
+                            <div style={{ display: 'flex', gap: '20px' }}>
+                                {showFormUpdate ? (
+                                    <StepFormUpdate step_id={steps[currentStepIndex].id} />
+                                ) : (
+                                    <StepFormCreate lesson_id={lessonID} />
+                                )}
                             </div>
                         </>
                     ) : (

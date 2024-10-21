@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 
-const StepForm = ({ step_id }) => {
+const StepFormUpdate = ({ step_id }) => {
     const [stepText, setStepText] = useState('');
     const [stepVideoPath, setStepVideoPath] = useState('');
 
@@ -37,9 +37,10 @@ const StepForm = ({ step_id }) => {
 
     return (
         <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
+            <h1>Update Step</h1>
             <form onSubmit={handleFormToUpdateStep}>
                 <div style={{ marginBottom: '15px' }}>
-                    <label htmlFor="stepText" style={{ display: 'block', marginBottom: '5px' }}>Step Text:</label>
+                    <label htmlFor="stepText" style={{ display: 'block', marginBottom: '5px', color: 'black' }}>Step Text:</label>
                     <input
                         type="text"
                         id="stepText"
@@ -51,12 +52,12 @@ const StepForm = ({ step_id }) => {
                 </div>
 
                 <div style={{ marginBottom: '15px' }}>
-                    <label htmlFor="stepVideoPath" style={{ display: 'block', marginBottom: '5px' }}>Step Video File:</label>
+                    <label htmlFor="stepVideoPath" style={{ display: 'block', marginBottom: '5px', color: 'black'}}>Step Video File:</label>
                     <input
                         type="file"
                         id="stepVideoPath"
                         onChange={(e) => setStepVideoPath(e.target.files[0])} 
-                        style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                        style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', color: 'black'}}
                     />
                 </div>
 
@@ -79,4 +80,4 @@ const StepForm = ({ step_id }) => {
     );
 };
 
-export default StepForm;
+export default StepFormUpdate;
