@@ -1,7 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import styles from './StepFormUpdate.module.css'; 
+import styles from './StepFormUpdate.module.css';
+
+import { PlusOutlined } from '@ant-design/icons';
+import {
+    Button,
+    Upload,
+    Form,
+    Input,
+    message,
+} from 'antd';
+
+const { TextArea } = Input;
 
 const StepFormUpdate = ({ step_id }) => {
     const [stepText, setStepText] = useState('');
@@ -36,39 +47,55 @@ const StepFormUpdate = ({ step_id }) => {
         }
     };
 
+    const normFile = (e) => {
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
+    };
+
     return (
         <div className={styles.container}>
             <h1 className={styles.heading}>Update Step</h1>
-            <form onSubmit={handleFormToUpdateStep}>
-                <div className={styles.formGroup}>
-                    <label htmlFor="stepText" className={styles.label}>Step Text:</label>
-                    <input
-                        type="text"
-                        id="stepText"
+            <Form
+                onFinish={handleFormToUpdateStep}
+                layout="vertical"
+                style={{ maxWidth: 400 }}
+            >
+                <Form.Item label="Step Text" required>
+                    <TextArea
                         value={stepText}
                         onChange={(e) => setStepText(e.target.value)}
                         placeholder="Enter step text"
+                        rows={4}
                         className={styles.input}
                     />
-                </div>
-
-                <div className={styles.formGroup}>
-                    <label htmlFor="stepVideoPath" className={styles.label}>Step Video File:</label>
-                    <input
-                        type="file"
-                        id="stepVideoPath"
-                        onChange={(e) => setStepVideoPath(e.target.files[0])}
-                        className={`${styles.input} ${styles.fileInput}`} 
-                    />
-                </div>
-
-                <button
-                    type="submit"
-                    className={styles.submitButton}
+                </Form.Item>
+                <Form.Item 
+                    label="Upload Video" 
+                    valuePropName="fileList" 
+                    getValueFromEvent={normFile}
                 >
-                    Update Step
-                </button>
-            </form>
+                    <Upload
+                        beforeUpload={(file) => {
+                            setStepVideoPath(file);
+                            return false;
+                        }}
+                        listType="picture-card"
+                        showUploadList={false}
+                    >
+                        <div>
+                            <PlusOutlined />
+                            <div style={{ marginTop: 8 }}>Upload</div>
+                        </div>
+                    </Upload>
+                </Form.Item>
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" className={styles.submitButton}>
+                        Update Step
+                    </Button>
+                </Form.Item>
+            </Form>
         </div>
     );
 };

@@ -59,23 +59,21 @@ const StepFormCreate = ({ lesson_id }) => {
             <h1 className={styles.heading}>Create Step</h1>
             <Form
                 onFinish={handleFormToCreateStep}
-                labelCol={{ span: 4 }}
-                wrapperCol={{ span: 14 }}
-                layout="horizontal"
-                style={{ maxWidth: 600 }}
+                layout="vertical"
+                style={{ maxWidth: 400 }}
             >
-                <Form.Item label="Step Text">
+                <Form.Item label="Step Text" required>
                     <TextArea
-                        id="stepText"
                         value={stepText}
                         onChange={(e) => setStepText(e.target.value)}
                         placeholder="Enter step text"
                         rows={4}
+                        className={styles.input}
                     />
                 </Form.Item>
-                <Form.Item
-                    label="Upload"
-                    valuePropName="fileList"
+                <Form.Item 
+                    label="Upload Video" 
+                    valuePropName="fileList" 
                     getValueFromEvent={normFile}
                 >
                     <Upload
@@ -86,20 +84,14 @@ const StepFormCreate = ({ lesson_id }) => {
                         listType="picture-card"
                         showUploadList={false}
                     >
-                        <button
-                            style={{
-                                border: 0,
-                                background: 'none',
-                            }}
-                            type="button"
-                        >
+                        <div>
                             <PlusOutlined />
                             <div style={{ marginTop: 8 }}>Upload</div>
-                        </button>
+                        </div>
                     </Upload>
                 </Form.Item>
-                <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
-                    <Button type="primary" htmlType="submit">
+                <Form.Item>
+                    <Button type="primary" htmlType="submit" className={styles.submitButton}>
                         Create Step
                     </Button>
                 </Form.Item>
