@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import styles from './StepFormUpdate.module.css'; 
 
 const StepFormUpdate = ({ step_id }) => {
     const [stepText, setStepText] = useState('');
@@ -28,7 +29,7 @@ const StepFormUpdate = ({ step_id }) => {
                 }
             );
             alert('Step updated successfully!');
-            window.location.realod();
+            window.location.reload();
         } catch (error) {
             console.error('Error updating step:', error);
             alert('Failed to update step.');
@@ -36,42 +37,34 @@ const StepFormUpdate = ({ step_id }) => {
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-            <h1>Update Step</h1>
+        <div className={styles.container}>
+            <h1 className={styles.heading}>Update Step</h1>
             <form onSubmit={handleFormToUpdateStep}>
-                <div style={{ marginBottom: '15px' }}>
-                    <label htmlFor="stepText" style={{ display: 'block', marginBottom: '5px', color: 'black' }}>Step Text:</label>
+                <div className={styles.formGroup}>
+                    <label htmlFor="stepText" className={styles.label}>Step Text:</label>
                     <input
                         type="text"
                         id="stepText"
                         value={stepText}
                         onChange={(e) => setStepText(e.target.value)}
                         placeholder="Enter step text"
-                        style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                        className={styles.input}
                     />
                 </div>
 
-                <div style={{ marginBottom: '15px' }}>
-                    <label htmlFor="stepVideoPath" style={{ display: 'block', marginBottom: '5px', color: 'black'}}>Step Video File:</label>
+                <div className={styles.formGroup}>
+                    <label htmlFor="stepVideoPath" className={styles.label}>Step Video File:</label>
                     <input
                         type="file"
                         id="stepVideoPath"
-                        onChange={(e) => setStepVideoPath(e.target.files[0])} 
-                        style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', color: 'black'}}
+                        onChange={(e) => setStepVideoPath(e.target.files[0])}
+                        className={`${styles.input} ${styles.fileInput}`} 
                     />
                 </div>
 
                 <button
                     type="submit"
-                    style={{
-                        width: '100%',
-                        padding: '10px',
-                        backgroundColor: '#28a745',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                    }}
+                    className={styles.submitButton}
                 >
                     Update Step
                 </button>
