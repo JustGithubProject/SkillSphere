@@ -1,6 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import styles from './StepFormCreate.module.css';
+
+import { PlusOutlined } from '@ant-design/icons';
+import {
+    Button,
+    Upload,
+    Form,
+    Input,
+    message,
+} from 'antd';
+
+const { TextArea } = Input;
 
 const StepFormCreate = ({ lesson_id }) => {
     const [stepText, setStepText] = useState('');
@@ -8,75 +20,90 @@ const StepFormCreate = ({ lesson_id }) => {
 
     const URL_BASE = "http://127.0.0.1:8000";
 
-    const handleFormToCreateStep = async (e) => {
-        e.preventDefault();
-
+    const handleFormToCreateStep = async (values) => {
         const accessToken = Cookies.get("access_token");
 
         try {
+            const formData = new FormData();
+            formData.append("text", stepText);
+            formData.append("lesson_id", lesson_id);
+            formData.append("video_path", stepVideoPath);
+
             await axios.post(
                 `${URL_BASE}/api/v1/step/`,
-                {
-                    text: stepText,
-                    lesson_id: lesson_id,
-                    video_path: stepVideoPath
-                },
+                formData,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${accessToken}`
                     }
                 }
             );
-            alert('Step created successfully!');
-            window.location.realod();
+            message.success('Step created successfully!');
+            window.location.reload();
         } catch (error) {
             console.error('Error creating step:', error);
-            alert('Failed to create step.');
+            message.error('Failed to create step.');
         }
     };
 
+    const normFile = (e) => {
+        if (Array.isArray(e)) {
+            return e;
+        }
+        return e && e.fileList;
+    };
+
     return (
-        <div style={{ maxWidth: '400px', margin: '0 auto', padding: '20px', border: '1px solid #ccc', borderRadius: '8px' }}>
-            <h1>Create Step</h1>
-            <form onSubmit={handleFormToCreateStep}>
-                <div style={{ marginBottom: '15px' }}>
-                    <label htmlFor="stepText" style={{ display: 'block', marginBottom: '5px', color: 'black' }}>Step Text:</label>
-                    <input
-                        type="text"
+        <div className={styles.container}>
+            <h1 className={styles.heading}>Create Step</h1>
+            <Form
+                onFinish={handleFormToCreateStep}
+                labelCol={{ span: 4 }}
+                wrapperCol={{ span: 14 }}
+                layout="horizontal"
+                style={{ maxWidth: 600 }}
+            >
+                <Form.Item label="Step Text">
+                    <TextArea
                         id="stepText"
                         value={stepText}
                         onChange={(e) => setStepText(e.target.value)}
                         placeholder="Enter step text"
-                        style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }}
+                        rows={4}
                     />
-                </div>
-
-                <div style={{ marginBottom: '15px' }}>
-                    <label htmlFor="stepVideoPath" style={{ display: 'block', marginBottom: '5px', color: 'black' }}>Step Video File:</label>
-                    <input
-                        type="file"
-                        id="stepVideoPath"
-                        onChange={(e) => setStepVideoPath(e.target.files[0])} 
-                        style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', color: 'black'}}
-                    />
-                </div>
-
-                <button
-                    type="submit"
-                    style={{
-                        width: '100%',
-                        padding: '10px',
-                        backgroundColor: '#28a745',
-                        color: '#fff',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                    }}
+                </Form.Item>
+                <Form.Item
+                    label="Upload"
+                    valuePropName="fileList"
+                    getValueFromEvent={normFile}
                 >
-                    Create Step
-                </button>
-            </form>
+                    <Upload
+                        beforeUpload={(file) => {
+                            setStepVideoPath(file);
+                            return false;
+                        }}
+                        listType="picture-card"
+                        showUploadList={false}
+                    >
+                        <button
+                            style={{
+                                border: 0,
+                                background: 'none',
+                            }}
+                            type="button"
+                        >
+                            <PlusOutlined />
+                            <div style={{ marginTop: 8 }}>Upload</div>
+                        </button>
+                    </Upload>
+                </Form.Item>
+                <Form.Item wrapperCol={{ offset: 4, span: 14 }}>
+                    <Button type="primary" htmlType="submit">
+                        Create Step
+                    </Button>
+                </Form.Item>
+            </Form>
         </div>
     );
 };
