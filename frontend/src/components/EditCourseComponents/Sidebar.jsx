@@ -94,7 +94,9 @@ const Sidebar = ({ course_id }) => {
     style: { color: '#fff' },
     children: module.lessons.map((lesson, l_index) => ({
       key: `lesson-${lesson.id}`,
-      label: `${l_index + 1}. ${lesson.title}`,
+      label: lesson.title 
+        ? `${l_index + 1}. ${lesson.title.length > 30 ? `${lesson.title.slice(0, 30)}...` : lesson.title}`
+        : `Lesson ${l_index + 1}`,
       style: { color: '#fff' },
     })),
   }));

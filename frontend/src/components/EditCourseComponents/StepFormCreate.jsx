@@ -75,6 +75,8 @@ const StepFormCreate = ({ lesson_id }) => {
                     label="Upload Video" 
                     valuePropName="fileList" 
                     getValueFromEvent={normFile}
+                    labelCol={{ span: 24 }}
+                    style={{ textAlign: 'center' }}
                 >
                     <Upload
                         beforeUpload={(file) => {
@@ -90,8 +92,8 @@ const StepFormCreate = ({ lesson_id }) => {
                         </div>
                     </Upload>
                 </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit" className={styles.submitButton}>
+                <Form.Item style={{ textAlign: 'center' }}>
+                    <Button type="primary" htmlType="submit">
                         Create Step
                     </Button>
                 </Form.Item>
