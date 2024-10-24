@@ -1,39 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Layout, Breadcrumb } from 'antd';
+import { Menu, Layout, Breadcrumb, Button, Radio } from 'antd';
 import { AppstoreOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import Sidebar from '../components/EditCourseComponents/Sidebar';
 import StepFormUpdate from '../components/EditCourseComponents/StepFormUpdate';
 import StepFormCreate from '../components/EditCourseComponents/StepFormCreate';
 import styles from '../components/EditCourseComponents/Sidebar.module.css';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-
 import Cookies from 'js-cookie';
 
-const { Header, Content, Sider } = Layout;
+const { Content, Sider } = Layout;
 
 const EditCoursePage = () => {
   const [steps, setSteps] = useState([]);
   const [lessonID, setLessonID] = useState();
-  const [currentStepIndex, setCurrentStepIndex] = useState(0); 
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [showFormUpdate, setShowFormUpdate] = useState(true);
   const [modules, setModules] = useState([]);
   const { id } = useParams();
-  const API_BASE = "http://127.0.0.1:8000";
+  const API_BASE = 'http://127.0.0.1:8000';
 
   useEffect(() => {
-    const storedSteps = JSON.parse(localStorage.getItem("steps_of_lesson"));
-    setLessonID(localStorage.getItem("lesson_id"));
-    setSteps(storedSteps || []); 
+    const storedSteps = JSON.parse(localStorage.getItem('steps_of_lesson'));
+    setLessonID(localStorage.getItem('lesson_id'));
+    setSteps(storedSteps || []);
 
     // Fetch modules and lessons
     const accessToken = Cookies.get('access_token');
-    axios.get(`${API_BASE}/api/v1/module/all/${id}`, {
-      headers: { Authorization: `Bearer ${accessToken}` }
-    })
-    .then((response) => setModules(response.data))
-    .catch((error) => console.error('Error fetching modules:', error));
+    axios
+      .get(`${API_BASE}/api/v1/module/all/${id}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      })
+      .then((response) => setModules(response.data))
+      .catch((error) => console.error('Error fetching modules:', error));
   }, [id]);
 
   const handleGetStepsOfLesson = (lesson) => {
@@ -45,8 +44,9 @@ const EditCoursePage = () => {
   // Generate menu items from modules
   const menuItems = modules.map((module) => ({
     key: `module-${module.id}`,
-    icon: <AppstoreOutlined />, // You can replace this icon or keep it
-    label: module.title,
+    icon: <AppstoreOutlined />,
+    label:
+      module.title.length > 20 ? `${module.title.slice(0, 20)}...` : module.title,
     children: module.lessons.map((lesson) => ({
       key: `lesson-${lesson.id}`,
       label: lesson.title,
@@ -55,10 +55,6 @@ const EditCoursePage = () => {
 
   return (
     <Layout>
-      {/* <Header>
-        <div className="logo" />
-        <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} />
-      </Header> */}
       <Layout>
         <Sider width={200} className="site-layout-background">
           <Menu
@@ -69,8 +65,8 @@ const EditCoursePage = () => {
               const [type, id] = e.key.split('-');
               if (type === 'lesson') {
                 const selectedLesson = modules
-                  .flatMap(module => module.lessons)
-                  .find(lesson => lesson.id === parseInt(id));
+                  .flatMap((module) => module.lessons)
+                  .find((lesson) => lesson.id === parseInt(id));
                 if (selectedLesson) {
                   handleGetStepsOfLesson(selectedLesson);
                 }
@@ -78,10 +74,14 @@ const EditCoursePage = () => {
             }}
           />
         </Sider>
-        <Layout style={{ padding: '0 24px 24px' }}>
+        <Layout style={{ padding: '0 24px 24px', minHeight: '100vh' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
-            <Breadcrumb.Item><Link to="/">Home</Link></Breadcrumb.Item>
-            <Breadcrumb.Item><Link to="/courses">Course</Link></Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <Link to="/">Home</Link>
+            </Breadcrumb.Item>
+            <Breadcrumb.Item>
+              <Link to="/courses">Course</Link>
+            </Breadcrumb.Item>
           </Breadcrumb>
           <Content
             style={{
@@ -89,57 +89,100 @@ const EditCoursePage = () => {
               margin: 0,
               minHeight: 280,
               background: '#fff',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: steps.length ? 'flex-start' : 'center',
+              alignItems: steps.length ? 'flex-start' : 'center',
+              textAlign: steps.length ? 'left' : 'center',
             }}
           >
-            <h1>Steps</h1>
             {steps.length > 0 ? (
               <>
-                <div>
+                <h1 style={{textAlign: 'center', width: '100%'}}>Steps</h1>
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: '16px',
+                    width: '100%', // Ensures full width to center align
+                  }}
+                >
                   {steps[currentStepIndex].video_path && (
-                    <video
-                      key={steps[currentStepIndex].video_path}
-                      controls
-                      style={{ width: '100%' }}
-                    >
-                      <source
-                        src={`http://127.0.0.1:8080${steps[currentStepIndex].video_path}`}
-                        type="video/mp4"
-                      />
-                      Your browser does not support the video tag.
-                    </video>
+                    <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                      <video
+                        key={steps[currentStepIndex].video_path}
+                        controls
+                        style={{ width: '50%' }}
+                      >
+                        <source
+                          src={`http://127.0.0.1:8080${steps[currentStepIndex].video_path}`}
+                          type="video/mp4"
+                        />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
                   )}
-                  <p>{steps[currentStepIndex].text}</p>
+                  <p style={{ marginTop: '16px' }}>{steps[currentStepIndex].text}</p>
                 </div>
-                <div className={styles.navigationButtons}>
-                  <button
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center', 
+                    alignItems: 'center', 
+                    marginTop: '16px',
+                    width: '100%', 
+                }}> 
+                  <Button
                     onClick={() => setCurrentStepIndex(currentStepIndex - 1)}
                     disabled={currentStepIndex === 0}
+                    color="danger"
+                    variant="outlined"
+                    style={{ marginRight: '10px' }}
                   >
                     Back
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     onClick={() => setCurrentStepIndex(currentStepIndex + 1)}
                     disabled={currentStepIndex === steps.length - 1}
+                    color="danger"
+                    variant="outlined"
                   >
                     Next
-                  </button>
+                  </Button>
                 </div>
-                <div>
-                  <button onClick={() => setShowFormUpdate(true)}>
-                    Show Update Form
-                  </button>
-                  <button onClick={() => setShowFormUpdate(false)}>
-                    Show Create Form
-                  </button>
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center', 
+                    alignItems: 'center', 
+                    marginTop: '16px',
+                    width: '100%', 
+                }}>
+                  <Radio.Group defaultValue="a" buttonStyle="solid">
+                    <Radio.Button onClick={() => setShowFormUpdate(true)} value="a">Show Update Form</Radio.Button>
+                    <Radio.Button onClick={() => setShowFormUpdate(false)} value="b">Show Create Form</Radio.Button>
+                  </Radio.Group>
                 </div>
-                {showFormUpdate ? (
-                  <StepFormUpdate step_id={steps[currentStepIndex].id} />
-                ) : (
-                  <StepFormCreate lesson_id={lessonID} />
-                )}
+                <div style={{
+                    display: 'flex',
+                    justifyContent: 'center', 
+                    alignItems: 'center', 
+                    marginTop: '16px',
+                    width: '100%', 
+                }}>
+                  {showFormUpdate ? (
+                    <StepFormUpdate step_id={steps[currentStepIndex].id} />
+                  ) : (
+                    <StepFormCreate lesson_id={lessonID} />
+                  )}
+                </div>
               </>
             ) : (
-              <p>No steps available</p>
+              <div style={{ padding: '50px', color: '#888' }}>
+                <h2 style={{color: 'black'}}>No steps available</h2>
+                <p>Please select a lesson to view or create steps.</p>
+                <StepFormCreate lesson_id={lessonID} />
+              </div>
             )}
           </Content>
         </Layout>
