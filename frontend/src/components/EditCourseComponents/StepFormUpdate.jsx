@@ -14,8 +14,8 @@ import {
 
 const { TextArea } = Input;
 
-const StepFormUpdate = ({ step_id }) => {
-    const [stepText, setStepText] = useState('');
+const StepFormUpdate = ({ step_id, prev_text}) => {
+    const [stepText, setStepText] = useState(prev_text);
     const [stepVideoPath, setStepVideoPath] = useState(null);
 
     const URL_BASE = "http://127.0.0.1:8000";
@@ -23,9 +23,7 @@ const StepFormUpdate = ({ step_id }) => {
     const handleFormToUpdateStep = async () => {
         const accessToken = Cookies.get("access_token");
         const formData = new FormData();
-        if (stepText) {
-            formData.append("text", stepText);
-        }
+        formData.append("text", stepText);
         if (stepVideoPath) {
             formData.append("video_path", stepVideoPath);
         }
@@ -68,7 +66,6 @@ const StepFormUpdate = ({ step_id }) => {
                     <TextArea
                         value={stepText}
                         onChange={(e) => setStepText(e.target.value)}
-                        placeholder="Enter step text"
                         rows={4}
                         className={styles.input}
                     />
