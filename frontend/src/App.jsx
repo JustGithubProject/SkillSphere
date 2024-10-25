@@ -13,6 +13,7 @@ import MyCreatedCoursesPage from './pages/MyCreatedCoursesPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 import EditCoursePage from './pages/EditCoursePage';
+import FullCoursePage from './pages/FullCoursePage';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -48,6 +49,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
           <Route path="/change-password/:id" element={<ChangePasswordPage/>} />
           <Route path="/edit-course/:id" element={<EditCoursePage/>} />
+          <Route path="/full-course/:id" element={<FullCoursePage/>} />
         </Routes>
     </Router>
   );
