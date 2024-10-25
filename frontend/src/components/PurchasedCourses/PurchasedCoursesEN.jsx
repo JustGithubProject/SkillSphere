@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import { EditOutlined } from '@ant-design/icons';
+import { EllipsisOutlined } from '@ant-design/icons';
 import { Avatar, Card, Row, Col, Switch, Spin } from 'antd';
 
 import './PurchasedCourses.css';
@@ -35,6 +35,10 @@ const PurchasedCoursesEN = () => {
         fetchData();
     }, []);
 
+    const handleViewCourse = (course_id) => {
+        window.location.href = `/full-course/${course_id}`
+    }
+
 
     return (
         <div style={{ padding: '20px' }}>
@@ -47,6 +51,9 @@ const PurchasedCoursesEN = () => {
                         <Col key={course.id} xs={24} sm={12} md={8} lg={6}>
                             <Card
                                 loading={false}
+                                actions={[
+                                    <EllipsisOutlined key="edit" onClick={() => handleViewCourse(course.id)}>View</EllipsisOutlined>
+                                ]}
                                 style={{
                                     minWidth: 300,
                                 }}
@@ -60,6 +67,7 @@ const PurchasedCoursesEN = () => {
                                         </>
                                     }
                                 />
+                                
                             </Card>
                         </Col>
                     ))}
