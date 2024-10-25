@@ -91,12 +91,36 @@ async def update_step(
     step_service: Annotated[StepService, Depends(get_step_service)],
     session: Annotated[AsyncSession, Depends(session_getter)],
     user: Annotated[UserOut, Depends(get_current_active_auth_user)],
-    step_update: StepUpdate,
-    step_id: int
+    step_id: int,
+    text: Annotated[str, Form()],
+    video_path: UploadFile | None = File(default=None),
+
 ) -> StepOutput:
+    # TODO: do like create_step_in_lesson
+    
+    result_video_path = None
+    SHARED_DIRECTORY_PATH = "/shared_data/uploads"
+    VIDEO_DIRECTORY = os.path.join(SHARED_DIRECTORY_PATH, "videos_of_steps")
+    
+    # Creating directories if they don't exist
+    os.makedirs(VIDEO_DIRECTORY, exist_ok=True)
+    
+    if video_path:
+        random_uuid_string = uuid.uuid4()
+        file_extension = video_path.filename.split(".")[-1]
+        result_video_path = os.path.join(
+            VIDEO_DIRECTORY,
+            f"{random_uuid_string}.{file_extension}"
+        )
+        with open(result_video_path, "wb") as buffer:
+            shutil.copyfileobj(video_path.file, buffer)
+
     return await step_service.update_step(
         session=session,
-        step_update=step_update,
+        step_update=StepUpdate(
+            text=text,
+            video_path=result_video_path
+        ),
         step_id=step_id
     )
 
