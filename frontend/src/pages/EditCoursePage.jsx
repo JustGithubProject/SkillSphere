@@ -174,7 +174,7 @@ const EditCoursePage = () => {
                     width: '100%', 
                 }}>
                   {showFormUpdate ? (
-                    <StepFormUpdate step_id={steps[currentStepIndex].id} />
+                    <StepFormUpdate key={steps[currentStepIndex].id} step_id={steps[currentStepIndex].id} prev_text={steps[currentStepIndex].text} />
                   ) : (
                     <StepFormCreate lesson_id={lessonID} />
                   )}
