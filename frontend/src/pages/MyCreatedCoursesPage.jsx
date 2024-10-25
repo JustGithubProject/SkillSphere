@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import HeaderEN from '../components/CoursesPageComponents/Header/HeaderEN';
 import HeaderUA from '../components/CoursesPageComponents/Header/HeaderUA';
 import MyCreatedCourses from '../components/MyCreatedCourses/MyCreatedCourses';
+import MyCreatedCoursesV2 from '../components/MyCreatedCourses/MyCreatedCoursesV2';
 
 const MyCreatedCoursesPage = () => {
     const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -16,7 +17,8 @@ const MyCreatedCoursesPage = () => {
         ) : (
             <HeaderUA isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
         )}
-        <MyCreatedCourses/>
+        {/* <MyCreatedCourses/> */}
+        <MyCreatedCoursesV2/>
         </>
     )
 }
