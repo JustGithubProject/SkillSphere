@@ -1,50 +1,82 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Layout, Breadcrumb, Button, Radio } from 'antd';
-import { AppstoreOutlined } from '@ant-design/icons';
+import { Menu, Layout, Breadcrumb, Button, Radio, Input } from 'antd';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import StepFormUpdate from '../components/EditCourseComponents/StepFormUpdate';
 import StepFormCreate from '../components/EditCourseComponents/StepFormCreate';
+import ModuleForm from '../components/EditCourseComponents/ModuleForm';
 import styles from '../components/EditCourseComponents/Sidebar.module.css';
 import { useParams } from 'react-router-dom';
-import { Link } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { PlusOutlined } from '@ant-design/icons';
 
 const { Content, Sider } = Layout;
 
 const EditCoursePage = () => {
   const [steps, setSteps] = useState([]);
-  const [lessonID, setLessonID] = useState();
+  const [lessonID, setLessonID] = useState(null);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [showFormUpdate, setShowFormUpdate] = useState(true);
   const [modules, setModules] = useState([]);
+  const [isAddingModule, setIsAddingModule] = useState(false);
+  const [newModuleTitle, setNewModuleTitle] = useState("");
   const { id } = useParams();
   const API_BASE = 'http://127.0.0.1:8000';
 
   useEffect(() => {
-    const storedSteps = JSON.parse(localStorage.getItem('steps_of_lesson'));
-    setLessonID(localStorage.getItem('lesson_id'));
-    setSteps(storedSteps || []);
-
-
-    // Fetch modules and lessons
-    const accessToken = Cookies.get('access_token');
-    axios
-      .get(`${API_BASE}/api/v1/module/all/${id}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
-      .then((response) => setModules(response.data))
-      .catch((error) => console.error('Error fetching modules:', error));
+    const fetchModules = async () => {
+      const accessToken = Cookies.get('access_token');
+      try {
+        const response = await axios.get(`${API_BASE}/api/v1/module/all/${id}`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        setModules(response.data);
+      } catch (error) {
+        console.error('Error fetching modules:', error);
+      }
+    };
+    fetchModules();
   }, [id]);
 
-
-
-  const handleGetStepsOfLesson = (lesson) => {
-    localStorage.setItem('steps_of_lesson', JSON.stringify(lesson.steps));
-    localStorage.setItem('lesson_id', lesson.id);
-    window.location.reload();
+  const fetchLessonSteps = async (lessonId) => {
+    const accessToken = Cookies.get('access_token');
+    try {
+      const response = await axios.get(`${API_BASE}/api/v1/step/all/${lessonId}`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      setSteps(response.data);
+      setLessonID(lessonId);
+      setCurrentStepIndex(0);
+    } catch (error) {
+      console.error('Error fetching steps:', error);
+    }
   };
 
-  // Generate menu items from modules
+  const handleAddModule = async () => {
+    const accessToken = Cookies.get('access_token');
+    try {
+      const response = await axios.post(
+        'http://127.0.0.1:8000/api/v1/module',
+        {
+            title: newModuleTitle,
+            description: "TEMP VALUE FOR A WHILE", 
+            course_id: id, 
+        },
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }
+      );
+      setModules([...modules, response.data]); 
+      setNewModuleTitle("");
+      setIsAddingModule(false);
+    } catch (error) {
+      console.error('Error creating module:', error);
+    }
+  };
+
   const menuItems = modules.map((module, m_index) => ({
     key: `module-${module.id}`,
     label: `${m_index + 1}. ` + (module.title.length > 35 ? `${module.title.substring(0, 35)}...` : module.title),
@@ -66,15 +98,30 @@ const EditCoursePage = () => {
               onClick={(e) => {
                 const [type, id] = e.key.split('-');
                 if (type === 'lesson') {
-                  const selectedLesson = modules
-                    .flatMap((module) => module.lessons)
-                    .find((lesson) => lesson.id === parseInt(id));
-                  if (selectedLesson) {
-                    handleGetStepsOfLesson(selectedLesson);
-                  }
+                  fetchLessonSteps(parseInt(id)); 
                 }
               }}
             />
+            <div style={{ padding: '10px', textAlign: 'center' }}>
+              {isAddingModule ? (
+                <Input
+                  autoFocus
+                  placeholder="Enter module title"
+                  value={newModuleTitle}
+                  onChange={(e) => setNewModuleTitle(e.target.value)}
+                  onPressEnter={handleAddModule}
+                  onBlur={() => setIsAddingModule(false)} 
+                />
+              ) : (
+                <Button
+                  icon={<PlusOutlined />}
+                  onClick={() => setIsAddingModule(true)}
+                  style={{ width: '100%', marginTop: '10px' }}
+                >
+                  Add Module
+                </Button>
+              )}
+            </div>
           </div>
         </Sider>
         <Layout style={{ padding: '0 24px 24px', minHeight: '100vh' }}>
@@ -101,7 +148,6 @@ const EditCoursePage = () => {
           >
             {steps.length > 0 ? (
               <>
-                {/* <h1 style={{textAlign: 'center', width: '100%'}}>{module.title}</h1> */}
                 <div
                   style={{
                     display: 'flex',
