@@ -16,25 +16,27 @@ const { TextArea } = Input;
 
 const StepFormUpdate = ({ step_id }) => {
     const [stepText, setStepText] = useState('');
-    const [stepVideoPath, setStepVideoPath] = useState('');
+    const [stepVideoPath, setStepVideoPath] = useState(null);
 
     const URL_BASE = "http://127.0.0.1:8000";
 
-    const handleFormToUpdateStep = async (e) => {
-        e.preventDefault();
-
+    const handleFormToUpdateStep = async () => {
         const accessToken = Cookies.get("access_token");
+        const formData = new FormData();
+        if (stepText) {
+            formData.append("text", stepText);
+        }
+        if (stepVideoPath) {
+            formData.append("video_path", stepVideoPath);
+        }
 
         try {
             await axios.patch(
                 `${URL_BASE}/api/v1/step/${step_id}`,
-                {
-                    text: stepText,
-                    video_path: stepVideoPath
-                },
+                formData,
                 {
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'multipart/form-data',
                         'Authorization': `Bearer ${accessToken}`
                     }
                 }
@@ -81,7 +83,7 @@ const StepFormUpdate = ({ step_id }) => {
                     <Upload
                         beforeUpload={(file) => {
                             setStepVideoPath(file);
-                            return false;
+                            return false; 
                         }}
                         listType="picture-card"
                         showUploadList={false}

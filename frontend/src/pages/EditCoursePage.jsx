@@ -25,6 +25,7 @@ const EditCoursePage = () => {
     setLessonID(localStorage.getItem('lesson_id'));
     setSteps(storedSteps || []);
 
+
     // Fetch modules and lessons
     const accessToken = Cookies.get('access_token');
     axios
@@ -35,6 +36,8 @@ const EditCoursePage = () => {
       .catch((error) => console.error('Error fetching modules:', error));
   }, [id]);
 
+
+
   const handleGetStepsOfLesson = (lesson) => {
     localStorage.setItem('steps_of_lesson', JSON.stringify(lesson.steps));
     localStorage.setItem('lesson_id', lesson.id);
@@ -42,11 +45,9 @@ const EditCoursePage = () => {
   };
 
   // Generate menu items from modules
-  const menuItems = modules.map((module) => ({
+  const menuItems = modules.map((module, m_index) => ({
     key: `module-${module.id}`,
-    icon: <AppstoreOutlined />,
-    label:
-      module.title.length > 20 ? `${module.title.slice(0, 20)}...` : module.title,
+    label: `${m_index + 1}. ` + (module.title.length > 35 ? `${module.title.substring(0, 35)}...` : module.title),
     children: module.lessons.map((lesson) => ({
       key: `lesson-${lesson.id}`,
       label: lesson.title,
@@ -56,23 +57,25 @@ const EditCoursePage = () => {
   return (
     <Layout>
       <Layout>
-        <Sider width={200} className="site-layout-background">
-          <Menu
-            mode="inline"
-            style={{ height: '100%', borderRight: 0 }}
-            items={menuItems}
-            onClick={(e) => {
-              const [type, id] = e.key.split('-');
-              if (type === 'lesson') {
-                const selectedLesson = modules
-                  .flatMap((module) => module.lessons)
-                  .find((lesson) => lesson.id === parseInt(id));
-                if (selectedLesson) {
-                  handleGetStepsOfLesson(selectedLesson);
+        <Sider width={300} className="site-layout-background">
+          <div className={styles.menuContainer}>
+            <Menu
+              mode="inline"
+              style={{ height: '100%', borderRight: 0 }}
+              items={menuItems}
+              onClick={(e) => {
+                const [type, id] = e.key.split('-');
+                if (type === 'lesson') {
+                  const selectedLesson = modules
+                    .flatMap((module) => module.lessons)
+                    .find((lesson) => lesson.id === parseInt(id));
+                  if (selectedLesson) {
+                    handleGetStepsOfLesson(selectedLesson);
+                  }
                 }
-              }
-            }}
-          />
+              }}
+            />
+          </div>
         </Sider>
         <Layout style={{ padding: '0 24px 24px', minHeight: '100vh' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
@@ -98,7 +101,7 @@ const EditCoursePage = () => {
           >
             {steps.length > 0 ? (
               <>
-                <h1 style={{textAlign: 'center', width: '100%'}}>Steps</h1>
+                {/* <h1 style={{textAlign: 'center', width: '100%'}}>{module.title}</h1> */}
                 <div
                   style={{
                     display: 'flex',
@@ -106,9 +109,10 @@ const EditCoursePage = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginBottom: '16px',
-                    width: '100%', // Ensures full width to center align
+                    width: '100%', 
                   }}
                 >
+                  <p style={{ marginTop: '16px' }}>{steps[currentStepIndex].text}</p>
                   {steps[currentStepIndex].video_path && (
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                       <video
@@ -124,7 +128,6 @@ const EditCoursePage = () => {
                       </video>
                     </div>
                   )}
-                  <p style={{ marginTop: '16px' }}>{steps[currentStepIndex].text}</p>
                 </div>
                 <div style={{
                     display: 'flex',

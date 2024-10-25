@@ -197,3 +197,10 @@
     background-color: #cccccc;
     cursor: not-allowed;
 }
+
+.menuContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%; 
+}
