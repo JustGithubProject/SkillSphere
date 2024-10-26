@@ -61,7 +61,7 @@ class StepRepository:
             for name, value in step_update.model_dump(exclude_none=True).items():
                 setattr(step, name, value)
             await session.commit()
-            await session.refresh(step, attributes_name=["test"])
+            await session.refresh(step, attribute_names=["test"])
             return step
         except Exception as e:
             await session.rollback()
