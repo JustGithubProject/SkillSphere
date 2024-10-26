@@ -19,6 +19,16 @@ async def check_is_user_a_course_staff(
         raise not_enough_rights_exception
     return True
 
+async def is_course_purchased_by_user(
+    user: UserOut,
+    students: list
+) -> bool:
+    if user.id in [student.id for student in students]:
+        return True
+    else:
+        return False
+
+
 
 def generate_email_template(subject: str, recipient_email: str, body: str) -> EmailMessage:
     email_message = EmailMessage()

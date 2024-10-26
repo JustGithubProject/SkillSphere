@@ -7,7 +7,7 @@ from authentication.schemas import UserOut
 from constants import COURSE, IMAGES, VIDEOS
 from services.mixins.file_action_mixin import FileActionMixin
 from course.enums import Category, CourseLevel
-from utils import check_is_user_a_course_staff
+from utils import check_is_user_a_course_staff, is_course_purchased_by_user
 from repositories.user_repository import UserRepository
 from repositories.course_repository import CourseRepository
 from database.models import Course, User
@@ -134,11 +134,19 @@ class CourseService(FileActionMixin):
             session=session,
             course_id=course_id
         )
+        is_student: bool = await is_course_purchased_by_user(
+            user=user,
+            students=course.students
+        )
+        if is_student:
+            return CourseOutput.model_validate(course, from_attributes=True)
+            
         is_staff: bool = await check_is_user_a_course_staff(
             user=user, 
             creator_id=course.creator_id,
             instructors=course.instructors
         )
+
         if course.is_published or is_staff:
             return CourseOutput.model_validate(course, from_attributes=True)
     
