@@ -51,7 +51,8 @@
     padding: 20px; /* Add padding for a card-like effect */
     border-radius: 8px; /* Rounded corners */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for card effect */
-    max-width: 800px; /* Optional: Set a max width */
+    max-width: 500px; /* Optional: Set a max width */
     margin: 20px auto; /* Center the form */
+    width: 400px;
 }
 

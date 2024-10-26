@@ -25,6 +25,8 @@ const EditCoursePage = () => {
   const { id } = useParams();
   const API_BASE = 'http://127.0.0.1:8000';
 
+
+
   useEffect(() => {
     const fetchModules = async () => {
       const accessToken = Cookies.get('access_token');

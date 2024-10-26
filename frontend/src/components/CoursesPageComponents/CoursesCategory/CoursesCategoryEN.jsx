@@ -1,14 +1,14 @@
 import React from 'react';
 
 const courses = [
-  { id: 1, title: 'Web Design', image: 'img/cat-1.jpg', coursesCount: 100 },
-  { id: 2, title: 'Development', image: 'img/cat-2.jpg', coursesCount: 100 },
-  { id: 3, title: 'Game Design', image: 'img/cat-3.jpg', coursesCount: 100 },
-  { id: 4, title: 'Apps Design', image: 'img/cat-4.jpg', coursesCount: 100 },
-  { id: 5, title: 'Marketing', image: 'img/cat-5.jpg', coursesCount: 100 },
-  { id: 6, title: 'Research', image: 'img/cat-6.jpg', coursesCount: 100 },
-  { id: 7, title: 'Content Writing', image: 'img/cat-7.jpg', coursesCount: 100 },
-  { id: 8, title: 'SEO', image: 'img/cat-8.jpg', coursesCount: 100 }
+  { id: 1, title: 'Web Design', image: 'img/cat-1.jpg', coursesCount: 100, link: '/courses/web-design'},
+  { id: 2, title: 'Development', image: 'img/cat-2.jpg', coursesCount: 100, link: '/courses/development'},
+  { id: 3, title: 'Game Design', image: 'img/cat-3.jpg', coursesCount: 100, link: '/courses/game-design'},
+  { id: 4, title: 'Apps Design', image: 'img/cat-4.jpg', coursesCount: 100, link: '/courses/apps-design'},
+  { id: 5, title: 'Marketing', image: 'img/cat-5.jpg', coursesCount: 100, link: '/courses/marketing'},
+  { id: 6, title: 'Research', image: 'img/cat-6.jpg', coursesCount: 100, link: '/courses/research'},
+  { id: 7, title: 'Content Writing', image: 'img/cat-7.jpg', coursesCount: 100, link: '/courses/content-writing'},
+  { id: 8, title: 'SEO', image: 'img/cat-8.jpg', coursesCount: 100, link: '/courses/seo'}
 ];
 
 const CoursesCategoryEN = () => {
