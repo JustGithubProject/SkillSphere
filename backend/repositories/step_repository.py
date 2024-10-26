@@ -36,7 +36,7 @@ class StepRepository:
             session.add(step)
             await session.commit()
             
-            query = select(Step).options(selectinload(Step.text), selectinload(Step.lesson)).where(Step.id == step.id)
+            query = select(Step).options(selectinload(Step.test), selectinload(Step.lesson)).where(Step.id == step.id)
             result = await session.execute(query)
             step = result.scalars().one()
 
