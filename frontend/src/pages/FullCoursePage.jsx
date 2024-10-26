@@ -21,9 +21,13 @@ const FullCoursePage = () => {
         const fetchModules = async () => {
           const accessToken = Cookies.get('access_token');
           try {
-            const response = await axios.get(`${API_BASE}/api/v1/module/all/${id}`, {
-              headers: { Authorization: `Bearer ${accessToken}` },
-            });
+            const response = await axios.get(`${API_BASE}/api/v1/module/all/${id}`, 
+            {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                },
+            }
+            );
             setModules(response.data);
           } catch (error) {
             console.error('Error fetching modules:', error);
