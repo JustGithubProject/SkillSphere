@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Layout, Breadcrumb, Button, Radio, Input } from 'antd';
+import { Menu, Layout, Breadcrumb, Button, Radio, Input, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import StepFormUpdate from '../components/EditCourseComponents/StepFormUpdate';
 import StepFormCreate from '../components/EditCourseComponents/StepFormCreate';
-import ModuleForm from '../components/EditCourseComponents/ModuleForm';
 import styles from '../components/EditCourseComponents/Sidebar.module.css';
 import { useParams } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Content, Sider } = Layout;
+const { Title } = Typography;
 
 const EditCoursePage = () => {
   const [steps, setSteps] = useState([]);
@@ -19,7 +19,9 @@ const EditCoursePage = () => {
   const [showFormUpdate, setShowFormUpdate] = useState(true);
   const [modules, setModules] = useState([]);
   const [isAddingModule, setIsAddingModule] = useState(false);
+  const [isAddingLesson, setIsAddingLesson] = useState(false);
   const [newModuleTitle, setNewModuleTitle] = useState("");
+  const [newLessonTitle, setNewLessonTitle] = useState();
   const { id } = useParams();
   const API_BASE = 'http://127.0.0.1:8000';
 
@@ -56,20 +58,20 @@ const EditCoursePage = () => {
     const accessToken = Cookies.get('access_token');
     try {
       const response = await axios.post(
-        'http://127.0.0.1:8000/api/v1/module',
+        `${API_BASE}/api/v1/module`,
         {
-            title: newModuleTitle,
-            description: "TEMP VALUE FOR A WHILE", 
-            course_id: id, 
+          title: newModuleTitle,
+          description: "TEMP VALUE FOR A WHILE",
+          course_id: id,
         },
         {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-            },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
       );
-      setModules([...modules, response.data]); 
+      setModules([...modules, response.data]);
       setNewModuleTitle("");
       setIsAddingModule(false);
     } catch (error) {
@@ -77,32 +79,73 @@ const EditCoursePage = () => {
     }
   };
 
+  const handleAddLesson = async (module_id) => {
+    const accessToken = Cookies.get("access_token");
+    try {
+      const response = await axios.post(
+        `${API_BASE}/api/v1/lesson`,
+        {
+          title: newLessonTitle,
+          description: "TEMP VALUE FOR A WHILE",
+          module_id: module_id 
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }
+      )
+      setModules(modules.map(module => 
+        module.id === module_id ? { ...module, lessons: [...module.lessons, response.data] } : module
+      ));
+      setNewLessonTitle("");
+      setIsAddingLesson({ ...isAddingLesson, [module_id]: false });
+    } catch(error) {
+      console.log("Error creating lesson: ", error);
+    }
+  }
+
   const menuItems = modules.map((module, m_index) => ({
     key: `module-${module.id}`,
     label: `${m_index + 1}. ` + (module.title.length > 35 ? `${module.title.substring(0, 35)}...` : module.title),
-    children: module.lessons.map((lesson) => ({
-      key: `lesson-${lesson.id}`,
-      label: lesson.title,
-    })),
+    children: [
+      ...module.lessons.map((lesson) => ({
+        key: `lesson-${lesson.id}`,
+        label: lesson.title,
+      })),
+      {
+        key: `add-lesson-${module.id}`,
+        label: isAddingLesson[module.id] ? (
+          <Input
+            autoFocus
+            placeholder="Enter lesson title"
+            value={newLessonTitle}
+            onChange={(e) => setNewLessonTitle(e.target.value)}
+            onPressEnter={() => handleAddLesson(module.id)}
+            onBlur={() => setIsAddingLesson({ ...isAddingLesson, [module.id]: false })}
+            style={{ borderRadius: '5px' }}
+          />
+        ) : (
+          <Button
+            icon={<PlusOutlined />}
+            onClick={() => setIsAddingLesson({ ...isAddingLesson, [module.id]: true })}
+            style={{ width: '100%'}}
+          >
+            Add Lesson
+          </Button>
+        ),
+      }
+    ],
   }));
+  
 
   return (
     <Layout>
       <Layout>
         <Sider width={300} className="site-layout-background">
           <div className={styles.menuContainer}>
-            <Menu
-              mode="inline"
-              style={{ height: '100%', borderRight: 0 }}
-              items={menuItems}
-              onClick={(e) => {
-                const [type, id] = e.key.split('-');
-                if (type === 'lesson') {
-                  fetchLessonSteps(parseInt(id)); 
-                }
-              }}
-            />
-            <div style={{ padding: '10px', textAlign: 'center' }}>
+            <div style={{ padding: '10px', textAlign: 'center', backgroundColor: 'white',  }}>
               {isAddingModule ? (
                 <Input
                   autoFocus
@@ -110,18 +153,30 @@ const EditCoursePage = () => {
                   value={newModuleTitle}
                   onChange={(e) => setNewModuleTitle(e.target.value)}
                   onPressEnter={handleAddModule}
-                  onBlur={() => setIsAddingModule(false)} 
+                  onBlur={() => setIsAddingModule(false)}
+                  style={{ marginBottom: '10px', borderRadius: '5px' }}
                 />
               ) : (
                 <Button
                   icon={<PlusOutlined />}
                   onClick={() => setIsAddingModule(true)}
-                  style={{ width: '100%', marginTop: '10px' }}
+                  style={{ width: '100%', marginBottom: '10px' }}
                 >
                   Add Module
                 </Button>
               )}
             </div>
+            <Menu
+              mode="inline"
+              style={{ height: '100%', borderRight: 0 }}
+              items={menuItems}
+              onClick={(e) => {
+                const [type, id] = e.key.split('-');
+                if (type === 'lesson') {
+                  fetchLessonSteps(parseInt(id));
+                }
+              }}
+            />
           </div>
         </Sider>
         <Layout style={{ padding: '0 24px 24px', minHeight: '100vh' }}>
@@ -155,7 +210,7 @@ const EditCoursePage = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginBottom: '16px',
-                    width: '100%', 
+                    width: '100%',
                   }}
                 >
                   <p style={{ marginTop: '16px' }}>{steps[currentStepIndex].text}</p>
@@ -177,11 +232,11 @@ const EditCoursePage = () => {
                 </div>
                 <div style={{
                     display: 'flex',
-                    justifyContent: 'center', 
-                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     marginTop: '16px',
-                    width: '100%', 
-                }}> 
+                    width: '100%',
+                }}>
                   <Button
                     onClick={() => setCurrentStepIndex(currentStepIndex - 1)}
                     disabled={currentStepIndex === 0}
@@ -202,10 +257,10 @@ const EditCoursePage = () => {
                 </div>
                 <div style={{
                     display: 'flex',
-                    justifyContent: 'center', 
-                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     marginTop: '16px',
-                    width: '100%', 
+                    width: '100%',
                 }}>
                   <Radio.Group defaultValue="a" buttonStyle="solid">
                     <Radio.Button onClick={() => setShowFormUpdate(true)} value="a">Show Update Form</Radio.Button>
@@ -214,10 +269,10 @@ const EditCoursePage = () => {
                 </div>
                 <div style={{
                     display: 'flex',
-                    justifyContent: 'center', 
-                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    alignItems: 'center',
                     marginTop: '16px',
-                    width: '100%', 
+                    width: '100%',
                 }}>
                   {showFormUpdate ? (
                     <StepFormUpdate key={steps[currentStepIndex].id} step_id={steps[currentStepIndex].id} prev_text={steps[currentStepIndex].text} />
