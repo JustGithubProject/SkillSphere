@@ -7,17 +7,11 @@ const CourseCategoryCoursesPage = () => {
 
     return (
         <>
-        <Row gutter={[40, 16]}>
+        <Row gutter={[16, 16]}>
             <Col span={8} />
             <Col span={8} />
             <Col span={8} />
 
-            <Col span={8} />
-            <Col span={8} />
-            <Col span={8} />
-            </Row>
-
-            <Row gutter={[40, 16]}>
             <Col span={8} />
             <Col span={8} />
             <Col span={8} />

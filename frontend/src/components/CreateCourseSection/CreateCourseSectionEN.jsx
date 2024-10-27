@@ -21,13 +21,13 @@ const CreateCourseSectionEN = () => {
   ];
 
   const categories = [
-    { value : 'web design', label: 'Web Design'},
+    { value : 'web-design', label: 'Web Design'},
     { value : 'development', label: 'Development'},
-    { value : 'game design', label: 'Game Design'},
-    { value : 'apps design', label: 'Apps Design'},
+    { value : 'game-design', label: 'Game Design'},
+    { value : 'apps-design', label: 'Apps Design'},
     { value : 'marketing', label: 'Marketing'},
     { value : 'research', label: 'Research'},
-    { value : 'content writing', label: 'Content Writing'},
+    { value : 'content-writing', label: 'Content Writing'},
     { value : 'seo', label: 'SEO'},
   ]
 
