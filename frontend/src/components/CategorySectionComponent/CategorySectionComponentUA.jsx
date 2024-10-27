@@ -1,15 +1,15 @@
 import React from 'react';
 
 const CategorySectionComponentUA = () => {
-  const categories = [
-    { id: 1, name: 'Веб-дизайн', courses: 100, img: 'img/cat-1.jpg' },
-    { id: 2, name: 'Розробка', courses: 100, img: 'img/cat-2.jpg' },
-    { id: 3, name: 'Ігровий дизайн', courses: 100, img: 'img/cat-3.jpg' },
-    { id: 4, name: 'Дизайн додатків', courses: 100, img: 'img/cat-4.jpg' },
-    { id: 5, name: 'Маркетинг', courses: 100, img: 'img/cat-5.jpg' },
-    { id: 6, name: 'Дослідження', courses: 100, img: 'img/cat-6.jpg' },
-    { id: 7, name: 'Написання контенту', courses: 100, img: 'img/cat-7.jpg' },
-    { id: 8, name: 'SEO', courses: 100, img: 'img/cat-8.jpg' },
+  const courses = [
+    { id: 1, title: 'Веб-дизайн', image: 'img/cat-1.jpg', coursesCount: 100, link: '/courses/web-design'},
+    { id: 2, title: 'Розробка', image: 'img/cat-2.jpg', coursesCount: 100, link: '/courses/development'},
+    { id: 3, title: 'Дизайн ігор', image: 'img/cat-3.jpg', coursesCount: 100, link: '/courses/game-design'},
+    { id: 4, title: 'Дизайн додатків', image: 'img/cat-4.jpg', coursesCount: 100, link: '/courses/apps-design'},
+    { id: 5, title: 'Маркетинг', image: 'img/cat-5.jpg', coursesCount: 100, link: '/courses/marketing'},
+    { id: 6, title: 'Дослідження', image: 'img/cat-6.jpg', coursesCount: 100, link: '/courses/research'},
+    { id: 7, title: 'Написання контенту', image: 'img/cat-7.jpg', coursesCount: 100, link: '/courses/content-writing'},
+    { id: 8, title: 'SEO', image: 'img/cat-8.jpg', coursesCount: 100, link: '/courses/seo'}
   ];
 
   return (
@@ -22,13 +22,13 @@ const CategorySectionComponentUA = () => {
           <h1>Досліджуйте найкращі теми</h1>
         </div>
         <div className="row">
-          {categories.map(category => (
-            <div className="col-lg-3 col-md-6 mb-4" key={category.id}>
+          {courses.map(course => (
+            <div className="col-lg-3 col-md-6 mb-4" key={course.id}>
               <div className="cat-item position-relative overflow-hidden rounded mb-2">
-                <img className="img-fluid" src={category.img} alt={category.name} />
-                <a className="cat-overlay text-white text-decoration-none" href="#">
-                  <h4 className="text-white font-weight-medium">{category.name}</h4>
-                  <span>{category.courses} Курсів</span>
+                <img className="img-fluid" src={course.image} alt={course.title} />
+                <a className="cat-overlay text-white text-decoration-none" href={course.link}>
+                  <h4 className="text-white font-weight-medium">{course.title}</h4>
+                  <span>{course.coursesCount} Курсів</span>
                 </a>
               </div>
             </div>

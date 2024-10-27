@@ -23,7 +23,7 @@ const SetCoursesUA = () => {
           reviews: 250,
           price: `$${course.price}`
         }));
-        setCourses(fetchedCourses);
+        setCourses(fetchedCourses.slice(0, 3));
       })
       .catch(error => {
         console.error('Error fetching courses:', error);
