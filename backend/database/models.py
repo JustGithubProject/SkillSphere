@@ -19,7 +19,7 @@ from sqlalchemy.orm import (
 )
 
 from course.enums import Category
-from course.enums import CourseLevel, Category
+from course.enums import CourseLevel
 
 class Base(DeclarativeBase):
     __abstract__ = True

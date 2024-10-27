@@ -165,6 +165,19 @@ async def get_course_by_id_no_auth(
         course_id=course_id
     )
 
+@router.get("/no-auth/category/{course_category}", response_model=list[CourseOutput])
+async def get_courses_by_category_no_auth(
+    course_service: Annotated[CourseService, Depends(get_course_service)],
+    session: Annotated[AsyncSession, Depends(session_getter)],
+    course_category: Category
+) -> list[CourseOutput]:
+    return await course_service.get_courses_by_category(
+        session=session,
+        course_category=course_category
+    )
+    
+
+
 @router.get("/my/created/courses", response_model=list[CourseOutput])
 async def get_my_created_courses(
     course_service: Annotated[CourseService, Depends(get_course_service)],

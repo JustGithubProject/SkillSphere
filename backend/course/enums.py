@@ -8,11 +8,11 @@ class CourseLevel(enum.Enum):
 
 
 class Category(enum.Enum):
-    WEB_DESIGN = "web design"
+    WEB_DESIGN = "web-design"
     DEVELOPMENT = "development"
-    GAME_DESIGN = "game design"
-    APPS_DESIGN = "apps design"
+    GAME_DESIGN = "game-design"
+    APPS_DESIGN = "apps-design"
     MARKETING = "marketing"
     RESEARCH = "research"
-    CONTENT_Writing = "content writing"
+    CONTENT_Writing = "content-writing"
     SEO = "seo"

@@ -76,6 +76,26 @@ class CourseRepository:
             detail="Course not found"
         )
     
+    async def get_courses_by_category(
+        self, 
+        session: AsyncSession,
+        course_category: str
+    ):
+        stmt = (
+            select(Course).where(Course.category == course_category)
+            .options(
+                joinedload(Course.creator),
+                selectinload(Course.instructors),
+                selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps).joinedload(Step.test).selectinload(Test.answers),
+                selectinload(Course.comments)
+            )
+            .order_by(Course.id)
+        )
+        
+        result = await session.execute(stmt)
+        courses: list[Course] = result.scalars().all()
+        return courses
+
     async def get_all_courses(
         self, 
         session: AsyncSession, 

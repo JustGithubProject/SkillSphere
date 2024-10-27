@@ -163,6 +163,22 @@ class CourseService(FileActionMixin):
         # if course.is_published:
         #     return CourseOutput.model_validate(course, from_attributes=True)    
         return CourseOutput.model_validate(course, from_attributes=True)
+    
+    async def get_courses_by_category(
+        self, 
+        session: AsyncSession,
+        course_category: str
+    ) -> list[CourseOutput]:
+        courses: list[Course] = await self.course_repository.get_courses_by_category(
+            session=session,
+            course_category=course_category
+        )
+        
+        return [
+            CourseOutput(**course.__dict__)
+            for course in courses
+        ]
+        
         
         
     async def update_course(
