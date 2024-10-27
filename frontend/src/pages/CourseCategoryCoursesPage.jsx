@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Col, Row, Card, Typography, Spin } from 'antd';
-import axios from 'axios';
+import Cookies from 'js-cookie';
 
 import HeaderEN from '../components/CoursesPageComponents/Header/HeaderEN';
 import HeaderUA from '../components/CoursesPageComponents/Header/HeaderUA';
+import PayPalForm from '../components/Paypal/PaypalForm';
+
+import axios from 'axios';
+
+import '../components/CoursesPageComponents/SetCourses/SetCoursesEN.css';
 
 const { Title, Paragraph } = Typography;
 
 const CourseCategoryCoursesPage = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [isAuthorized, setIsAuthorized] = useState();
+    const [selectedCourse, setSelectedCourse] = useState(null);
+
     const { categoryName } = useParams();
 
     const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -37,6 +45,25 @@ const CourseCategoryCoursesPage = () => {
         fetchCoursesByCategory();
     }, [categoryName]);
 
+    useEffect(() => {
+        const accessToken = Cookies.get("access_token");
+        if (accessToken) {
+          setIsAuthorized(true);
+        }
+    }, []); 
+
+    const handleBuyCourse = (course) => {
+        setSelectedCourse(course);
+    };
+    
+      const handleCloseModal = () => {
+        setSelectedCourse(null);
+    };
+
+    const handleViewCourse = (course_id, video_url) => {
+        window.location.href = `/course-single/${course_id}?watch=${video_url}`;
+    };
+
     return (
         <div style={{ padding: '20px' }}>
             {currentLanguage == 'en' ? <HeaderEN isCoursesPage={true} isHomePage={false} isPurchasedCoursesPage={false}/> : <HeaderUA isCoursesPage={true} isHomePage={false} isPurchasedCoursesPage={false}/>}
@@ -59,11 +86,37 @@ const CourseCategoryCoursesPage = () => {
                                     {course.description || 'No description available.'}
                                 </Paragraph>
                                 <Title level={5}>Price: ${course.price}</Title>
+                                {isAuthorized ? (
+                                    <button className="btn btn-success w-100 mb-2" onClick={() => handleBuyCourse(course)}>Buy Course</button>
+                                ) : null}
+                                <button className="btn btn-primary w-100" onClick={() => handleViewCourse(course.id, course.video_url)}>View Course</button>
                             </Card>
                         </Col>
                     ))}
                 </Row>
             )}
+        {selectedCourse && (
+            <div className="modal show" style={{ display: 'block' }}>
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Payment Details</h5>
+                            <button type="button" className="close" onClick={handleCloseModal}>
+                            <span>&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <h5>{selectedCourse.title}</h5>
+                            <p>Price: {selectedCourse.price}</p>
+                            <PayPalForm price={`$${selectedCourse.price}`} course_id={selectedCourse.id} />
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      )}
         </div>
     );
 };
