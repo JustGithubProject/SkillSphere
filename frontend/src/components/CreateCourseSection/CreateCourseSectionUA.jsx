@@ -8,6 +8,7 @@ const CreateCourseSectionUA = () => {
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [level, setLevel] = useState('');
+  const [category, setCategory] = useState('');
   const [photoFile, setPhotoFile] = useState(null);
   const [videoFile, setVideoFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
@@ -19,6 +20,17 @@ const CreateCourseSectionUA = () => {
     { value: 'Advanced', label: 'Просунутий' },
   ];
 
+  const categories = [
+    { value : 'web-design', label: 'Web Design'},
+    { value : 'development', label: 'Development'},
+    { value : 'game-design', label: 'Game Design'},
+    { value : 'apps-design', label: 'Apps Design'},
+    { value : 'marketing', label: 'Marketing'},
+    { value : 'research', label: 'Research'},
+    { value : 'content-writing', label: 'Content Writing'},
+    { value : 'seo', label: 'SEO'},
+  ]
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -29,6 +41,7 @@ const CreateCourseSectionUA = () => {
     formData.append("description", description);
     formData.append("price", price);
     formData.append("level", level);
+    formData.append("category", category);
     if (photoFile) formData.append("photo_file", photoFile);
     if (videoFile) formData.append("video_file", videoFile);
 
@@ -81,6 +94,18 @@ const CreateCourseSectionUA = () => {
         >
           <option value="" disabled>Оберіть рівень</option>
           {levels.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="form-field"
+        >
+          <option value="" disabled>Оберіть категорію</option>
+          {categories.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}
             </option>

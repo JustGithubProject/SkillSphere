@@ -24,7 +24,7 @@ const CoursesCategoryEN = () => {
             <div key={course.id} className="col-lg-3 col-md-6 mb-4">
               <div className="cat-item position-relative overflow-hidden rounded mb-2">
                 <img className="img-fluid" src={course.image} alt={course.title} />
-                <a className="cat-overlay text-white text-decoration-none" href="#">
+                <a className="cat-overlay text-white text-decoration-none" href={course.link}>
                   <h4 className="text-white font-weight-medium">{course.title}</h4>
                   <span>{course.coursesCount} Courses</span>
                 </a>

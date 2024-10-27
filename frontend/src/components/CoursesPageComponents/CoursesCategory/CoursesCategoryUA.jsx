@@ -1,14 +1,14 @@
 import React from 'react';
 
 const courses = [
-  { id: 1, title: 'Веб-дизайн', image: 'img/cat-1.jpg', coursesCount: 100 },
-  { id: 2, title: 'Розробка', image: 'img/cat-2.jpg', coursesCount: 100 },
-  { id: 3, title: 'Дизайн ігор', image: 'img/cat-3.jpg', coursesCount: 100 },
-  { id: 4, title: 'Дизайн додатків', image: 'img/cat-4.jpg', coursesCount: 100 },
-  { id: 5, title: 'Маркетинг', image: 'img/cat-5.jpg', coursesCount: 100 },
-  { id: 6, title: 'Дослідження', image: 'img/cat-6.jpg', coursesCount: 100 },
-  { id: 7, title: 'Написання контенту', image: 'img/cat-7.jpg', coursesCount: 100 },
-  { id: 8, title: 'SEO', image: 'img/cat-8.jpg', coursesCount: 100 }
+  { id: 1, title: 'Веб-дизайн', image: 'img/cat-1.jpg', coursesCount: 100, link: '/courses/web-design'},
+  { id: 2, title: 'Розробка', image: 'img/cat-2.jpg', coursesCount: 100, link: '/courses/development'},
+  { id: 3, title: 'Дизайн ігор', image: 'img/cat-3.jpg', coursesCount: 100, link: '/courses/game-design'},
+  { id: 4, title: 'Дизайн додатків', image: 'img/cat-4.jpg', coursesCount: 100, link: '/courses/apps-design'},
+  { id: 5, title: 'Маркетинг', image: 'img/cat-5.jpg', coursesCount: 100, link: '/courses/marketing'},
+  { id: 6, title: 'Дослідження', image: 'img/cat-6.jpg', coursesCount: 100, link: '/courses/research'},
+  { id: 7, title: 'Написання контенту', image: 'img/cat-7.jpg', coursesCount: 100, link: '/courses/content-writing'},
+  { id: 8, title: 'SEO', image: 'img/cat-8.jpg', coursesCount: 100, link: '/courses/seo'}
 ];
 
 const CoursesCategoryUA = () => {
@@ -24,7 +24,7 @@ const CoursesCategoryUA = () => {
             <div key={course.id} className="col-lg-3 col-md-6 mb-4">
               <div className="cat-item position-relative overflow-hidden rounded mb-2">
                 <img className="img-fluid" src={course.image} alt={course.title} />
-                <a className="cat-overlay text-white text-decoration-none" href="#">
+                <a className="cat-overlay text-white text-decoration-none" href={course.link}>
                   <h4 className="text-white font-weight-medium">{course.title}</h4>
                   <span>{course.coursesCount} Курсів</span>
                 </a>

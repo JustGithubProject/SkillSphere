@@ -1,15 +1,15 @@
 import React from 'react';
 
-const CategorySectionComponent = () => {
-  const categories = [
-    { id: 1, name: 'Web Design', courses: 100, img: 'img/cat-1.jpg' },
-    { id: 2, name: 'Development', courses: 100, img: 'img/cat-2.jpg' },
-    { id: 3, name: 'Game Design', courses: 100, img: 'img/cat-3.jpg' },
-    { id: 4, name: 'Apps Design', courses: 100, img: 'img/cat-4.jpg' },
-    { id: 5, name: 'Marketing', courses: 100, img: 'img/cat-5.jpg' },
-    { id: 6, name: 'Research', courses: 100, img: 'img/cat-6.jpg' },
-    { id: 7, name: 'Content Writing', courses: 100, img: 'img/cat-7.jpg' },
-    { id: 8, name: 'SEO', courses: 100, img: 'img/cat-8.jpg' },
+const CategorySectionComponentEN = () => {
+  const courses = [
+    { id: 1, title: 'Web Design', image: 'img/cat-1.jpg', coursesCount: 100, link: '/courses/web-design'},
+    { id: 2, title: 'Development', image: 'img/cat-2.jpg', coursesCount: 100, link: '/courses/development'},
+    { id: 3, title: 'Game Design', image: 'img/cat-3.jpg', coursesCount: 100, link: '/courses/game-design'},
+    { id: 4, title: 'Apps Design', image: 'img/cat-4.jpg', coursesCount: 100, link: '/courses/apps-design'},
+    { id: 5, title: 'Marketing', image: 'img/cat-5.jpg', coursesCount: 100, link: '/courses/marketing'},
+    { id: 6, title: 'Research', image: 'img/cat-6.jpg', coursesCount: 100, link: '/courses/research'},
+    { id: 7, title: 'Content Writing', image: 'img/cat-7.jpg', coursesCount: 100, link: '/courses/content-writing'},
+    { id: 8, title: 'SEO', image: 'img/cat-8.jpg', coursesCount: 100, link: '/courses/seo'}
   ];
 
   return (
@@ -22,13 +22,13 @@ const CategorySectionComponent = () => {
           <h1>Explore Top Subjects</h1>
         </div>
         <div className="row">
-          {categories.map(category => (
-            <div className="col-lg-3 col-md-6 mb-4" key={category.id}>
+          {courses.map(course => (
+            <div className="col-lg-3 col-md-6 mb-4" key={course.id}>
               <div className="cat-item position-relative overflow-hidden rounded mb-2">
-                <img className="img-fluid" src={category.img} alt={category.name} />
-                <a className="cat-overlay text-white text-decoration-none" href="#">
-                  <h4 className="text-white font-weight-medium">{category.name}</h4>
-                  <span>{category.courses} Courses</span>
+                <img className="img-fluid" src={course.image} alt={course.title} />
+                <a className="cat-overlay text-white text-decoration-none" href={course.link}>
+                  <h4 className="text-white font-weight-medium">{course.title}</h4>
+                  <span>{course.coursesCount} Courses</span>
                 </a>
               </div>
             </div>
@@ -39,4 +39,4 @@ const CategorySectionComponent = () => {
   );
 };
 
-export default CategorySectionComponent;
+export default CategorySectionComponentEN;
