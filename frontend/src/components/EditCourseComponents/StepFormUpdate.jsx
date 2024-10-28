@@ -5,6 +5,7 @@ import styles from './StepFormUpdate.module.css';
 
 import { PlusOutlined } from '@ant-design/icons';
 import { Button, Upload, Form, Input, message } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 const { TextArea } = Input;
 
@@ -12,6 +13,7 @@ const StepFormUpdate = ({ step_id, prev_text }) => {
     const [showForm, setShowForm] = useState(false);
     const [stepText, setStepText] = useState(prev_text);
     const [stepVideoPath, setStepVideoPath] = useState(null);
+    const { t, i18n } = useTranslation();
 
     const URL_BASE = "http://127.0.0.1:8000";
 
@@ -34,12 +36,12 @@ const StepFormUpdate = ({ step_id, prev_text }) => {
                     }
                 }
             );
-            message.success('Step updated successfully!');
+            message.success(t('Step updated successfully!'));
             setShowForm(false);
             window.location.reload();
         } catch (error) {
             console.error('Error updating step:', error);
-            message.error('Failed to update step.');
+            message.error(t('Failed to update step.'));
         }
     };
 
@@ -49,13 +51,13 @@ const StepFormUpdate = ({ step_id, prev_text }) => {
         <div className={showForm ? styles.formContainer : ''}> 
             {showForm ? (
                 <div>
-                    <h1 className={styles.heading}>Update Step</h1>
+                    <h1 className={styles.heading}>{t('Update Step')}</h1>
                     <Form
                         onFinish={handleFormToUpdateStep}
                         layout="vertical"
                         style={{ maxWidth: 400 }}
                     >
-                        <Form.Item label="Step Text" required>
+                        <Form.Item label={t('Step Text')} required>
                             <TextArea
                                 value={stepText}
                                 onChange={(e) => setStepText(e.target.value)}
@@ -64,7 +66,7 @@ const StepFormUpdate = ({ step_id, prev_text }) => {
                             />
                         </Form.Item>
                         <Form.Item 
-                            label="Upload Video" 
+                            label={t('Upload Video')}
                             valuePropName="fileList" 
                             getValueFromEvent={normFile}
                             labelCol={{ span: 24 }}
@@ -80,23 +82,23 @@ const StepFormUpdate = ({ step_id, prev_text }) => {
                             >
                                 <div>
                                     <PlusOutlined />
-                                    <div style={{ marginTop: 8 }}>Upload</div>
+                                    <div style={{ marginTop: 8 }}>{t('Upload')}</div>
                                 </div>
                             </Upload>
                         </Form.Item>
                         <Form.Item style={{ textAlign: 'center' }}>
                             <Button type="primary" htmlType="submit">
-                                Update Step
+                                {t('Update Step')}
                             </Button>
                             <Button style={{ marginLeft: '10px' }} onClick={() => setShowForm(false)}>
-                                Cancel
+                                {t('Cancel')}
                             </Button>
                         </Form.Item>
                     </Form>
                 </div>
             ) : (
                 <Button type="primary" icon={<PlusOutlined />} onClick={() => setShowForm(true)}>
-                    Update Step
+                    {t('Update Step')}
                 </Button>
             )}
         </div>

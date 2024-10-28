@@ -90,9 +90,9 @@ const FullCoursePage = () => {
                 <Breadcrumb.Item>
                     <Link to="/courses">{t('Course')}</Link>
                 </Breadcrumb.Item>
-                <Breadcrumb.Item>
-                    <LanguageSwitcher/>
-                </Breadcrumb.Item>
+                
+                <LanguageSwitcher style={{marginLeft: '50px', marginBottom: '10px'}}/>
+           
             </Breadcrumb>
             <Content
                 style={{
