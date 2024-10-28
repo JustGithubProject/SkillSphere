@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-import HeaderEN from '../components/CoursesPageComponents/Header/HeaderEN';
-import HeaderUA from '../components/CoursesPageComponents/Header/HeaderUA';
+import Header from '../components/CoursesPageComponents/Header/Header';
 import BookImageContainerEN from '../components/CoursesPageComponents/BookImageContainer/BookImageContainerEN';
 import BookImageContainerUA from '../components/CoursesPageComponents/BookImageContainer/BookImageContainerUA';
 import CoursesCategoryEN from '../components/CoursesPageComponents/CoursesCategory/CoursesCategoryEN';
 import CoursesCategoryUA from '../components/CoursesPageComponents/CoursesCategory/CoursesCategoryUA';
 import SetCoursesEN from '../components/CoursesPageComponents/SetCourses/SetCoursesEN';
 import SetCoursesUA from '../components/CoursesPageComponents/SetCourses/SetCoursesUA';
-import FooterEN from '../components/CoursesPageComponents/Footer/FooterEN';
-import FooterUA from '../components/CoursesPageComponents/Footer/FooterUA';
+import Footer from '../components/CoursesPageComponents/Footer/Footer';
+
 
 const Courses = () => {
     const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -22,19 +21,19 @@ const Courses = () => {
         <>
             {currentLanguage === 'en' ? (
                 <>
-                    <HeaderEN isCoursesPage={true} isHomePage={false} isPurchasedCoursesPage={false} />
+                    <Header isCoursesPage={true} isHomePage={false} isPurchasedCoursesPage={false} />
                     <BookImageContainerEN/>
                     <CoursesCategoryEN/>
                     <SetCoursesEN/>
-                    <FooterEN/>
+                    <Footer/>
                 </>
             ) : (
                 <>
-                    <HeaderUA isCoursesPage={true} isHomePage={false} isPurchasedCoursesPage={false} />
+                    <Header isCoursesPage={true} isHomePage={false} isPurchasedCoursesPage={false} />
                     <BookImageContainerUA/>
                     <CoursesCategoryUA/>
                     <SetCoursesUA/>
-                    <FooterUA/>
+                    <Footer/>
                 </>
             )}
 

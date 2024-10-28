@@ -7,12 +7,15 @@ import Cookies from 'js-cookie';
 import { FaLanguage } from 'react-icons/fa';
 import { BiWorld } from 'react-icons/bi';
 
+import { useTranslation } from 'react-i18next';
 
 
-const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
+
+const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
     const [username, setUsername] = useState('');
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const { t, i18n } = useTranslation();
 
     useEffect(() => {
       const accessToken = Cookies.get("access_token");
@@ -52,16 +55,14 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
         setIsDropdownOpen(prev => !prev); 
     };
 
-    const changeLanguage = (lang) => {
-        const currentKey = localStorage.getItem("language_key");
-        if (lang === 'en' && currentKey === 'ua') {
-            localStorage.removeItem("language_key");
-        } else if (lang === 'ua' && currentKey === 'en') {
-            localStorage.removeItem("language_key");
-        }
-        localStorage.setItem("language_key", lang);
-        window.location.reload();
-    }
+    const switchToUkrainian = () => {
+        i18n.changeLanguage('uk'); 
+    };
+    
+    const switchToEnglish = () => {
+        i18n.changeLanguage('en');
+    };
+
     return (
         <>
             {/* Topbar Start */}
@@ -76,8 +77,8 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                         <div className="d-inline-flex align-items-center">
                             <i className="fa fa-2x fa-map-marker-alt text-primary mr-3"></i>
                             <div className="text-left">
-                                <h6 className="font-weight-semi-bold mb-1">Our Office</h6>
-                                <small>123 Street, New York, USA</small>
+                                <h6 className="font-weight-semi-bold mb-1">{t('Our Office')}</h6>
+                                <small>{t('123 Street, New York, USA')}</small>
                             </div>
                         </div>
                     </div>
@@ -85,7 +86,7 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                         <div className="d-inline-flex align-items-center">
                             <i className="fa fa-2x fa-envelope text-primary mr-3"></i>
                             <div className="text-left">
-                                <h6 className="font-weight-semi-bold mb-1">Email Us</h6>
+                                <h6 className="font-weight-semi-bold mb-1">{t('Email Us')}</h6>
                                 <small>info@example.com</small>
                             </div>
                         </div>
@@ -94,7 +95,7 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                         <div className="d-inline-flex align-items-center">
                             <i className="fa fa-2x fa-phone text-primary mr-3"></i>
                             <div className="text-left">
-                                <h6 className="font-weight-semi-bold mb-1">Call Us</h6>
+                                <h6 className="font-weight-semi-bold mb-1">{t('Call Us')}</h6>
                                 <small>+012 345 6789</small>
                             </div>
                         </div>
@@ -108,22 +109,22 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                 <div className="row border-top px-xl-5">
                     <div className="col-lg-3 d-none d-lg-block">
                         <a className="d-flex align-items-center justify-content-between bg-secondary w-100 text-decoration-none" data-toggle="collapse" href="#navbar-vertical" style={{ height: '67px', padding: '0 30px' }}>
-                            <h5 className="text-primary m-0"><i className="fa fa-book-open mr-2"></i>Subjects</h5>
+                            <h5 className="text-primary m-0"><i className="fa fa-book-open mr-2"></i>{t('Subjects')}</h5>
                             <i className="fa fa-angle-down text-primary"></i>
                         </a>
                         <nav className="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style={{ width: 'calc(100% - 30px)', zIndex: 9 }}>
                             <div className="navbar-nav w-100">
                                 <div className="nav-item dropdown">
-                                    <a href="#" className="nav-link" data-toggle="dropdown">Web Design <i className="fa fa-angle-down float-right mt-1"></i></a>
+                                    <a href="#" className="nav-link" data-toggle="dropdown">{t('Web Design')}<i className="fa fa-angle-down float-right mt-1"></i></a>
                                     <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
                                         <a href="" className="dropdown-item">HTML</a>
                                         <a href="" className="dropdown-item">CSS</a>
                                         <a href="" className="dropdown-item">jQuery</a>
                                     </div>
                                 </div>
-                                <a href="" className="nav-item nav-link">Apps Design</a>
-                                <a href="" className="nav-item nav-link">Marketing</a>
-                                <a href="" className="nav-item nav-link">Research</a>
+                                <a href="" className="nav-item nav-link">{t('Apps Design')}</a>
+                                <a href="" className="nav-item nav-link">{t('Marketing')}</a>
+                                <a href="" className="nav-item nav-link">{t('Research')}</a>
                                 <a href="" className="nav-item nav-link">SEO</a>
                             </div>
                         </nav>
@@ -138,19 +139,19 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                             </button>
                             <div className="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                                 <div className="navbar-nav py-0">
-                                    <Link to="/" className={`nav-item nav-link ${isHomePage ? 'active' : ''}`}>Home</Link>
-                                    <Link to="/courses" className={`nav-item nav-link ${isCoursesPage ? 'active' : ''}`}>Courses</Link>
+                                    <Link to="/" className={`nav-item nav-link ${isHomePage ? 'active' : ''}`}>{t('Home')}</Link>
+                                    <Link to="/courses" className={`nav-item nav-link ${isCoursesPage ? 'active' : ''}`}>{t('Courses')}</Link>
                                 
-                                    <Link to="/contact-us" className="nav-item nav-link">Contact</Link>
+                                    <Link to="/contact-us" className="nav-item nav-link">{t('Contact')}</Link>
                                     <button
-                                        onClick={() => changeLanguage('en')}
+                                        onClick={switchToEnglish}
                                         className="btn btn-outline-primary btn-sm mx-2"
                                         title="English"
                                     >
                                         EN
                                     </button>
                                     <button
-                                        onClick={() => changeLanguage('ua')}
+                                        onClick={switchToUkrainian}
                                         className="btn btn-outline-primary btn-sm mx-2"
                                         title="Українська"
                                     >
@@ -165,16 +166,16 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                         {isDropdownOpen && (
                                             <div className="dropdown-menu show" aria-labelledby="userDropdown">
                                                 <button onClick={handleCreateCourseClick} className="dropdown-item">
-                                                    Create Course
+                                                    {t('Create Course')}
                                                 </button>
                                                 <button onClick={handlePurchasedCoursesClick} className="dropdown-item">
-                                                    Purchases Courses
+                                                    {t('Purchases Courses')}
                                                 </button>
                                                 <button onClick={handleMyCreatedCoursesClick} className="dropdown-item">
-                                                    My created courses
+                                                    {t('My created courses')}
                                                 </button>
                                                 <button onClick={handleLogOutClick} className="dropdown-item">
-                                                    Log out
+                                                    {t('Log out')}
                                                 </button>
                                             </div>
                                         )}
@@ -182,12 +183,12 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                 ) : (
                                     <div className="dropdown ml-auto d-none d-lg-block">
                                         <button className="btn btn-info" type="button" onClick={toggleDropdown}>
-                                            Login / Sign Up <i className={`fa ${isDropdownOpen ? 'fa-angle-up' : 'fa-angle-down'}`}></i>
+                                            {t('Login / Sign Up')} <i className={`fa ${isDropdownOpen ? 'fa-angle-up' : 'fa-angle-down'}`}></i>
                                         </button>
                                         {isDropdownOpen && (
                                             <div className="dropdown-menu show" aria-labelledby="authDropdown">
-                                                <Link to="/login" className="dropdown-item">Login</Link>
-                                                <Link to="/signup" className="dropdown-item">Sign Up</Link>
+                                                <Link to="/login" className="dropdown-item">{t('Login')}</Link>
+                                                <Link to="/signup" className="dropdown-item">{t('Sign Up')}</Link>
                                             </div>
                                         )}
                                     </div>
@@ -204,4 +205,4 @@ const HeaderEN = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
     );
 };
 
-export default HeaderEN;
+export default Header;

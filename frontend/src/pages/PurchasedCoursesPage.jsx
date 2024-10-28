@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import HeaderEN from '../components/CoursesPageComponents/Header/HeaderEN';
-import HeaderUA from '../components/CoursesPageComponents/Header/HeaderUA';
+import Header from '../components/CoursesPageComponents/Header/Header';
 import PurchasedCoursesEN from '../components/PurchasedCourses/PurchasedCoursesEN';
 import PurchasedCoursesUA from '../components/PurchasedCourses/PurchasedCoursesUA';
 
@@ -14,12 +13,12 @@ const PurchasedCoursesPage = () => {
         <>
         {currentLanguage === 'en' ? (
             <>
-                <HeaderEN isCoursesPage={false} isHomePage={false} isPurchasedCoursesPage={false} />
+                <Header isCoursesPage={false} isHomePage={false} isPurchasedCoursesPage={false} />
                 <PurchasedCoursesEN/>
             </>
         ) : (
             <>
-                <HeaderUA isCoursesPage={false} isHomePage={false} isPurchasedCoursesPage={false} />
+                <Header isCoursesPage={false} isHomePage={false} isPurchasedCoursesPage={false} />
                 <PurchasedCoursesUA/>
             </>
         )}

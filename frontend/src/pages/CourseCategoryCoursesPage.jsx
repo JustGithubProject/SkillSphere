@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Col, Row, Card, Typography, Spin } from 'antd';
+import { Col, Row, Card, Typography, Spin, Button } from 'antd';
 import Cookies from 'js-cookie';
 
-import HeaderEN from '../components/CoursesPageComponents/Header/HeaderEN';
-import HeaderUA from '../components/CoursesPageComponents/Header/HeaderUA';
+import Header from '../components/CoursesPageComponents/Header/Header';
 import PayPalForm from '../components/Paypal/PaypalForm';
 
 import axios from 'axios';
@@ -66,7 +65,7 @@ const CourseCategoryCoursesPage = () => {
 
     return (
         <div style={{ padding: '20px' }}>
-            {currentLanguage == 'en' ? <HeaderEN isCoursesPage={true} isHomePage={false} isPurchasedCoursesPage={false}/> : <HeaderUA isCoursesPage={true} isHomePage={false} isPurchasedCoursesPage={false}/>}
+            <Header isCoursesPage={true} isHomePage={false} isPurchasedCoursesPage={false}/>
             <Title level={2} style={{ textAlign: 'center', marginBottom: '20px', color: '#FF6600'}}>
                 "{categoryName}" 
             </Title>
@@ -87,9 +86,22 @@ const CourseCategoryCoursesPage = () => {
                                 </Paragraph>
                                 <Title level={5}>Price: ${course.price}</Title>
                                 {isAuthorized ? (
-                                    <button className="btn btn-success w-100 mb-2" onClick={() => handleBuyCourse(course)}>Buy Course</button>
+                                    <Button 
+                                            type="primary" 
+                                            className="w-100 mb-2" 
+                                            onClick={() => handleBuyCourse(course)}
+                                            style={{ backgroundColor: 'rgb(255, 102, 0)', borderColor: 'rgb(255, 102, 0)' }}
+                                    >
+                                            Buy Course
+                                    </Button>
                                 ) : null}
-                                <button className="btn btn-primary w-100" onClick={() => handleViewCourse(course.id, course.video_url)}>View Course</button>
+                                    <Button 
+                                        type="default" 
+                                        className="w-100" 
+                                        onClick={() => handleViewCourse(course.id, course.video_url)}
+                                    >
+                                        View Course
+                                    </Button>
                             </Card>
                         </Col>
                     ))}
