@@ -2,8 +2,26 @@
     "Home": "Home",
     "Course": "Course",
     "Back": "Back",
+    "Next": "Next",
     "NoStepsAvailable": "No steps available",
     "Please select a lesson to view.": "Please select a lesson to view.",
-    "Your browser does not support the video tag.": "Your browser does not support the video tag."
+    "Your browser does not support the video tag.": "Your browser does not support the video tag.",
+    "Add Module": "Add Module",
+    "Add Lesson": "Add Lesson",
+    "Enter lesson title": "Enter lesson title",
+    "Enter module title": "Enter module title",
+    "Show Update Form": "Show Update Form",
+    "Show Create Form": "Show Create Form",
+    "Create Step": "Create Step",
+    "Cancel": "Cancel",
+    "Upload": "Upload",
+    "Update Step": "Update Step",
+    "Step Text": "Step Text",
+    "Upload Video": "Upload Video",
+    "Failed to create step.": "Failed to create step.",
+    "Step created successfully!": "Step created successfully!",
+    "Failed to update step.": "Failed to update step.",
+    "Step updated successfully!": "Step updated successfully!"
+
 }
   

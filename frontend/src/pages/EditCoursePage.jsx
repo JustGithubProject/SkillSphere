@@ -5,9 +5,12 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import StepFormUpdate from '../components/EditCourseComponents/StepFormUpdate';
 import StepFormCreate from '../components/EditCourseComponents/StepFormCreate';
+import LanguageSwitcher from '../LanguageSwitcher';
 import styles from '../components/EditCourseComponents/Sidebar.module.css';
 import { useParams } from 'react-router-dom';
 import { PlusOutlined } from '@ant-design/icons';
+
+import { useTranslation } from 'react-i18next';
 
 const { Content, Sider } = Layout;
 const { Title } = Typography;
@@ -23,6 +26,8 @@ const EditCoursePage = () => {
   const [newModuleTitle, setNewModuleTitle] = useState("");
   const [newLessonTitle, setNewLessonTitle] = useState();
   const { id } = useParams();
+  const { t, i18n } = useTranslation();
+
   const API_BASE = 'http://127.0.0.1:8000';
 
 
@@ -121,7 +126,7 @@ const EditCoursePage = () => {
         label: isAddingLesson[module.id] ? (
           <Input
             autoFocus
-            placeholder="Enter lesson title"
+            placeholder={t('Enter lesson title')}
             value={newLessonTitle}
             onChange={(e) => setNewLessonTitle(e.target.value)}
             onPressEnter={() => handleAddLesson(module.id)}
@@ -134,7 +139,7 @@ const EditCoursePage = () => {
             onClick={() => setIsAddingLesson({ ...isAddingLesson, [module.id]: true })}
             style={{ width: '100%'}}
           >
-            Add Lesson
+            {t('Add Lesson')}
           </Button>
         ),
       }
@@ -151,7 +156,7 @@ const EditCoursePage = () => {
               {isAddingModule ? (
                 <Input
                   autoFocus
-                  placeholder="Enter module title"
+                  placeholder={t('Enter module title')}
                   value={newModuleTitle}
                   onChange={(e) => setNewModuleTitle(e.target.value)}
                   onPressEnter={handleAddModule}
@@ -164,7 +169,7 @@ const EditCoursePage = () => {
                   onClick={() => setIsAddingModule(true)}
                   style={{ width: '100%', marginBottom: '10px' }}
                 >
-                  Add Module
+                  {t('Add Module')}
                 </Button>
               )}
             </div>
@@ -184,11 +189,12 @@ const EditCoursePage = () => {
         <Layout style={{ padding: '0 24px 24px', minHeight: '100vh' }}>
           <Breadcrumb style={{ margin: '16px 0' }}>
             <Breadcrumb.Item>
-              <Link to="/">Home</Link>
+              <Link to="/">{t('Home')}</Link>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <Link to="/courses">Course</Link>
+              <Link to="/courses">{t('Course')}</Link>
             </Breadcrumb.Item>
+            <LanguageSwitcher style={{marginLeft: '50px', marginBottom: '10px'}}/>
           </Breadcrumb>
           <Content
             style={{
@@ -227,7 +233,7 @@ const EditCoursePage = () => {
                           src={`http://127.0.0.1:8080${steps[currentStepIndex].video_path}`}
                           type="video/mp4"
                         />
-                        Your browser does not support the video tag.
+                        {t('Your browser does not support the video tag.')}
                       </video>
                     </div>
                   )}
@@ -246,7 +252,7 @@ const EditCoursePage = () => {
                     variant="outlined"
                     style={{ marginRight: '10px' }}
                   >
-                    Back
+                    {t('Back')}
                   </Button>
                   <Button
                     onClick={() => setCurrentStepIndex(currentStepIndex + 1)}
@@ -254,7 +260,7 @@ const EditCoursePage = () => {
                     color="danger"
                     variant="outlined"
                   >
-                    Next
+                    {t('Next')}
                   </Button>
                 </div>
                 <div style={{
@@ -265,8 +271,8 @@ const EditCoursePage = () => {
                     width: '100%',
                 }}>
                   <Radio.Group defaultValue="a" buttonStyle="solid">
-                    <Radio.Button onClick={() => setShowFormUpdate(true)} value="a">Show Update Form</Radio.Button>
-                    <Radio.Button onClick={() => setShowFormUpdate(false)} value="b">Show Create Form</Radio.Button>
+                    <Radio.Button onClick={() => setShowFormUpdate(true)} value="a">{t('Show Update Form')}</Radio.Button>
+                    <Radio.Button onClick={() => setShowFormUpdate(false)} value="b">{t('Show Create Form')}</Radio.Button>
                   </Radio.Group>
                 </div>
                 <div style={{
@@ -285,8 +291,8 @@ const EditCoursePage = () => {
               </>
             ) : (
               <div style={{ padding: '50px', color: '#888' }}>
-                <h2 style={{color: 'black'}}>No steps available</h2>
-                <p>Please select a lesson to view or create steps.</p>
+                <h2 style={{color: 'black'}}>{t('NoStepsAvailable')}</h2>
+                <p>{t('Please select a lesson to view.')}</p>
                 <StepFormCreate lesson_id={lessonID} />
               </div>
             )}

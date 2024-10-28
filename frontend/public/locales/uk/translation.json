@@ -2,8 +2,25 @@
     "Home": "Головна",
     "Course": "Курс",
     "Back": "Назад",
+    "Next": "Вперед",
     "NoStepsAvailable": "Немає доступних кроків",
     "Please select a lesson to view.": "Будь ласка, виберіть урок для перегляду.",
-    "Your browser does not support the video tag.": "Ваш браузер не підтримує тег video."
+    "Your browser does not support the video tag.": "Ваш браузер не підтримує тег video.",
+    "Add Module": "Додати модуль",
+    "Add Lesson": "Додати урок",
+    "Enter lesson title": "Введіть назву уроку",
+    "Enter module title": "Введіть назву модуля",
+    "Show Update Form": "Показати форму оновлення",
+    "Show Create Form": "Показати форму створення",
+    "Create Step": "Створити крок",
+    "Cancel": "Скасувати",
+    "Upload": "Завантажити",
+    "Update Step": "Оновити крок",
+    "Step Text": "Крок Текст",
+    "Upload Video": "Завантажити відео",
+    "Failed to create step.": "Не вдалося створити крок.",
+    "Step created successfully!": "Крок успішно створено!",
+    "Failed to update step.": "Не вдалося оновити крок.",
+    "Step updated successfully!": "Крок успішно оновлено!"
 }
   
