@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import HeaderEN from '../components/CoursesPageComponents/Header/HeaderEN';
-import HeaderUA from '../components/CoursesPageComponents/Header/HeaderUA';
+import Header from '../components/CoursesPageComponents/Header/Header';
 import CourseSingleComponent from '../components/CourseSingle/CourseSingle';
-import FooterEN from '../components/CoursesPageComponents/Footer/FooterEN';
-import FooterUA from '../components/CoursesPageComponents/Footer/FooterUA';
+import Footer from '../components/CoursesPageComponents/Footer/Footer';
 
 
 import { useParams } from 'react-router-dom';
@@ -23,15 +21,15 @@ const CourseSingle = () => {
         <>
             {currentLanguage === 'en' ? (
                 <>
-                    <HeaderEN isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
+                    <Header isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
                     <CourseSingleComponent course_id={id}/>
-                    <FooterEN/>
+                    <Footer/>
                 </>
             ) : (
                 <>
-                    <HeaderUA isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
+                    <Header isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
                     <CourseSingleComponent course_id={id}/>
-                    <FooterUA/>
+                    <Footer/>
                 </>
             )}
 

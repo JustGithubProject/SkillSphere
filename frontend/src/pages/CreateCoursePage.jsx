@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
-import HeaderEN from '../components/CoursesPageComponents/Header/HeaderEN';
-import HeaderUA from '../components/CoursesPageComponents/Header/HeaderUA';
+import Header from '../components/CoursesPageComponents/Header/Header';
 import CreateCourseSectionEN from '../components/CreateCourseSection/CreateCourseSectionEN';
 import CreateCourseSectionUA from '../components/CreateCourseSection/CreateCourseSectionUA';
-import FooterEN from '../components/CoursesPageComponents/Footer/FooterEN';
-import FooterUA from '../components/CoursesPageComponents/Footer/FooterUA';
+import Footer from '../components/CoursesPageComponents/Footer/Footer';
 
 const CreateCoursePage = () => {
     const [currentLanguage, setCurrentLanguage] = useState('en');
@@ -18,16 +16,16 @@ const CreateCoursePage = () => {
         <>
             {currentLanguage === 'en' ? (
                 <>
-                    <HeaderEN isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
+                    <Header isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
                     <CreateCourseSectionEN/>
-                    <FooterEN/>
+                    <Footer/>
                 </>
                 
             ) : (
                 <>
-                    <HeaderUA isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
+                    <Header isCoursesPage={false} isHomePage={true} isPurchasedCoursesPage={false} />
                     <CreateCourseSectionUA/>
-                    <FooterUA/>
+                    <Footer/>
                 </>
             )}
 

@@ -1,6 +1,9 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
-const AboutUsComponentEN = () => {
+const AboutUsComponent = () => {
+  const { t } = useTranslation(); 
+
   return (
     <div className="container-fluid py-5">
       <div className="container py-5">
@@ -9,26 +12,21 @@ const AboutUsComponentEN = () => {
             <img
               className="img-fluid rounded mb-4 mb-lg-0"
               src="img/about.jpg"
-              alt="About Us"
+              alt={t("About Us")}
             />
           </div>
           <div className="col-lg-7">
             <div className="text-left mb-4">
               <h5 className="text-primary text-uppercase mb-3" style={{ letterSpacing: '5px' }}>
-                About Us
+                {t("About Us")}
               </h5>
-              <h1>Innovative Way To Learn</h1>
+              <h1>{t("Innovative Way To Learn")}</h1>
             </div>
             <p>
-              Our mission is to empower learners around the world
-              by providing high-quality educational content and a supportive community.
-              We leverage innovative technology to create interactive learning
-              experiences that keep you engaged and motivated. 
-              From video lectures and quizzes to discussion forums and hands-on projects,
-              our courses cater to various learning styles.
+              {t("Our mission is to empower learners around the world by providing high-quality educational content and a supportive community. We leverage innovative technology to create interactive learning experiences that keep you engaged and motivated. From video lectures and quizzes to discussion forums and hands-on projects, our courses cater to various learning styles.")}
             </p>
             <a href="#" className="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">
-              Learn More
+              {t("Learn More")}
             </a>
           </div>
         </div>
@@ -37,4 +35,4 @@ const AboutUsComponentEN = () => {
   );
 };
 
-export default AboutUsComponentEN;
+export default AboutUsComponent;
