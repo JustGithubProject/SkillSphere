@@ -13,9 +13,9 @@ const Footer = () => {
             <div className="row">
               <div className="col-md-6 mb-5">
                 <h5 className="text-primary text-uppercase mb-4" style={{ letterSpacing: '5px' }}>{t('Get In Touch')}</h5>
-                <p><i className="fa fa-map-marker-alt mr-2"></i>{t('Address')}</p>
-                <p><i className="fa fa-phone-alt mr-2"></i>{t('Phone')}</p>
-                <p><i className="fa fa-envelope mr-2"></i>{t('Email')}</p>
+                <p style={{color: 'white'}}><i className="fa fa-map-marker-alt mr-2"></i>{t('Address')}</p>
+                <p style={{color: 'white'}}><i className="fa fa-phone-alt mr-2"></i>{t('Phone')}</p>
+                <p style={{color: 'white'}}><i className="fa fa-envelope mr-2"></i>{t('Email')}</p>
                 <div className="d-flex justify-content-start mt-4">
                   <a className="btn btn-outline-light btn-square mr-2" href="#"><i className="fab fa-twitter"></i></a>
                   <a className="btn btn-outline-light btn-square mr-2" href="#"><i className="fab fa-facebook-f"></i></a>
@@ -37,7 +37,6 @@ const Footer = () => {
           </div>
           <div className="col-lg-5 col-md-12 mb-5">
             <h5 className="text-primary text-uppercase mb-4" style={{ letterSpacing: '5px' }}>{t('Newsletter')}</h5>
-            <p>{t('Newsletter Description')}</p>
             <div className="w-100">
               <div className="input-group">
                 <input type="text" className="form-control border-light" style={{ padding: '30px' }} placeholder={t('Your Email Address')} />
