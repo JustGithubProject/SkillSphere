@@ -116,6 +116,7 @@ const CreateCourseSectionUA = () => {
             type="file"
             onChange={(e) => setPhotoFile(e.target.files[0])}
             className="form-file-input"
+            accept="image/*"
           />
           <span className="form-file-label">Завантажити фото</span>
         </label>
@@ -124,6 +125,7 @@ const CreateCourseSectionUA = () => {
             type="file"
             onChange={(e) => setVideoFile(e.target.files[0])}
             className="form-file-input"
+            accept="video/*"
           />
           <span className="form-file-label">Завантажити відео</span>
         </label>

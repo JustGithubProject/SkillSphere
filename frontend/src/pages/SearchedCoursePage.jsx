@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import Header from '../components/CoursesPageComponents/Header/Header';
 import PayPalForm from '../components/Paypal/PaypalForm';
+import { useTranslation } from 'react-i18next';
 
 const { Meta } = Card;
 const { Title } = Typography;
@@ -14,6 +15,7 @@ const SearchedCoursePage = () => {
     const [loading, setLoading] = useState(true);
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
+    const { t } = useTranslation(); 
 
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q");
@@ -69,7 +71,12 @@ const SearchedCoursePage = () => {
                                 <div style={{ flex: 1 }}>
                                     <Meta 
                                         title={course.title} 
-                                        description={course.description || "No description available."} 
+                                        description={
+                                            course.description.length > 100 ?
+                                            course.description.slice(0, 100) + "..." :
+                                            course.description || "No description available."
+                                        }
+                                        price={`$${course.price}`} 
                                     />
                                 </div>
                                 
