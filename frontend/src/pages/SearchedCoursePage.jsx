@@ -76,8 +76,8 @@ const SearchedCoursePage = () => {
                                             course.description.slice(0, 100) + "..." :
                                             course.description || "No description available."
                                         }
-                                        price={`$${course.price}`} 
                                     />
+                                    <p>{t('Price')}: ${course.price}</p>
                                 </div>
                                 
                                 <div style={{ marginTop: '16px' }}>
@@ -87,7 +87,7 @@ const SearchedCoursePage = () => {
                                             style={{ backgroundColor: 'rgb(255, 102, 0)', borderColor: 'rgb(255, 102, 0)', width: '100%', marginBottom: '8px' }}
                                             onClick={() => handleBuyCourse(course)}
                                         >
-                                            Buy Course
+                                            {t('Buy Course')}
                                         </Button>
                                     )}
                                     <Button
@@ -95,7 +95,7 @@ const SearchedCoursePage = () => {
                                         style={{ width: '100%' }}
                                         onClick={() => handleViewCourse(course.id, course.video_url)}
                                     >
-                                        View Course
+                                        {t('View Course')}
                                     </Button>
                                 </div>
                             </Card>
@@ -109,19 +109,19 @@ const SearchedCoursePage = () => {
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <h5 className="modal-title">Payment Details</h5>
+                                <h5 className="modal-title">{t('Payment Details')}</h5>
                                 <button type="button" className="close" onClick={handleCloseModal}>
                                     <span>&times;</span>
                                 </button>
                             </div>
                             <div className="modal-body">
                                 <h5>{selectedCourse.title}</h5>
-                                <p>Price: ${selectedCourse.price}</p>
+                                {selectedCourse && <p>{t('Price')}: ${selectedCourse.price}</p>}
                                 <PayPalForm price={selectedCourse.price} course_id={selectedCourse.id} />
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={handleCloseModal}>
-                                    Close
+                                    {t('Close')}
                                 </button>
                             </div>
                         </div>
