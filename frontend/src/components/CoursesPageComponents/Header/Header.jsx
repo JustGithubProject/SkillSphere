@@ -68,7 +68,7 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
     };
 
     const handleSearch = (value) => {
-        window.location.href = ''
+        window.location.href = `/courses/search/?q=${value}&is_free=false`
     }
 
     return (
@@ -162,12 +162,12 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                         UA
                                     </button>
                                     <Search
-                                        placeholder="input search text"
+                                        placeholder={t('Search course...')}
                                         onSearch={handleSearch}
                                         style={{
                                             width: 200,
                                             marginTop: '20px',
-                                            marginLeft: '250px'
+                                            marginLeft: '500px'
                                         }}
                                     />
                                 </div>
