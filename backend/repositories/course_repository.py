@@ -18,7 +18,9 @@ class CourseRepository:
         query = select(Course).options(
             selectinload(Course.instructors),  # Загрузка инструкторов
             selectinload(Course.creator),      # Загрузка создателя курса
-            selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps).joinedload(Step.test).selectinload(Test.answers)       # Загрузка модулей курса
+            selectinload(Course.modules).selectinload(Module.lessons).selectinload(Lesson.steps).joinedload(Step.test).selectinload(Test.answers),
+            selectinload(Course.comments),
+            selectinload(Course.students)
         )
 
         # Поиск по полю title и description
