@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 const { Content, Sider } = Layout;
 const { Title } = Typography;
+const { Paragraph } = Typography;
 
 const EditCoursePage = () => {
   const [steps, setSteps] = useState([]);
@@ -221,13 +222,15 @@ const EditCoursePage = () => {
                     width: '100%',
                   }}
                 >
-                  <p style={{ marginTop: '16px' }}>{steps[currentStepIndex].text}</p>
+                    <Paragraph ellipsis={{ rows: 3, expandable: true, symbol: 'more' }} style={{ marginTop: '16px' }}>
+                        {steps[currentStepIndex].text}
+                    </Paragraph>
                   {steps[currentStepIndex].video_path && (
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                       <video
                         key={steps[currentStepIndex].video_path}
                         controls
-                        style={{ width: '50%' }}
+                        style={{ width: '50%'}}
                       >
                         <source
                           src={`http://127.0.0.1:8080${steps[currentStepIndex].video_path}`}

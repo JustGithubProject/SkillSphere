@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
-import { Menu, Layout, Breadcrumb, Button, Radio, Input } from 'antd';
+import { Menu, Layout, Breadcrumb, Button, Radio, Input, Typography} from 'antd';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '../LanguageSwitcher';
 
 const { Content, Sider } = Layout;
+const { Paragraph } = Typography;
 
 const FullCoursePage = () => {
     const [modules, setModules] = useState([]);
@@ -119,7 +120,9 @@ const FullCoursePage = () => {
                         width: '100%', 
                     }}
                     >
-                    <p style={{ marginTop: '16px' }}>{steps[currentStepIndex].text}</p>
+                        <Paragraph ellipsis={{ rows: 3, expandable: true, symbol: 'more' }} style={{ marginTop: '16px' }}>
+                            {steps[currentStepIndex].text}
+                        </Paragraph>
                     {steps[currentStepIndex].video_path && (
                         <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                         <video
