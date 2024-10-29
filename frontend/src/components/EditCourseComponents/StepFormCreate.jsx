@@ -82,6 +82,7 @@ const StepFormCreate = ({ lesson_id }) => {
                                 }}
                                 listType="picture-card"
                                 showUploadList={false}
+                                accept="video/*"
                             >
                                 <div>
                                     <PlusOutlined />

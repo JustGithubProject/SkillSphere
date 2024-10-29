@@ -79,6 +79,7 @@ const StepFormUpdate = ({ step_id, prev_text }) => {
                                 }}
                                 listType="picture-card"
                                 showUploadList={false}
+                                accept="video/*"
                             >
                                 <div>
                                     <PlusOutlined />
