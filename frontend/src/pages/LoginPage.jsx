@@ -7,7 +7,7 @@ const LoginPage = () => {
     const [currentLanguage, setCurrentLanguage] = useState('en');
 
     useEffect(() => {
-        const currentLang = localStorage.getItem("language_key");
+        const currentLang = localStorage.getItem("i18nextLng");
         setCurrentLanguage(currentLang);
     }, []);
     return (

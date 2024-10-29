@@ -15,6 +15,7 @@ import ChangePasswordPage from './pages/ChangePasswordPage';
 import EditCoursePage from './pages/EditCoursePage';
 import FullCoursePage from './pages/FullCoursePage';
 import CourseCategoryCoursesPage from './pages/CourseCategoryCoursesPage';
+import SearchedCoursePage from './pages/SearchedCoursePage';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
@@ -23,7 +24,7 @@ function App() {
   const [currentLanguage, setCurrentLanguage] = useState('en');
 
   useEffect(() => {
-      const currentLang = localStorage.getItem("language_key");
+      const currentLang = localStorage.getItem("i18nextLng");
       setCurrentLanguage(currentLang);
   }, []);
 
@@ -52,6 +53,7 @@ function App() {
           <Route path="/edit-course/:id" element={<EditCoursePage/>} />
           <Route path="/full-course/:id" element={<FullCoursePage/>} />
           <Route path="/courses/:categoryName" element={<CourseCategoryCoursesPage/>} />
+          <Route path="/courses/search/" element={<SearchedCoursePage/>} />
         </Routes>
     </Router>
   );

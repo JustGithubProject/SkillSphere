@@ -81,7 +81,14 @@ const CourseCategoryCoursesPage = () => {
             <Header isCoursesPage={true} isHomePage={false} isPurchasedCoursesPage={false} />
             
             <Title level={2} style={{ marginBottom: '20px', color: '#FF6600' }}>
-                "{categoryName}"
+                {categoryName === 'web-design' ? 'Web Design' : null}
+                {categoryName === 'development' ? "Development" : null}
+                {categoryName === 'game-design' ? "Game Design" : null}
+                {categoryName === 'apps-design' ? "Apps Design" : null}
+                {categoryName === 'marketing' ? "Marketing" : null}
+                {categoryName === 'research' ? "Research" : null}
+                {categoryName === "content-writing" ? "Content Writing" : null}
+                {categoryName === "seo" ? "SEO" : null}
             </Title>
 
             {loading ? (

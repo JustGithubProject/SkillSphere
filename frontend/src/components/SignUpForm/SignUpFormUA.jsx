@@ -115,6 +115,7 @@ const SignUpFormUA = () => {
       {error && <div style={styles.alert}>{error}</div>}
       {step === 'signup' ? (
         <form onSubmit={handleSubmit}>
+          <h3 style={styles.title}>Зареєструватися</h3>
           <input
             type="text"
             style={styles.input}
