@@ -39,8 +39,8 @@ class CourseRepository:
 
         # Выполнение запроса и возврат результатов
         result = await session.execute(query)
-        courses = result.scalars()
-        return courses.all()
+        courses = result.scalars().all()
+        return courses
 
     async def check_is_course_exists(
         self,

@@ -86,5 +86,6 @@
     "Price": "Ціна",
     "Close": "Закрити",
     "Error fetching courses": "Помилка завантаження курсів",
-    "No description available": "Опис недоступний."
+    "No description available": "Опис недоступний.",
+    "Search course...": "Шукати курс..."
 }

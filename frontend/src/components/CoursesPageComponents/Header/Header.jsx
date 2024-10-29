@@ -9,6 +9,10 @@ import { BiWorld } from 'react-icons/bi';
 
 import { useTranslation } from 'react-i18next';
 
+import { Input, Space } from 'antd';
+
+const { Search } = Input;
+
 
 
 const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
@@ -63,6 +67,10 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
         i18n.changeLanguage('en');
     };
 
+    const handleSearch = (value) => {
+        window.location.href = `/courses/search/?q=${value}&is_free=false`
+    }
+
     return (
         <>
             {/* Topbar Start */}
@@ -114,18 +122,14 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                         </a>
                         <nav className="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style={{ width: 'calc(100% - 30px)', zIndex: 9 }}>
                             <div className="navbar-nav w-100">
-                                <div className="nav-item dropdown">
-                                    <a href="#" className="nav-link" data-toggle="dropdown">{t('Web Design')}<i className="fa fa-angle-down float-right mt-1"></i></a>
-                                    <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                                        <a href="" className="dropdown-item">HTML</a>
-                                        <a href="" className="dropdown-item">CSS</a>
-                                        <a href="" className="dropdown-item">jQuery</a>
-                                    </div>
-                                </div>
-                                <a href="" className="nav-item nav-link">{t('Apps Design')}</a>
-                                <a href="" className="nav-item nav-link">{t('Marketing')}</a>
-                                <a href="" className="nav-item nav-link">{t('Research')}</a>
-                                <a href="" className="nav-item nav-link">SEO</a>
+                                <a href="/courses/web-design" className="nav-link">{t('Web Design')}</a>
+                                <a href="/courses/apps-design" className="nav-item nav-link">{t('Apps Design')}</a>
+                                <a href="/courses/marketing" className="nav-item nav-link">{t('Marketing')}</a>
+                                <a href="/courses/research" className="nav-item nav-link">{t('Research')}</a>
+                                <a href="/courses/seo" className="nav-item nav-link">SEO</a>
+                                <a href="/courses/development" className="nav-item nav-link">{t('Development')}</a>
+                                <a href="/courses/game-design" className="nav-item nav-link">{t('Game Design')}</a>
+                                <a href="/courses/content-writing" className="nav-item nav-link">{t('Content Writing')}</a>
                             </div>
                         </nav>
                     </div>
@@ -157,6 +161,15 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                     >
                                         UA
                                     </button>
+                                    <Search
+                                        placeholder={t('Search course...')}
+                                        onSearch={handleSearch}
+                                        style={{
+                                            width: 200,
+                                            marginTop: '20px',
+                                            marginLeft: '500px'
+                                        }}
+                                    />
                                 </div>
                                 {isAuthorized ? (
                                     <div className="dropdown ml-auto d-none d-lg-block">
