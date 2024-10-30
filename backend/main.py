@@ -85,7 +85,8 @@ origins = [
     "http://172.18.0.4:3000",
     "http://0.0.0.0:3000",
     "http://127.0.0.1:3000",
-    "http://localhost:3000"
+    "http://localhost:3000",
+    "http://185.126.115.49"
 ]
 
 # To allow access from frontend to backend routers
