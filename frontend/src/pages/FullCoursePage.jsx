@@ -91,8 +91,6 @@ const FullCoursePage = () => {
                 <Breadcrumb.Item>
                     <Link to="/courses">{t('Course')}</Link>
                 </Breadcrumb.Item>
-                
-                <LanguageSwitcher style={{marginLeft: '50px', marginBottom: '10px'}}/>
            
             </Breadcrumb>
             <Content
@@ -106,8 +104,12 @@ const FullCoursePage = () => {
                 justifyContent: steps.length ? 'flex-start' : 'center',
                 alignItems: steps.length ? 'flex-start' : 'center',
                 textAlign: steps.length ? 'left' : 'center',
+                position: 'relative',
                 }}
             >
+                <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 1 }}>
+                    <LanguageSwitcher />
+                </div>
                 {steps.length > 0 ? (
                 <>
                     <div
@@ -120,7 +122,7 @@ const FullCoursePage = () => {
                         width: '100%', 
                     }}
                     >
-                        <Paragraph ellipsis={{ rows: 3, expandable: true, symbol: 'more' }} style={{ marginTop: '16px' }}>
+                        <Paragraph ellipsis={{ rows: 3, expandable: true, symbol: 'more' }} style={{ marginTop: '40px' }}>
                             {steps[currentStepIndex].text}
                         </Paragraph>
                     {steps[currentStepIndex].video_path && (
