@@ -12,7 +12,7 @@ import { PlusOutlined } from '@ant-design/icons';
 
 import { useTranslation } from 'react-i18next';
 
-const { Content, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 const { Title } = Typography;
 const { Paragraph } = Typography;
 
@@ -195,8 +195,8 @@ const EditCoursePage = () => {
             <Breadcrumb.Item>
               <Link to="/courses">{t('Course')}</Link>
             </Breadcrumb.Item>
-            <LanguageSwitcher style={{marginLeft: '50px', marginBottom: '10px'}}/>
           </Breadcrumb>
+
           <Content
             style={{
               padding: 24,
@@ -208,8 +208,12 @@ const EditCoursePage = () => {
               justifyContent: steps.length ? 'flex-start' : 'center',
               alignItems: steps.length ? 'flex-start' : 'center',
               textAlign: steps.length ? 'left' : 'center',
+              position: 'relative',
             }}
           >
+             <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 1 }}>
+              <LanguageSwitcher />
+            </div>
             {steps.length > 0 ? (
               <>
                 <div
@@ -222,7 +226,8 @@ const EditCoursePage = () => {
                     width: '100%',
                   }}
                 >
-                    <Paragraph ellipsis={{ rows: 3, expandable: true, symbol: 'more' }} style={{ marginTop: '16px' }}>
+                    
+                    <Paragraph ellipsis={{ rows: 3, expandable: true, symbol: 'more' }} style={{ marginTop: '40px' }}>
                         {steps[currentStepIndex].text}
                     </Paragraph>
                   {steps[currentStepIndex].video_path && (

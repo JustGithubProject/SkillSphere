@@ -167,7 +167,7 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                         style={{
                                             width: 200,
                                             marginTop: '20px',
-                                            marginLeft: '550px'
+                                            marginLeft: '500px'
                                         }}
                                     />
                                 </div>
