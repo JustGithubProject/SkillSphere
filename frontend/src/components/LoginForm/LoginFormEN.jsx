@@ -52,7 +52,7 @@ const LoginFormEN = () => {
     const handleGoogleLoginSuccess = async (credentialResponse) => {
         try {
             console.log(credentialResponse)
-            const response = await axios.get('http://localhost:8000/auth/google/callback/', {
+            const response = await axios.get('http://localhost:8000/api/v1/auth/google/callback/', {
                 params: {
                     google_id_token: credentialResponse.credential,
                   },

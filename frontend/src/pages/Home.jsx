@@ -29,7 +29,7 @@ const HomeV2Page = () => {
             if (tokenParam && payerIDParam) {
                 // TODO: logic to handle token and payerID
                 await axios.post(
-                    "http://127.0.0.1:8000/paypal/check/payment",
+                    "http://127.0.0.1:8000/api/v1/paypal/check/payment",
                     {
                         token: tokenParam,
                         payer_id: payerIDParam,

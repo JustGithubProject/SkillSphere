@@ -48,11 +48,14 @@ app.include_router(
 )
 
 app.include_router(
-    router=google_router
+    router=google_router,
+    prefix=API_V1_PREFIX
+    
 )
 
 app.include_router(
-    router=paypal_router
+    router=paypal_router,
+    prefix=API_V1_PREFIX
 )
 
 app.include_router(

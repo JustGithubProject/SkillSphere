@@ -12,7 +12,7 @@ const PayPalForm = ({ price, course_id }) => {
         try {
             const accessToken = Cookies.get("access_token");
             const response = await axios.post(
-                "http://127.0.0.1:8000/paypal/create-order/",
+                "http://127.0.0.1:8000/api/v1/paypal/create-order/",
                 {
                     price: price.slice(1),
                     currency_code: "USD"
