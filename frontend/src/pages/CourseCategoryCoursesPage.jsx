@@ -95,53 +95,66 @@ const CourseCategoryCoursesPage = () => {
                 <Spin size="large" style={{ marginTop: '50px' }} />
             ) : (
                 <>
-                    <Row gutter={[16, 16]} style={{ width: '100%', maxWidth: '1200px' }}>
-                        {paginatedCourses.map(course => (
-                            <Col xs={24} sm={12} md={8} lg={6} key={course.id}>
-                                <Card
-                                    hoverable
-                                    title={course.title}
-                                    style={{ height: '100%' }}
-                                >
-                                    <Paragraph ellipsis={{ rows: 2 }}>
-                                        {course.description || t('No description available.')}
-                                    </Paragraph>
-                                    <Title level={5}>{t('Price')}: ${course.price}</Title>
-                                    
-                                    {isAuthorized ? (
-                                        <Button
-                                            type="primary"
-                                            className="w-100 mb-2"
-                                            onClick={() => handleBuyCourse(course)}
-                                            style={{ backgroundColor: 'rgb(255, 102, 0)', borderColor: 'rgb(255, 102, 0)' }}
+                    {courses.length > 0 ? (
+                        <>
+                            <Row gutter={[16, 16]} style={{ width: '100%', maxWidth: '1200px' }}>
+                                {paginatedCourses.map(course => (
+                                    <Col xs={24} sm={12} md={8} lg={6} key={course.id}>
+                                        <Card
+                                            hoverable
+                                            title={course.title}
+                                            style={{ height: '100%' }}
                                         >
-                                            {t('Buy Course')}
-                                        </Button>
-                                    ) : null}
-                                    
-                                    <Button
-                                        type="default"
-                                        className="w-100"
-                                        onClick={() => handleViewCourse(course.id, course.video_url)}
-                                    >
-                                        {t('View Course')}
-                                    </Button>
-                                </Card>
-                            </Col>
-                        ))}
-                    </Row>
-                    
-                    {/* Pagination Component */}
-                    <Pagination
-                        current={currentPage}
-                        pageSize={pageSize}
-                        total={courses.length}
-                        onChange={handlePageChange}
-                        style={{ marginTop: '20px' }}
-                    />
+                                            <Paragraph ellipsis={{ rows: 2 }}>
+                                                {course.description || t('No description available.')}
+                                            </Paragraph>
+                                            <Title level={5}>{t('Price')}: ${course.price}</Title>
+                                            
+                                            {isAuthorized && (
+                                                <Button
+                                                    type="primary"
+                                                    className="w-100 mb-2"
+                                                    onClick={() => handleBuyCourse(course)}
+                                                    style={{ backgroundColor: 'rgb(255, 102, 0)', borderColor: 'rgb(255, 102, 0)' }}
+                                                >
+                                                    {t('Buy Course')}
+                                                </Button>
+                                            )}
+                                            
+                                            <Button
+                                                type="default"
+                                                className="w-100"
+                                                onClick={() => handleViewCourse(course.id, course.video_url)}
+                                            >
+                                                {t('View Course')}
+                                            </Button>
+                                        </Card>
+                                    </Col>
+                                ))}
+                            </Row>
+                            
+                            {/* Pagination Component */}
+                            <Pagination
+                                current={currentPage}
+                                pageSize={pageSize}
+                                total={courses.length}
+                                onChange={handlePageChange}
+                                style={{ marginTop: '20px' }}
+                            />
+                        </>
+                    ) : (
+                        <div style={{
+                            marginTop: '50px',
+                            color: '#999',
+                            fontSize: '18px',
+                            textAlign: 'center',
+                        }}>
+                            {t('Unfortunately, there are no available courses in this category.')}
+                        </div>
+                    )}
                 </>
             )}
-        
+            
             {selectedCourse && (
                 <div className="modal show" style={{ display: 'block' }}>
                     <div className="modal-dialog">
