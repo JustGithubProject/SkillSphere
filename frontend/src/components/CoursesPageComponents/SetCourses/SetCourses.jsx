@@ -62,11 +62,11 @@ const SetCourses = () => {
           {courses.map(course => (
             <div key={course.id} className="col-lg-4 col-md-6 mb-4 d-flex">
               <div className="card course-card">
-                <img
+                {/* <img
                   className="card-img-top"
                   src={`http://127.0.0.1:8080${course.image}`}
                   alt={course.title}
-                />
+                /> */}
                 <div className="card-body d-flex flex-column">
                   <div className="mb-3 flex-grow-1">
                     <div className="d-flex justify-content-between mb-2">

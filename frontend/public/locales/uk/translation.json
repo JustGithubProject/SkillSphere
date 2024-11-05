@@ -87,5 +87,6 @@
     "Close": "Закрити",
     "Error fetching courses": "Помилка завантаження курсів",
     "No description available": "Опис недоступний.",
-    "Search course...": "Шукати курс..."
+    "Search course...": "Шукати курс...",
+    "Unfortunately, there are no available courses in this category.": "На жаль, у цій категорії немає доступних курсів."
 }
