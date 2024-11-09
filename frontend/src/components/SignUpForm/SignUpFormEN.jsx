@@ -12,6 +12,8 @@ const SignUpFormEN = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [step, setStep] = useState('signup'); 
 
+  const BASE_URL = "http://127.0.0.1:8000";
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -21,7 +23,7 @@ const SignUpFormEN = () => {
     }
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/jwt/auth/signup/', {
+      const response = await axios.post(`${BASE_URL}/api/v1/jwt/auth/signup/`, {
         email: email,
         username: username,
         password_hash: password,
@@ -45,7 +47,7 @@ const SignUpFormEN = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/jwt/auth/confirm/code/', {
+      const response = await axios.post(`${BASE_URL}/api/v1/jwt/auth/confirm/code/`, {
         email: email,
         username: username,
         password_hash: password,

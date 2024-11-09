@@ -7,6 +7,8 @@ const LoginFormEN = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
+    const BASE_URL = "http://localhost:8000";
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         
@@ -15,7 +17,7 @@ const LoginFormEN = () => {
         formData.append('password', password);
         
         try {
-          const response = await axios.post('http://127.0.0.1:8000/api/v1/jwt/auth/login/', formData, {
+          const response = await axios.post(`${BASE_URL}/api/v1/jwt/auth/login/`, formData, {
             withCredentials: true,
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
@@ -52,7 +54,7 @@ const LoginFormEN = () => {
     const handleGoogleLoginSuccess = async (credentialResponse) => {
         try {
             console.log(credentialResponse)
-            const response = await axios.get('http://localhost:8000/api/v1/auth/google/callback/', {
+            const response = await axios.get(`${BASE_URL}/api/v1/auth/google/callback/`, {
                 params: {
                     google_id_token: credentialResponse.credential,
                   },
