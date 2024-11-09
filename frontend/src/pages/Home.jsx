@@ -13,6 +13,10 @@ import axios from 'axios';
 
 const HomeV2Page = () => {
     const [isAuthorized, setIsAuthorized] = useState(false);
+
+    const BASE_URL = "http://127.0.0.1:8000";
+
+    
     useEffect(() => {
         const accessToken = Cookies.get("access_token");
         if (accessToken) {
@@ -29,7 +33,7 @@ const HomeV2Page = () => {
             if (tokenParam && payerIDParam) {
                 // TODO: logic to handle token and payerID
                 await axios.post(
-                    "http://127.0.0.1:8000/api/v1/paypal/check/payment",
+                    `${BASE_URL}/api/v1/paypal/check/payment`,
                     {
                         token: tokenParam,
                         payer_id: payerIDParam,

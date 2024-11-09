@@ -13,6 +13,8 @@ const SignUpFormUA = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const BASE_URL = "http://127.0.0.1:8000"
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     
@@ -25,7 +27,7 @@ const SignUpFormUA = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/jwt/auth/signup/', {
+      const response = await axios.post(`${BASE_URL}/api/v1/jwt/auth/signup/`, {
         email: email,
         username: username,
         password_hash: password,
@@ -54,7 +56,7 @@ const SignUpFormUA = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/v1/jwt/auth/confirm/code/', {
+      const response = await axios.post(`${BASE_URL}/api/v1/jwt/auth/confirm/code/`, {
         email: email,
         username: username,
         password_hash: password,
