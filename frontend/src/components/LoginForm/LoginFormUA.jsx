@@ -7,7 +7,7 @@ const LoginFormUA = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const BASE_URL = "http://localhost:8000";
+    const BASE_URL = "http://vaua0078539.online-vm.com:8000";
 
     const handleSubmit = async (event) => {
         event.preventDefault();

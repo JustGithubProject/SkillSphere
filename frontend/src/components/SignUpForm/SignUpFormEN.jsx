@@ -12,7 +12,7 @@ const SignUpFormEN = () => {
   const [verificationCode, setVerificationCode] = useState('');
   const [step, setStep] = useState('signup'); 
 
-  const BASE_URL = "http://127.0.0.1:8000";
+  const BASE_URL = "http://vaua0078539.online-vm.com:8000";
 
   const handleSubmit = async (event) => {
     event.preventDefault();
