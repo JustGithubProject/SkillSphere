@@ -13,5 +13,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code
 COPY backend/ .
 
-# Expose ports
-EXPOSE 8000
+# # Expose ports
+# EXPOSE 8000

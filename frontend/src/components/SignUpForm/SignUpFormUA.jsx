@@ -13,7 +13,7 @@ const SignUpFormUA = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const BASE_URL = "http://127.0.0.1:8000"
+  const BASE_URL = "http://vaua0078539.online-vm.com:8000"
 
   const handleSubmit = async (event) => {
     event.preventDefault();
