@@ -13,7 +13,7 @@ const CreateCourseSectionUA = () => {
   const [videoFile, setVideoFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-
+  const BASE_URL = "http://vaua0078539.online-vm.com:8000";
   const levels = [
     { value: 'Beginner', label: 'Початківець' },
     { value: 'Intermediate', label: 'Середній' },
@@ -46,7 +46,7 @@ const CreateCourseSectionUA = () => {
     if (videoFile) formData.append("video_file", videoFile);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/v1/course/", formData, {
+      const response = await axios.post(`${BASE_URL}/api/v1/course/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${accessToken}`
