@@ -17,6 +17,7 @@ const CreateCourseSectionUA = () => {
   const BASE_URL = process.env.REACT_APP_API_URL;
   console.log("BASE_URL: ", BASE_URL);
 
+
   const levels = [
     { value: 'Beginner', label: 'Початківець' },
     { value: 'Intermediate', label: 'Середній' },
