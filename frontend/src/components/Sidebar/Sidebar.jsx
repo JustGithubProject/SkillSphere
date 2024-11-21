@@ -232,12 +232,15 @@ const Sidebar = ({ course_id }) => {
   const [lessonDescription, setLessonDescription] = useState('');
   const [openLessons, setOpenLessons] = useState({});
 
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  console.log("BASE_URL: ", BASE_URL);
+
   useEffect(() => {
     const accessToken = Cookies.get('access_token');
     const fetchModulesOfCourse = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/v1/module/all/${course_id}`,
+          `${BASE_URL}/api/v1/module/all/${course_id}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -258,7 +261,7 @@ const Sidebar = ({ course_id }) => {
     try {
       const accessToken = Cookies.get('access_token');
       const response = await axios.post(
-        'http://127.0.0.1:8000/api/v1/module',
+        `${BASE_URL}/api/v1/module`,
         {
           title: title,
           description: description,
@@ -286,7 +289,7 @@ const Sidebar = ({ course_id }) => {
     try {
       const accessToken = Cookies.get("access_token");
       await axios.post(
-        'http://127.0.0.1:8000/api/v1/lesson',
+        `${BASE_URL}/api/v1/lesson`,
         {
           title: lessonTitle,
           description: lessonDescription,
@@ -324,7 +327,7 @@ const Sidebar = ({ course_id }) => {
     const accessToken = Cookies.get("access_token");
     try {
       await axios.delete(
-        `http://127.0.0.1:8000/api/v1/lesson/${lesson_id}`,
+        `${BASE_URL}/api/v1/lesson/${lesson_id}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`

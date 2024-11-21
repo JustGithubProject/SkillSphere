@@ -20,13 +20,14 @@ const SearchedCoursePage = () => {
     const [searchParams] = useSearchParams();
     const query = searchParams.get("q");
 
-    const API_BASE = 'http://127.0.0.1:8000';
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);
 
     useEffect(() => {
         const fetchCourses = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${API_BASE}/api/v1/course?search=${query}`);
+                const response = await axios.get(`${BASE_URL}/api/v1/course?search=${query}`);
                 setCourses(response.data);
             } catch (error) {
                 console.error("Error fetching courses:", error);

@@ -13,7 +13,11 @@ const CreateCourseSectionUA = () => {
   const [videoFile, setVideoFile] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const BASE_URL = "http://vaua0078539.online-vm.com:8000";
+
+
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  console.log("BASE_URL: ", BASE_URL);
+
   const levels = [
     { value: 'Beginner', label: 'Початківець' },
     { value: 'Intermediate', label: 'Середній' },

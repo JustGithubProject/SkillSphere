@@ -6,13 +6,16 @@ import Cookies from 'js-cookie';
 const CourseCommentForm = ({ userID, courseID }) => {
     const [message, setMessage] = useState('');
 
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);
+
     const handleFormToCreateComment = async (event) => {
         event.preventDefault();
         
         const accessToken = Cookies.get("access_token");
         try {
             const response = await axios.post(
-                'http://127.0.0.1:8000/api/v1/comment',
+                `${BASE_URL}/api/v1/comment`,
                 {
                     content: message,
                     parent_id: 0,

@@ -21,13 +21,18 @@ const FullCoursePage = () => {
 
     const { t, i18n } = useTranslation();
 
-    const API_BASE = 'http://127.0.0.1:8000';
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    const NGINX_URL = process.env.REACT_APP_NGINX_URL;
+    
+    console.log("BASE_URL: ", BASE_URL);
+    console.log("NGINX_URL: ", NGINX_URL);
+    
 
     useEffect(() => {
         const fetchModules = async () => {
           const accessToken = Cookies.get('access_token');
           try {
-            const response = await axios.get(`${API_BASE}/api/v1/module/all/${id}`, 
+            const response = await axios.get(`${BASE_URL}/api/v1/module/all/${id}`, 
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
@@ -46,7 +51,7 @@ const FullCoursePage = () => {
     const fetchLessonSteps = async (lessonId) => {
         const accessToken = Cookies.get('access_token');
         try {
-          const response = await axios.get(`${API_BASE}/api/v1/step/all/${lessonId}`, {
+          const response = await axios.get(`${BASE_URL}/api/v1/step/all/${lessonId}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
           });
           setSteps(response.data);
@@ -133,7 +138,7 @@ const FullCoursePage = () => {
                             style={{ width: '50%' }}
                         >
                             <source
-                            src={`http://127.0.0.1:8080${steps[currentStepIndex].video_path}`}
+                            src={`${NGINX_URL}${steps[currentStepIndex].video_path}`}
                             type="video/mp4"
                             />
                             {t('Your browser does not support the video tag.')}

@@ -7,6 +7,10 @@ const ChangePasswordForm = ({ unique_id }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
+
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);
+
     const handleChangePasswordForm = async (event) => {
         event.preventDefault();
         setError('');
@@ -19,7 +23,7 @@ const ChangePasswordForm = ({ unique_id }) => {
         setLoading(true);
         try {
             await axios.post(
-                `http://127.0.0.1:8000/api/v1/jwt/auth/change/password/${unique_id}`,
+                `${BASE_URL}/api/v1/jwt/auth/change/password/${unique_id}`,
                 {
                     new_password: newPassword,
                     new_password_repeat: repeatPassword

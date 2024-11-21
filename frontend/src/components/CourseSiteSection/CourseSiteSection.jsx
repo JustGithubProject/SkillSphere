@@ -11,10 +11,13 @@ const CourseSiteSection = ({ courseID }) => {
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [userID, setUserID] = useState();
 
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);
+
     useEffect(() => {
         const fetchCourseByID = async () => {
             try {
-                const response = await axios.get(`http://127.0.0.1:8000/api/v1/course/no-auth/${courseID}`);
+                const response = await axios.get(`${BASE_URL}/api/v1/course/no-auth/${courseID}`);
                 console.log("Course: ", response.data);
                 setCourse(response.data);
                 setLoading(false);

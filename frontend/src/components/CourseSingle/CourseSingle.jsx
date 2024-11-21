@@ -19,6 +19,10 @@ const CourseSingleComponent = ({ course_id }) => {
   const query = new URLSearchParams(useLocation().search);
   const videoURLParamValue = query.get("watch");
 
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  const NGINX_URL = process.env.REACT_APP_NGINX_URL;
+  console.log("BASE_URL: ", BASE_URL);
+
   const handleCreateCommentSubmit = async (e) => {
     e.preventDefault();
     const accessToken = Cookies.get("access_token");
@@ -28,7 +32,7 @@ const CourseSingleComponent = ({ course_id }) => {
       const userID = decodedToken.id;
       try {
         await axios.post(
-          'http://127.0.0.1:8000/api/v1/comment',
+          `${BASE_URL}/api/v1/comment`,
           {
             content: formMessage,
             parent_id: null,
@@ -58,7 +62,7 @@ const CourseSingleComponent = ({ course_id }) => {
       const userID = decodedToken.id;
       try {
         await axios.post(
-          'http://127.0.0.1:8000/api/v1/comment',
+          `${BASE_URL}/api/v1/comment`,
           {
             content: formReplyMessage,
             parent_id: commentParentID,
@@ -88,7 +92,7 @@ const CourseSingleComponent = ({ course_id }) => {
     }
     const fetchCourseById = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/v1/course/no-auth/${course_id}`);
+        const response = await axios.get(`${BASE_URL}/api/v1/course/no-auth/${course_id}`);
         setCourse(response.data);
       } catch (error) {
         console.log("Error fetching course: ", error);
@@ -97,7 +101,7 @@ const CourseSingleComponent = ({ course_id }) => {
 
     const fetchCommentsById = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/v1/comment/all/${course_id}`);
+        const response = await axios.get(`${BASE_URL}/api/v1/comment/all/${course_id}`);
         setComments(response.data);
       } catch (error) {
         console.log("Error fetching comments: ", error);
@@ -127,7 +131,7 @@ const CourseSingleComponent = ({ course_id }) => {
                 <h6 className="text-primary mb-3">{course && formatDate(course.created_at)}</h6>
                 <h1 className="mb-5">{course && course.title}</h1>
                 <video className="video-fluid rounded w-100 mb-4" width="800" controls>
-                  <source src={`http://127.0.0.1:8080${videoURLParamValue}`} type="video/mp4" />
+                  <source src={`${NGINX_URL}${videoURLParamValue}`} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
                 <p>{course && course.description}</p>
