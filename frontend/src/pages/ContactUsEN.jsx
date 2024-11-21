@@ -10,6 +10,9 @@ const ContactUsEN = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);
+
     const switchTheme = (e) => {
         if (e.target.checked) {
             document.documentElement.setAttribute('data-theme', 'dark');
@@ -39,7 +42,7 @@ const ContactUsEN = () => {
         }
 
         try {
-            await axios.post("http://127.0.0.1:8000/api/v1/contactus", 
+            await axios.post(`${BASE_URL}/api/v1/contactus`, 
             {
                 full_name: name,
                 email: email,

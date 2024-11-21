@@ -13,7 +13,8 @@ const SignUpFormUA = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const BASE_URL = "http://vaua0078539.online-vm.com:8000"
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  console.log("BASE_URL: ", BASE_URL);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

@@ -8,11 +8,14 @@ const PayPalForm = ({ price, course_id }) => {
     console.log(price);
     console.log(course_id);
 
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);
+
     const createOrder = async (data, actions) => {
         try {
             const accessToken = Cookies.get("access_token");
             const response = await axios.post(
-                "http://127.0.0.1:8000/api/v1/paypal/create-order/",
+                `${BASE_URL}/api/v1/paypal/create-order/`,
                 {
                     price: price.slice(1),
                     currency_code: "USD"

@@ -11,8 +11,11 @@ const SetCourses = () => {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
 
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  console.log("BASE_URL: ", BASE_URL);
+
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/v1/course/all/no-auth/')
+    axios.get(`${BASE_URL}/api/v1/course/all/no-auth/`)
       .then(response => {
         const fetchedCourses = response.data.map(course => ({
           id: course.id,

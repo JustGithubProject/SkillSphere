@@ -15,6 +15,9 @@ const CreateCourseSectionEN = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const BASE_URL = "http://vaua0078539.online-vm.com:8000";
 
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  console.log("BASE_URL: ", BASE_URL);
+
   const levels = [
     { value: 'Beginner', label: 'Beginner' },
     { value: 'Intermediate', label: 'Intermediate' },
