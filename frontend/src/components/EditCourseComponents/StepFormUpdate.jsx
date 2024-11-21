@@ -15,7 +15,8 @@ const StepFormUpdate = ({ step_id, prev_text }) => {
     const [stepVideoPath, setStepVideoPath] = useState(null);
     const { t, i18n } = useTranslation();
 
-    const URL_BASE = "http://127.0.0.1:8000";
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);
 
     const handleFormToUpdateStep = async () => {
         const accessToken = Cookies.get("access_token");
@@ -27,7 +28,7 @@ const StepFormUpdate = ({ step_id, prev_text }) => {
 
         try {
             await axios.patch(
-                `${URL_BASE}/api/v1/step/${step_id}`,
+                `${BASE_URL}/api/v1/step/${step_id}`,
                 formData,
                 {
                     headers: {

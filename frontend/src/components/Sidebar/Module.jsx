@@ -37,11 +37,14 @@ const RemoveButton = styled.button`
 
 
 const Module = ({ module }) => {
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  console.log("BASE_URL: ", BASE_URL);
+
   const handleRemoveModule = async (module_id) => {
     const accessToken = Cookies.get("access_token");
     try {
       await axios.delete(
-        `http://127.0.0.1:8000/api/v1/module/${module_id}`,
+        `${BASE_URL}/api/v1/module/${module_id}`,
         {
           headers: {
             'Authorization': `Bearer ${accessToken}`

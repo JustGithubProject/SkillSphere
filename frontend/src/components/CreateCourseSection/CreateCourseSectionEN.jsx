@@ -14,6 +14,9 @@ const CreateCourseSectionEN = () => {
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  console.log("BASE_URL: ", BASE_URL);
+
   const levels = [
     { value: 'Beginner', label: 'Beginner' },
     { value: 'Intermediate', label: 'Intermediate' },
@@ -46,7 +49,7 @@ const CreateCourseSectionEN = () => {
     if (videoFile) formData.append("video_file", videoFile);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/v1/course/", formData, {
+      const response = await axios.post(`${BASE_URL}/api/v1/course/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${accessToken}`

@@ -15,7 +15,8 @@ const StepFormCreate = ({ lesson_id }) => {
     const [stepVideoPath, setStepVideoPath] = useState('');
     const { t, i18n } = useTranslation();
 
-    const URL_BASE = "http://127.0.0.1:8000";
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);
 
     const handleFormToCreateStep = async () => {
         const accessToken = Cookies.get("access_token");
@@ -27,7 +28,7 @@ const StepFormCreate = ({ lesson_id }) => {
             formData.append("video_path", stepVideoPath);
 
             await axios.post(
-                `${URL_BASE}/api/v1/step/`,
+                `${BASE_URL}/api/v1/step/`,
                 formData,
                 {
                     headers: {

@@ -11,6 +11,9 @@ const PurchasedCoursesEN = () => {
     const [purchasedCourses, setPurchasedCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);
+
     useEffect(() => {
         const fetchData = async () => {
             const accessToken = Cookies.get("access_token");
@@ -18,7 +21,7 @@ const PurchasedCoursesEN = () => {
                 setIsAuthorized(true);
                 try {
                     const response = await axios.get(
-                        "http://127.0.0.1:8000/api/v1/jwt/users/joined/courses",
+                        `${BASE_URL}/api/v1/jwt/users/joined/courses`,
                         {
                             headers: {
                                 'Authorization': `Bearer ${accessToken}`

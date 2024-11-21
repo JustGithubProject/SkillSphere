@@ -23,6 +23,10 @@ const CourseCategoryCoursesPage = () => {
     const [pageSize, setPageSize] = useState(8); 
 
     const { categoryName } = useParams();
+    
+
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);
 
     // Fetch courses by category
     useEffect(() => {
@@ -30,7 +34,7 @@ const CourseCategoryCoursesPage = () => {
             setLoading(true);
             try {
                 const response = await axios.get(
-                    `http://127.0.0.1:8000/api/v1/course/no-auth/category/${categoryName}`
+                    `${BASE_URL}/api/v1/course/no-auth/category/${categoryName}`
                 );
                 setCourses(response.data);
             } catch (error) {

@@ -9,6 +9,9 @@ const MyCreatedCoursesV2 = () => {
     const [myCreatedCourses, setMyCreatedCourses] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);
+
     const handleEditCourse = (course_id) => {
         window.location.href = `/edit-course/${course_id}`;
     }
@@ -20,7 +23,7 @@ const MyCreatedCoursesV2 = () => {
                 setIsAuthorized(true);
                 try {
                     const response = await axios.get(
-                        "http://127.0.0.1:8000/api/v1/course/my/created/courses/",
+                        `${BASE_URL}/api/v1/course/my/created/courses/`,
                         {
                             headers: {
                                 'Authorization': `Bearer ${accessToken}`

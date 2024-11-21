@@ -12,7 +12,8 @@ const Sidebar = ({ course_id }) => {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
 
-  const API_BASE = "http://127.0.0.1:8000";
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  console.log("BASE_URL: ", BASE_URL);
 
   useEffect(() => {
     const accessToken = Cookies.get('access_token');
@@ -21,7 +22,7 @@ const Sidebar = ({ course_id }) => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `${API_BASE}/api/v1/module/all/${course_id}`,
+          `${BASE_URL}/api/v1/module/all/${course_id}`,
           {
             headers: {
               Authorization: `Bearer ${accessToken}`,
@@ -39,7 +40,7 @@ const Sidebar = ({ course_id }) => {
     const fetchCourseById = async () => {
       try {
         const response = await axios.get(
-          `${API_BASE}/api/v1/course/${course_id}`,
+          `${BASE_URL}/api/v1/course/${course_id}`,
           {
             headers: {
               'Authorization': `Bearer ${accessToken}`

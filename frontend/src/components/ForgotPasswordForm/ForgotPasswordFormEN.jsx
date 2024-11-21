@@ -7,6 +7,9 @@ const ForgotPasswordFormEN = () => {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
 
+    const BASE_URL = process.env.REACT_APP_API_URL;
+    console.log("BASE_URL: ", BASE_URL);    
+
     const handleForgotPasswordForm = async (event) => {
         event.preventDefault();
         setLoading(true);
@@ -14,7 +17,7 @@ const ForgotPasswordFormEN = () => {
 
         try {
             await axios.post(
-                `http://127.0.0.1:8000/api/v1/jwt/auth/forgot/password/?email=${email}`
+                `${BASE_URL}/api/v1/jwt/auth/forgot/password/?email=${email}`
             );
             setMessage("Check your email for the reset link");
         } catch(error) {
