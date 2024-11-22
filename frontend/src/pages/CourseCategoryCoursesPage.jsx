@@ -84,16 +84,43 @@ const CourseCategoryCoursesPage = () => {
         }}>
             <Header isCoursesPage={true} isHomePage={false} isPurchasedCoursesPage={false} />
             
-            <Title level={2} style={{ marginBottom: '20px', color: '#FF6600' }}>
-                {categoryName === 'web-design' ? 'Web Design' : null}
-                {categoryName === 'development' ? "Development" : null}
-                {categoryName === 'game-design' ? "Game Design" : null}
-                {categoryName === 'apps-design' ? "Apps Design" : null}
-                {categoryName === 'marketing' ? "Marketing" : null}
-                {categoryName === 'research' ? "Research" : null}
-                {categoryName === "content-writing" ? "Content Writing" : null}
-                {categoryName === "seo" ? "SEO" : null}
-            </Title>
+            {/* Category Title with Elegant Styling */}
+            <div style={{
+                width: '100%',
+                padding: '80px 0',
+                background: 'rgba(0, 0, 0, 0.3)',  // Subtle background overlay
+                textAlign: 'center',
+                backdropFilter: 'blur(10px)', // Soft blur effect
+                marginBottom: '30px',
+            }}>
+                <Title 
+                    level={2} 
+                    style={{
+                        color: '#fff',
+                        fontWeight: 'bold',
+                        fontSize: '42px',
+                        letterSpacing: '1px',
+                        textTransform: 'uppercase',
+                        textShadow: '2px 2px 5px rgba(0, 0, 0, 0.4)', // Soft shadow for better contrast
+                        marginBottom: '10px',
+                    }}
+                >
+                    {categoryName === 'web-design' ? t('Web Design') : null}
+                    {categoryName === 'development' ? t('Development') : null}
+                    {categoryName === 'game-design' ? t('Game Design') : null}
+                    {categoryName === 'apps-design' ? t('Apps Design') : null}
+                    {categoryName === 'marketing' ? t('Marketing') : null}
+                    {categoryName === 'research' ? t('Research') : null}
+                    {categoryName === "content-writing" ? t('Content Writing') : null}
+                    {categoryName === "seo" ? t('SEO') : null}
+                </Title>
+                <div style={{
+                    width: '60px',
+                    height: '4px',
+                    backgroundColor: '#FF6600',
+                    margin: '10px auto',
+                }}></div> {/* Underline with color accent */}
+            </div>
 
             {loading ? (
                 <Spin size="large" style={{ marginTop: '50px' }} />
