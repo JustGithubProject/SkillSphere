@@ -30,7 +30,7 @@ services:
     networks:
       - production
   skillsphere_database:
-    image: postgres:latest
+    image: postgres:16
     container_name: skillsphere_database
     env_file:
       - ./.env
