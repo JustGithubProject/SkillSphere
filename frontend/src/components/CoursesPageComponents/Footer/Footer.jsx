@@ -4,6 +4,9 @@ import { useTranslation } from 'react-i18next';
 const Footer = () => {
   const { t } = useTranslation();
 
+  const FRONT_URL = process.env.REACT_APP_FRONT_URL;
+  console.log("BASE_URL: ", FRONT_URL);
+
   return (
     <footer>
       {/* Footer Start */}
@@ -26,11 +29,11 @@ const Footer = () => {
               <div className="col-md-6 mb-5">
                 <h5 className="text-primary text-uppercase mb-4" style={{ letterSpacing: '5px' }}>{t('Our Courses')}</h5>
                 <div className="d-flex flex-column justify-content-start">
-                  <a className="text-white mb-2" href="#"><i className="fa fa-angle-right mr-2"></i>{t('Web Design')}</a>
-                  <a className="text-white mb-2" href="#"><i className="fa fa-angle-right mr-2"></i>{t('Apps Design')}</a>
-                  <a className="text-white mb-2" href="#"><i className="fa fa-angle-right mr-2"></i>{t('Marketing')}</a>
-                  <a className="text-white mb-2" href="#"><i className="fa fa-angle-right mr-2"></i>{t('Research')}</a>
-                  <a className="text-white" href="#"><i className="fa fa-angle-right mr-2"></i>{t('SEO')}</a>
+                  <a className="text-white mb-2" href={FRONT_URL + "/courses/web-design"}><i className="fa fa-angle-right mr-2"></i>{t('Web Design')}</a>
+                  <a className="text-white mb-2" href={FRONT_URL + "/courses/apps-design"}><i className="fa fa-angle-right mr-2"></i>{t('Apps Design')}</a>
+                  <a className="text-white mb-2" href={FRONT_URL + "/courses/marketing"}><i className="fa fa-angle-right mr-2"></i>{t('Marketing')}</a>
+                  <a className="text-white mb-2" href={FRONT_URL + "/courses/research"}><i className="fa fa-angle-right mr-2"></i>{t('Research')}</a>
+                  <a className="text-white" href={FRONT_URL + "/courses/seo"}><i className="fa fa-angle-right mr-2"></i>{t('SEO')}</a>
                 </div>
               </div>
             </div>
