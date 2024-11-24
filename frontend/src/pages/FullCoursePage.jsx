@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
-import { Menu, Layout, Breadcrumb, Button, Radio, Input, Typography} from 'antd';
+import { Menu, Layout, Breadcrumb, Button, Radio, Input, Typography, Card} from 'antd';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -100,36 +100,43 @@ const FullCoursePage = () => {
             </Breadcrumb>
             <Content
                 style={{
-                padding: 24,
-                margin: 0,
-                minHeight: 280,
-                background: '#fff',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: steps.length ? 'flex-start' : 'center',
-                alignItems: steps.length ? 'flex-start' : 'center',
-                textAlign: steps.length ? 'left' : 'center',
-                position: 'relative',
+                    padding: 24,
+                    margin: 0,
+                    minHeight: 280,
+                    background: '#fff',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: steps.length ? 'flex-start' : 'center',
+                    alignItems: steps.length ? 'flex-start' : 'center',
+                    textAlign: steps.length ? 'left' : 'center',
+                    position: 'relative',
                 }}
-            >
+                >
                 <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 1 }}>
                     <LanguageSwitcher />
                 </div>
                 {steps.length > 0 ? (
                 <>
-                    <div
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginBottom: '16px',
-                        width: '100%', 
-                    }}
+                    <Card
+                        style={{
+                            width: '60%',
+                            maxWidth: '800px',
+                            margin: '0 auto',
+                            marginBottom: '24px',
+                            marginTop: '32px',
+                            padding: '16px',
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                            borderRadius: '8px',
+                            textAlign: 'center',
+                        }}
                     >
-                        <Paragraph ellipsis={{ rows: 3, expandable: true, symbol: 'more' }} style={{ marginTop: '40px' }}>
-                            {steps[currentStepIndex].text}
-                        </Paragraph>
+                    <Paragraph
+                        ellipsis={{ rows: 3, expandable: true, symbol: t('more') }}
+                        style={{ margin: 0, fontSize: '16px', lineHeight: '1.5' }}
+                    >
+                        {steps[currentStepIndex].text}
+                    </Paragraph>
+                    </Card>
                     {steps[currentStepIndex].video_path && (
                         <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
                         <video
@@ -145,7 +152,6 @@ const FullCoursePage = () => {
                         </video>
                         </div>
                     )}
-                    </div>
                     <div style={{
                         display: 'flex',
                         justifyContent: 'center', 
