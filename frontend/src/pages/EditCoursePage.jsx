@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, Layout, Breadcrumb, Button, Radio, Input, Typography } from 'antd';
+import { Menu, Layout, Breadcrumb, Button, Radio, Input, Typography, Card } from 'antd';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -29,7 +29,11 @@ const EditCoursePage = () => {
   const { id } = useParams();
   const { t, i18n } = useTranslation();
 
-  const API_BASE = 'http://127.0.0.1:8000';
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  console.log("BASE_URL: ", BASE_URL);
+
+  const NGINX_URL = process.env.REACT_APP_NGINX_URL;
+  console.log("NGINX_URL: ", NGINX_URL)
 
 
 
@@ -37,7 +41,7 @@ const EditCoursePage = () => {
     const fetchModules = async () => {
       const accessToken = Cookies.get('access_token');
       try {
-        const response = await axios.get(`${API_BASE}/api/v1/module/all/${id}`, {
+        const response = await axios.get(`${BASE_URL}/api/v1/module/all/${id}`, {
           headers: { Authorization: `Bearer ${accessToken}` },
         });
         setModules(response.data);
@@ -51,7 +55,7 @@ const EditCoursePage = () => {
   const fetchLessonSteps = async (lessonId) => {
     const accessToken = Cookies.get('access_token');
     try {
-      const response = await axios.get(`${API_BASE}/api/v1/step/all/${lessonId}`, {
+      const response = await axios.get(`${BASE_URL}/api/v1/step/all/${lessonId}`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
       setSteps(response.data);
@@ -66,7 +70,7 @@ const EditCoursePage = () => {
     const accessToken = Cookies.get('access_token');
     try {
       const response = await axios.post(
-        `${API_BASE}/api/v1/module`,
+        `${BASE_URL}/api/v1/module`,
         {
           title: newModuleTitle,
           description: "TEMP VALUE FOR A WHILE",
@@ -91,7 +95,7 @@ const EditCoursePage = () => {
     const accessToken = Cookies.get("access_token");
     try {
       const response = await axios.post(
-        `${API_BASE}/api/v1/lesson`,
+        `${BASE_URL}/api/v1/lesson`,
         {
           title: newLessonTitle,
           description: "TEMP VALUE FOR A WHILE",
@@ -211,53 +215,58 @@ const EditCoursePage = () => {
               position: 'relative',
             }}
           >
-             <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 1 }}>
+            <div style={{ position: 'absolute', top: 16, left: 16, zIndex: 1 }}>
               <LanguageSwitcher />
             </div>
             {steps.length > 0 ? (
               <>
-                <div
+                <Card
                   style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: '16px',
-                    width: '100%',
+                    width: '60%',
+                    maxWidth: '800px',
+                    margin: '0 auto',
+                    marginBottom: '24px',
+                    marginTop: '32px',
+                    padding: '16px',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+                    borderRadius: '8px',
+                    textAlign: 'center',
                   }}
                 >
-                    
-                    <Paragraph ellipsis={{ rows: 3, expandable: true, symbol: 'more' }} style={{ marginTop: '40px' }}>
-                        {steps[currentStepIndex].text}
-                    </Paragraph>
-                  {steps[currentStepIndex].video_path && (
-                    <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                      <video
-                        key={steps[currentStepIndex].video_path}
-                        controls
-                        style={{ width: '50%'}}
-                      >
-                        <source
-                          src={`http://127.0.0.1:8080${steps[currentStepIndex].video_path}`}
-                          type="video/mp4"
-                        />
-                        {t('Your browser does not support the video tag.')}
-                      </video>
-                    </div>
-                  )}
-                </div>
-                <div style={{
+                  <Paragraph
+                    ellipsis={{ rows: 3, expandable: true, symbol: t('more') }}
+                    style={{ margin: 0, fontSize: '16px', lineHeight: '1.5' }}
+                  >
+                    {steps[currentStepIndex].text}
+                  </Paragraph>
+                </Card>
+                {steps[currentStepIndex].video_path && (
+                  <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: '16px' }}>
+                    <video
+                      key={steps[currentStepIndex].video_path}
+                      controls
+                      style={{ width: '50%' }}
+                    >
+                      <source
+                        src={`${NGINX_URL}${steps[currentStepIndex].video_path}`}
+                        type="video/mp4"
+                      />
+                      {t('Your browser does not support the video tag.')}
+                    </video>
+                  </div>
+                )}
+                <div
+                  style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginTop: '16px',
                     width: '100%',
-                }}>
+                  }}
+                >
                   <Button
                     onClick={() => setCurrentStepIndex(currentStepIndex - 1)}
                     disabled={currentStepIndex === 0}
-                    color="danger"
-                    variant="outlined"
                     style={{ marginRight: '10px' }}
                   >
                     {t('Back')}
@@ -265,31 +274,37 @@ const EditCoursePage = () => {
                   <Button
                     onClick={() => setCurrentStepIndex(currentStepIndex + 1)}
                     disabled={currentStepIndex === steps.length - 1}
-                    color="danger"
-                    variant="outlined"
                   >
                     {t('Next')}
                   </Button>
                 </div>
-                <div style={{
+                <div
+                  style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginTop: '16px',
                     width: '100%',
-                }}>
+                  }}
+                >
                   <Radio.Group defaultValue="a" buttonStyle="solid">
-                    <Radio.Button onClick={() => setShowFormUpdate(true)} value="a">{t('Show Update Form')}</Radio.Button>
-                    <Radio.Button onClick={() => setShowFormUpdate(false)} value="b">{t('Show Create Form')}</Radio.Button>
+                    <Radio.Button onClick={() => setShowFormUpdate(true)} value="a">
+                      {t('Show Update Form')}
+                    </Radio.Button>
+                    <Radio.Button onClick={() => setShowFormUpdate(false)} value="b">
+                      {t('Show Create Form')}
+                    </Radio.Button>
                   </Radio.Group>
                 </div>
-                <div style={{
+                <div
+                  style={{
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginTop: '16px',
                     width: '100%',
-                }}>
+                  }}
+                >
                   {showFormUpdate ? (
                     <StepFormUpdate key={steps[currentStepIndex].id} step_id={steps[currentStepIndex].id} prev_text={steps[currentStepIndex].text} />
                   ) : (
@@ -299,7 +314,7 @@ const EditCoursePage = () => {
               </>
             ) : (
               <div style={{ padding: '50px', color: '#888' }}>
-                <h2 style={{color: 'black'}}>{t('NoStepsAvailable')}</h2>
+                <h2 style={{ color: 'black' }}>{t('NoStepsAvailable')}</h2>
                 <p>{t('Please select a lesson to view.')}</p>
                 <StepFormCreate lesson_id={lessonID} />
               </div>
