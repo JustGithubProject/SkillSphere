@@ -163,11 +163,11 @@ const SignUpFormEN = () => {
 
 const styles = {
     formBox: {
-        width: '300px',
+        width: '320px',
         margin: '0 auto',
-        padding: '20px',
+        padding: '25px',
         borderRadius: '10px',
-        boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)',
         backgroundColor: '#fff',
         boxSizing: 'border-box',
     },
