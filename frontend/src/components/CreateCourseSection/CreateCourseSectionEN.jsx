@@ -59,8 +59,8 @@ const CreateCourseSectionEN = () => {
       setSuccessMessage("Course created successfully!");
       setErrorMessage('');
       setTimeout(() => {
-        window.location.href = "/";
-      }, 2000);
+        window.location.href = "/my-created-courses";
+      }, 500);
     } catch (error) {
       setErrorMessage("Failed to create course: " + error.message);
       setSuccessMessage('');

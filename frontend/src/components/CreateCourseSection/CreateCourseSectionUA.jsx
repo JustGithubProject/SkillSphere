@@ -61,8 +61,8 @@ const CreateCourseSectionUA = () => {
       setSuccessMessage("Курс успішно створено!");
       setErrorMessage('');
       setTimeout(() => {
-        window.location.href = "/";
-      }, 2000);
+        window.location.href = "/my-created-courses";
+      }, 500);
     } catch (error) {
       setErrorMessage("Не вдалося створити курс: " + error.message);
       setSuccessMessage('');

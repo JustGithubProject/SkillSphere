@@ -70,8 +70,12 @@ const SetCourses = () => {
               <Card
                 hoverable
                 title={course.title}
-                style={{ height: '100%' }}
                 className="flex-grow-1"
+                style={{
+                  transition: 'transform 0.3s ease-in-out',
+                  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                  transform: 'scale(1.05)'
+                }}
               >
                 <Paragraph ellipsis={{ rows: 2 }}>
                   {course.description}

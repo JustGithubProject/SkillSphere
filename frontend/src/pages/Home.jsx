@@ -68,7 +68,7 @@ const HomeV2Page = () => {
             <CarouselComponent />
             <AboutUsComponent/>
             <CategorySectionComponent/>
-            <Footer/>
+            {/* <Footer/> */}
         </>
     );
 };

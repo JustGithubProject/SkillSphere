@@ -38,7 +38,7 @@ const Footer = () => {
               </div>
             </div>
           </div>
-          <div className="col-lg-5 col-md-12 mb-5">
+          {/* <div className="col-lg-5 col-md-12 mb-5">
             <h5 className="text-primary text-uppercase mb-4" style={{ letterSpacing: '5px' }}>{t('Newsletter')}</h5>
             <div className="w-100">
               <div className="input-group">
@@ -48,7 +48,7 @@ const Footer = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5">
