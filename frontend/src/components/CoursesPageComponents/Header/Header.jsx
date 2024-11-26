@@ -85,8 +85,8 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                         <div className="d-inline-flex align-items-center">
                             <i className="fa fa-2x fa-map-marker-alt text-primary mr-3"></i>
                             <div className="text-left">
-                                <h6 className="font-weight-semi-bold mb-1">{t('Our Office')}</h6>
-                                <small>{t('123 Street, New York, USA')}</small>
+                                <h6 className="font-weight-semi-bold mb-1">{t('Country')}</h6>
+                                <small>{t('Ukraine')}</small>
                             </div>
                         </div>
                     </div>
@@ -161,6 +161,7 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                     >
                                         UA
                                     </button>
+                                
                                     <Search
                                         placeholder={t('Search course...')}
                                         onSearch={handleSearch}
