@@ -14,5 +14,6 @@ class Category(enum.Enum):
     APPS_DESIGN = "apps-design"
     MARKETING = "marketing"
     RESEARCH = "research"
-    CONTENT_Writing = "content-writing"
+    # CONTENT_Writing = "content-writing"
+    CONTENT_WRITING = "content-writing"
     SEO = "seo"

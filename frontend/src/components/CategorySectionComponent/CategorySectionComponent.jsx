@@ -1,19 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 const CategorySectionComponent = () => {
   const { t } = useTranslation(); 
+  const BASE_URL = process.env.REACT_APP_API_URL;
+  console.log("BASE_URL: ", BASE_URL);
 
-  const courses = [
-    { id: 1, title: t('Web Design'), image: 'img/cat-1.jpg', coursesCount: 100, link: '/courses/web-design' },
-    { id: 2, title: t('Development'), image: 'img/cat-2.jpg', coursesCount: 100, link: '/courses/development' },
-    { id: 3, title: t('Game Design'), image: 'img/cat-3.jpg', coursesCount: 100, link: '/courses/game-design' },
-    { id: 4, title: t('Apps Design'), image: 'img/cat-4.jpg', coursesCount: 100, link: '/courses/apps-design' },
-    { id: 5, title: t('Marketing'), image: 'img/cat-5.jpg', coursesCount: 100, link: '/courses/marketing' },
-    { id: 6, title: t('Research'), image: 'img/cat-6.jpg', coursesCount: 100, link: '/courses/research' },
-    { id: 7, title: t('Content Writing'), image: 'img/cat-7.jpg', coursesCount: 100, link: '/courses/content-writing' },
-    { id: 8, title: t('SEO'), image: 'img/cat-8.jpg', coursesCount: 100, link: '/courses/seo' }
-  ];
+  const [courses, setCourses] = useState([
+    { id: 1, title: t('Web Design'), image: 'img/cat-1.jpg', coursesCount: 0, link: '/courses/web-design', category: 'web-design'},
+    { id: 2, title: t('Development'), image: 'img/cat-2.jpg', coursesCount: 0, link: '/courses/development', category: 'development'},
+    { id: 3, title: t('Game Design'), image: 'img/cat-3.jpg', coursesCount: 0, link: '/courses/game-design', category: 'game-design'},
+    { id: 4, title: t('Apps Design'), image: 'img/cat-4.jpg', coursesCount: 0, link: '/courses/apps-design', category: 'apps-design'},
+    { id: 5, title: t('Marketing'), image: 'img/cat-5.jpg', coursesCount: 0, link: '/courses/marketing', category: 'marketing'},
+    { id: 6, title: t('Research'), image: 'img/cat-6.jpg', coursesCount: 0, link: '/courses/research', category: 'research'},
+    { id: 7, title: t('Content Writing'), image: 'img/cat-7.jpg', coursesCount: 0, link: '/courses/content-writing', category: 'content-writing'},
+    { id: 8, title: t('SEO'), image: 'img/cat-8.jpg', coursesCount: 0, link: '/courses/seo', category: 'seo'}
+  ]);
+
+  useEffect(() => {
+    const fetchCoursesCounts = async () => {
+      const updatedCourses = await Promise.all(
+        courses.map(async (course) => {
+          const coursesCount = await fetchAmountOfCoursesByCategory(course.category);
+          return { ...course, coursesCount };
+        })
+      );
+      setCourses(updatedCourses);
+    };
+
+    fetchCoursesCounts();
+  }, []);
+
+  const fetchAmountOfCoursesByCategory = async (categoryName) => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/api/v1/course/no-auth/category/${categoryName}`
+      );
+      return response.data.length;
+    } catch(error) {
+      console.log("Failed to fetch courses by category", error);
+      return 0;
+    }
+  }
 
   return (
     <div className="container-fluid py-5">
