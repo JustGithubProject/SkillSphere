@@ -25,9 +25,6 @@ const AboutUsComponent = () => {
             <p>
               {t("Our mission is to empower learners around the world by providing high-quality educational content and a supportive community. We leverage innovative technology to create interactive learning experiences that keep you engaged and motivated. From video lectures and quizzes to discussion forums and hands-on projects, our courses cater to various learning styles.")}
             </p>
-            <a href="#" className="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">
-              {t("Learn More")}
-            </a>
           </div>
         </div>
       </div>
