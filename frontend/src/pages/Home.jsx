@@ -68,7 +68,6 @@ const HomeV2Page = () => {
             <CarouselComponent />
             <AboutUsComponent/>
             <CategorySectionComponent/>
-            <RegistrationComponent/>
             <Footer/>
         </>
     );
