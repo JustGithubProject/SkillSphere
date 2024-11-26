@@ -24,9 +24,9 @@ const CarouselComponent = () => {
               <div className="p-5" style={{ width: '100%', maxWidth: '900px' }}>
                 <h5 className="text-white text-uppercase mb-md-3">{t("Best Online Courses")}</h5>
                 <h1 className="display-3 text-white mb-md-4">{t("Best Education From Your Home")}</h1>
-                <a href="/" className="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">
+                {/* <a href="/" className="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">
                   {t("Learn More")}
-                </a>
+                </a> */}
               </div>
             </div>
           </div>
@@ -41,9 +41,9 @@ const CarouselComponent = () => {
               <div className="p-5" style={{ width: '100%', maxWidth: '900px' }}>
                 <h5 className="text-white text-uppercase mb-md-3">{t("Best Online Courses")}</h5>
                 <h1 className="display-3 text-white mb-md-4">{t("Best Online Learning Platform")}</h1>
-                <a href="/" className="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">
+                {/* <a href="/" className="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">
                   {t("Learn More")}
-                </a>
+                </a> */}
               </div>
             </div>
           </div>
@@ -58,9 +58,9 @@ const CarouselComponent = () => {
               <div className="p-5" style={{ width: '100%', maxWidth: '900px' }}>
                 <h5 className="text-white text-uppercase mb-md-3">{t("Best Online Courses")}</h5>
                 <h1 className="display-3 text-white mb-md-4">{t("New Way To Learn From Home")}</h1>
-                <a href="/" className="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">
+                {/* <a href="/" className="btn btn-primary py-md-2 px-md-4 font-weight-semi-bold mt-2">
                   {t("Learn More")}
-                </a>
+                </a> */}
               </div>
             </div>
           </div>
