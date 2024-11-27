@@ -5,19 +5,24 @@ import Cookies from 'js-cookie';
 
 const PayPalForm = ({ price, course_id }) => {
     const [message, setMessage] = useState('');
-    console.log(price);
+    console.log(typeof price);
     console.log(course_id);
 
-    const BASE_URL = process.env.REACT_APP_API_URL;
+    const BASE_URL = process.env.REACT_APP_SPECIAL_URL_FOR_PAYPAL;
     console.log("BASE_URL: ", BASE_URL);
 
+    const REACT_APP_PAYPAL_CLIENT_ID = process.env.REACT_APP_PAYPAL_CLIENT_ID;
+    console.log("REACT_APP_PAYPAL_CLIENT_ID: ", REACT_APP_PAYPAL_CLIENT_ID)
+
     const createOrder = async (data, actions) => {
+        console.log("PRICE=", price);
         try {
             const accessToken = Cookies.get("access_token");
             const response = await axios.post(
                 `${BASE_URL}/api/v1/paypal/create-order/`,
                 {
-                    price: price.slice(1),
+                    // price: price.slice(1),
+                    price: price.toString() + '.00',
                     currency_code: "USD"
                 },
                 {
@@ -51,7 +56,7 @@ const PayPalForm = ({ price, course_id }) => {
     };
 
     return (
-        <PayPalScriptProvider options={{ 'client-id': 'Af-7rH7yIOw2FPwIQVVPg-A_7aQycoFmXSJQUeY7PcTlamLpQfl2anHmQLNExL-dqSMcrAUiXl3fjTdA' }}>
+        <PayPalScriptProvider options={{ 'client-id': `${REACT_APP_PAYPAL_CLIENT_ID}` }}>
             <div>
                 <div id="paypal-button-container">
                     <PayPalButtons

@@ -14,7 +14,7 @@ const Courses = () => {
             <BookImageContainer/>
             <CategorySectionComponent/>
             <SetCourses/>
-            {/* <Footer/> */}
+            <Footer/>
 
         </>
     )

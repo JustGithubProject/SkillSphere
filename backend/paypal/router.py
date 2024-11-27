@@ -73,8 +73,12 @@ async def paypal_create_order(
                 currency_code=paypal_data.currency_code
             )
         )
+        """
+            TODO: You need to switch your client_id to the production environment'
+            and somehow when the user creates their own course they have to provide a PayPal account.
             
-        # TODO: additional logic to send 90% of the money to the owner of course, and 10% to the site owner.
+            # TODO: additional logic to send 90% of the money to the owner of course, and 10% to the site owner.
+        """
         logging.info(f"Result: {response.json()}")
         return response.json()
     else:
