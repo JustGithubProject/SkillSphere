@@ -32,7 +32,9 @@ from services.course_service import (
 from paypal.utils import (
     get_paypal_headers,
     get_paypal_json,
-    get_paypal_access_token
+    get_paypal_access_token,
+    get_paypal_headers_to_send_money,
+    get_paypal_json_to_send_money
 )
 
 from config import PAYPAL_BASE_URL
@@ -73,12 +75,7 @@ async def paypal_create_order(
                 currency_code=paypal_data.currency_code
             )
         )
-        """
-            TODO: You need to switch your client_id to the production environment'
-            and somehow when the user creates their own course they have to provide a PayPal account.
-            
-            # TODO: additional logic to send 90% of the money to the owner of course, and 10% to the site owner.
-        """
+
         logging.info(f"Result: {response.json()}")
         return response.json()
     else:
@@ -110,13 +107,45 @@ async def paypal_check_payment(
         )
         
         status = response.json().get("status")
+        price = response.json().get("purchase_units")[0].get("amount").get("value")
+        logging.info(f"Price: {price}")
         logging.info(f"Status: {status}")
         logging.info(f"User: {user}")
         logging.info(f"course_id: {paypal_check_data.course_id}")
         
         # Checking status of paypal order
         if status == "APPROVED":
-            logging.info(f"Status: {status}")
+            """
+                TODO: You need to switch your client_id to the production environment'
+                and somehow when the user creates their own course they have to provide a PayPal account.
+            
+                TODO: additional logic to send 90% of the money to the owner of course, and 10% to the site owner.
+            """
+            # Receive 90% of the total price
+            price_90_percent = str(float(price) * 0.9)
+            
+            current_course = await course_service.get_course_by_id(
+                session=session,
+                course_id=paypal_check_data.course_id,
+                user=user
+            )
+            
+            # Extracting email of owner
+            owner_paypal_email = current_course.owner_paypal_email
+            
+            
+            # If the owner doesn't provide a PayPal email address, he will suck 
+            if owner_paypal_email:
+                headers_to_send_money = get_paypal_headers_to_send_money(paypal_access_token)
+                response = requests.post(
+                    PAYPAL_BASE_URL + "/v2/payments/payouts",
+                    headers=headers_to_send_money,
+                    data=get_paypal_json_to_send_money(
+                        price=price_90_percent,
+                        owner_paypal_email=owner_paypal_email
+                    )
+                )
+                # TODO: To add some checks (status_code == 201 and etc)
             
             # Adding student to course
             try:
