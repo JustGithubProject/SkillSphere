@@ -23,6 +23,12 @@ def get_paypal_headers(access_token: str) -> dict:
         'Authorization': f'Bearer {access_token}',
     }
 
+def get_paypal_headers_to_send_money(access_token: str) -> dict:
+    return  {
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {access_token}'
+    }
+
 
 def get_paypal_json(
     price: str,
@@ -71,6 +77,36 @@ def get_paypal_json(
     }
     
     return json.dumps(data, indent=4)
+
+def get_paypal_json_to_send_money(
+    price: str,
+    owner_paypal_email: str
+) -> str:
+    """
+        NOTE: It could be incorrect JSON to check it go to:
+            https://developer.paypal.com/docs/api/payments.payouts-batch/v1/#payouts_post
+    """
+    
+    data = {
+        "sender_batch_header": {
+            "sender_batch_id": "batch-123456",
+            "email_subject": "You have a payment"
+        },
+        "items": [
+            {
+                "recipient_type": "EMAIL",
+                "receiver": owner_paypal_email,
+                "amount": {
+                    "value": price,
+                    "currency": "USD"
+                },
+                "note": "Thanks for your business",
+                "sender_item_id": "item-1"
+            }
+        ]
+    }
+    return json.dumps(data, indent=4)
+    
 
 
 def get_paypal_access_token():

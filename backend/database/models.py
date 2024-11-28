@@ -60,6 +60,7 @@ class Course(Base):
     description: Mapped[str]
     video_url: Mapped[str | None]
     photo_url: Mapped[str | None]
+    owner_paypal_email: Mapped[str | None]
     price: Mapped[int]
     level: Mapped["CourseLevel"] = mapped_column(default=CourseLevel.BEGINNER)
     category: Mapped["Category"]
