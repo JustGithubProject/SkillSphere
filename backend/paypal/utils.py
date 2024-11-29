@@ -78,36 +78,44 @@ def get_paypal_json(
     
     return json.dumps(data, indent=4)
 
-def get_paypal_json_to_send_money(
-    price: str,
-    owner_paypal_email: str
-) -> str:
+
+def get_paypal_json_to_send_money(price: str, owner_paypal_email: str) -> str:
     """
-        NOTE: It could be incorrect JSON to check it go to:
-            https://developer.paypal.com/docs/api/payments.payouts-batch/v1/#payouts_post
+    Generate JSON for PayPal payout to send money to a PayPal account.
+    The format follows the structure provided in the example.
     """
+    # JUST IN CASE
+    price = str(price)
     
     data = {
         "sender_batch_header": {
-            "sender_batch_id": "batch-123456",
-            "email_subject": "You have a payment"
+            "sender_batch_id": f"Payouts_{generate_paypal_unique_id()}",  
+            "email_subject": "You have a payout!",  
+            "email_message": "You have received a payout! Thanks for using our service!" 
         },
         "items": [
             {
-                "recipient_type": "EMAIL",
-                "receiver": owner_paypal_email,
+                "recipient_type": "EMAIL", 
                 "amount": {
-                    "value": price,
-                    "currency": "USD"
+                    "currency": "USD",
+                    "value": price
                 },
-                "note": "Thanks for your business",
-                "sender_item_id": "item-1"
+                "note": "Thanks for your patronage!",  
+                "sender_item_id": f"{generate_paypal_unique_id()}", 
+                "receiver": owner_paypal_email, 
+                "alternate_notification_method": {
+                    "phone": {
+                        "country_code": "91",  
+                        "national_number": "9999988888" 
+                    }
+                },
+                "notification_language": "fr-FR" 
             }
         ]
     }
-    return json.dumps(data, indent=4)
     
-
+    return json.dumps(data)
+    
 
 def get_paypal_access_token():
     response = requests.post(

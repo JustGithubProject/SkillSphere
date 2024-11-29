@@ -91,77 +91,93 @@ async def paypal_check_payment(
     paypal_check_data: PayPalCheckOrderData,
 ):
     if user:
-        # Getting paypal access_token
+        # Get PayPal access token
         response = get_paypal_access_token()
+        if response.status_code != 200:
+            logging.error(f"Failed to get PayPal access token: {response.status_code} {response.text}")
+            return {"error": "Failed to get PayPal access token", "details": response.text}
+
         paypal_access_token = response.json().get("access_token")
-        
-        
-        # Request for information about a created order
+        if not paypal_access_token:
+            logging.error("PayPal access token is missing in the response.")
+            return {"error": "Missing PayPal access token"}
+
+        # Request order details
         headers = {
             'Authorization': f'Bearer {paypal_access_token}',
         }
         
         response = requests.get(
-            PAYPAL_BASE_URL + "/v2/checkout/orders/" + paypal_check_data.token,
+            f"{PAYPAL_BASE_URL}/v2/checkout/orders/{paypal_check_data.token}",
             headers=headers
         )
         
-        status = response.json().get("status")
-        price = response.json().get("purchase_units")[0].get("amount").get("value")
+        if response.status_code != 200:
+            logging.error(f"Error getting PayPal order details: {response.status_code} {response.text}")
+            return {"error": "Failed to get PayPal order details", "details": response.text}
+        
+        order_data = response.json()
+        status = order_data.get("status")
+        price = order_data.get("purchase_units")[0].get("amount").get("value")
         logging.info(f"Price: {price}")
         logging.info(f"Status: {status}")
         logging.info(f"User: {user}")
         logging.info(f"course_id: {paypal_check_data.course_id}")
         
-        # Checking status of paypal order
+        # Check the status of the PayPal order
         if status == "APPROVED":
-            """
-                TODO: You need to switch your client_id to the production environment'
-                and somehow when the user creates their own course they have to provide a PayPal account.
+            # Calculate 90% of the price
             
-                TODO: additional logic to send 90% of the money to the owner of course, and 10% to the site owner.
-            """
-            # Receive 90% of the total price
-            price_90_percent = str(float(price) * 0.9)
+            price_90_percent = float(price) * 0.9
+            price_90_percent_string = f"{float(price_90_percent):.2f}"
+            logging.info(f"Price: {price_90_percent_string}")
             
-            current_course = await course_service.get_course_by_id(
+            current_course = await course_service.get_course_by_id_no_auth(
                 session=session,
                 course_id=paypal_check_data.course_id,
-                user=user
             )
             
-            # Extracting email of owner
+            # Extract the course owner's PayPal email
             owner_paypal_email = current_course.owner_paypal_email
+            if not owner_paypal_email:
+                logging.info("Course owner does not provide PayPal email.")
+                return {"error": "Course owner does not provide PayPal email."}
+            logging.info(f"OWNER_PAYPAL_EMAIL: {owner_paypal_email}")
+            # Send the money to the course owner
+            headers_to_send_money = get_paypal_headers_to_send_money(paypal_access_token)
+            json_data = get_paypal_json_to_send_money(price_90_percent_string, owner_paypal_email)
             
+            response = requests.post(
+                f"{PAYPAL_BASE_URL}/v1/payments/payouts",
+                headers=headers_to_send_money,
+                data=json_data
+            )
             
-            # If the owner doesn't provide a PayPal email address, he will suck 
-            if owner_paypal_email:
-                headers_to_send_money = get_paypal_headers_to_send_money(paypal_access_token)
-                response = requests.post(
-                    PAYPAL_BASE_URL + "/v2/payments/payouts",
-                    headers=headers_to_send_money,
-                    data=get_paypal_json_to_send_money(
-                        price=price_90_percent,
-                        owner_paypal_email=owner_paypal_email
-                    )
-                )
-                # TODO: To add some checks (status_code == 201 and etc)
+            if response.status_code != 201:
+                logging.info(f"Error sending payout to PayPal: {response.status_code} {response.text}")
+                return {"error": "Failed to send payout to owner", "details": response.text}
             
-            # Adding student to course
+            # Add student to the course
             try:
                 await course_service.join_the_course(
                     session=session,
                     course_id=paypal_check_data.course_id,
                     user=user
                 )
+                logging.info("The student has been added successfully")
             except Exception as ex:
-                logging.info(f"Failed to add student to course: {ex}")
-            logging.info("The student has been added successfully")
+                logging.error(f"Failed to add student to course: {ex}")
+                return {"error": "Failed to add student to course", "details": str(ex)}
+
+            return {"message": "Payment successful, student added to course."}
+        
         else:
-            logging.info(f"Status: {status}")
-            return "Failed to buy course"
+            logging.info(f"Order status is not approved: {status}")
+            return {"error": "Failed to buy course, order not approved."}
+    
     else:
-        return "Unauthorized user"
+        logging.error("Unauthorized user.")
+        return {"error": "Unauthorized user"}
             
         
 
