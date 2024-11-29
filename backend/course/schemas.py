@@ -19,7 +19,7 @@ class CourseBase(BaseModel):
     photo_url: str | None = None
 
 class CourseInput(CourseBase):
-    pass
+    owner_paypal_email: str | None = None
 
 
 class CourseOutput(CourseInput):

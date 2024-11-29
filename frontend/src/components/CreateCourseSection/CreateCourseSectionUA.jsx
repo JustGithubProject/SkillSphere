@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 
 const CreateCourseSectionUA = () => {
   const [title, setTitle] = useState('');
+  const [ownerPaypalEmail, setOwnerPaypalEmail] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
   const [level, setLevel] = useState('');
@@ -48,6 +49,7 @@ const CreateCourseSectionUA = () => {
     formData.append("price", price);
     formData.append("level", level);
     formData.append("category", category);
+    formData.append("owner_paypal_email", ownerPaypalEmail)
     if (photoFile) formData.append("photo_file", photoFile);
     if (videoFile) formData.append("video_file", videoFile);
 
@@ -78,6 +80,13 @@ const CreateCourseSectionUA = () => {
           placeholder="Назва"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          className="form-field"
+        />
+        <input
+          type="text"
+          placeholder="PayPal Email (гроші надходитимуть на цей PayPal-аккаунт)"
+          value={ownerPaypalEmail}
+          onChange={(e) => setOwnerPaypalEmail(e.target.value)}
           className="form-field"
         />
         <textarea
