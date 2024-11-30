@@ -118,6 +118,7 @@ const EditCoursePage = () => {
     }
   }
 
+
   const menuItems = modules.map((module, m_index) => ({
     key: `module-${module.id}`,
     label: `${m_index + 1}. ` + (module.title.length > 35 ? `${module.title.substring(0, 35)}...` : module.title),
