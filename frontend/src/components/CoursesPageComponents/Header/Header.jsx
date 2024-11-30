@@ -4,16 +4,11 @@ import { Link } from 'react-router-dom';
 import * as jwtDecodeModule from 'jwt-decode';
 import Cookies from 'js-cookie';
 
-import { FaLanguage } from 'react-icons/fa';
-import { BiWorld } from 'react-icons/bi';
-
 import { useTranslation } from 'react-i18next';
 
-import { Input, Space } from 'antd';
+import { Input, Space, Button } from 'antd';
 
 const { Search } = Input;
-
-
 
 const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
     const [username, setUsername] = useState('');
@@ -147,21 +142,8 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                     <Link to="/courses" className={`nav-item nav-link ${isCoursesPage ? 'active' : ''}`}>{t('Courses')}</Link>
                                 
                                     <Link to="/contact-us" className="nav-item nav-link">{t('Contact')}</Link>
-                                    <button
-                                        onClick={switchToEnglish}
-                                        className="btn btn-outline-primary btn-sm mx-2"
-                                        title="English"
-                                    >
-                                        EN
-                                    </button>
-                                    <button
-                                        onClick={switchToUkrainian}
-                                        className="btn btn-outline-primary btn-sm mx-2"
-                                        title="Українська"
-                                    >
-                                        UA
-                                    </button>
-                                
+                                    <Button onClick={switchToEnglish} size="small" style={{ marginRight: '8px' }}>EN</Button>
+                                    <Button onClick={switchToUkrainian} size="small">UA</Button>
                                     <Search
                                         placeholder={t('Search course...')}
                                         onSearch={handleSearch}
@@ -174,49 +156,51 @@ const Header = ({isCoursesPage, isPurchasedCoursesPage, isHomePage}) => {
                                 </div>
                                 {isAuthorized ? (
                                     <div className="dropdown ml-auto d-none d-lg-block">
-                                        <button className="btn btn-primary" type="button" onClick={toggleDropdown}>
+                                        <Button type="primary" onClick={toggleDropdown}>
                                             {username} <i className={`fa ${isDropdownOpen ? 'fa-angle-up' : 'fa-angle-down'}`}></i>
-                                        </button>
+                                        </Button>
                                         {isDropdownOpen && (
                                             <div className="dropdown-menu show" aria-labelledby="userDropdown">
-                                                <button onClick={handleCreateCourseClick} className="dropdown-item">
+                                                <Button onClick={handleCreateCourseClick} className="dropdown-item">
                                                     {t('Create Course')}
-                                                </button>
-                                                <button onClick={handlePurchasedCoursesClick} className="dropdown-item">
+                                                </Button>
+                                                <Button onClick={handlePurchasedCoursesClick} className="dropdown-item">
                                                     {t('Purchases Courses')}
-                                                </button>
-                                                <button onClick={handleMyCreatedCoursesClick} className="dropdown-item">
+                                                </Button>
+                                                <Button onClick={handleMyCreatedCoursesClick} className="dropdown-item">
                                                     {t('My created courses')}
-                                                </button>
-                                                <button onClick={handleLogOutClick} className="dropdown-item">
+                                                </Button>
+                                                <Button onClick={handleLogOutClick} className="dropdown-item">
                                                     {t('Log out')}
-                                                </button>
+                                                </Button>
                                             </div>
                                         )}
                                     </div>
                                 ) : (
                                     <div className="dropdown ml-auto d-none d-lg-block">
-                                        <button className="btn btn-info" type="button" onClick={toggleDropdown}>
+                                        <Button type="info" onClick={toggleDropdown}>
                                             {t('Login / Sign Up')} <i className={`fa ${isDropdownOpen ? 'fa-angle-up' : 'fa-angle-down'}`}></i>
-                                        </button>
+                                        </Button>
                                         {isDropdownOpen && (
-                                            <div className="dropdown-menu show" aria-labelledby="authDropdown">
-                                                <Link to="/login" className="dropdown-item">{t('Login')}</Link>
-                                                <Link to="/signup" className="dropdown-item">{t('Sign Up')}</Link>
+                                            <div className="dropdown-menu show" aria-labelledby="userDropdown">
+                                                <Link to="/signup">
+                                                    <Button className="dropdown-item">{t('Sign Up')}</Button>
+                                                </Link>
+                                                <Link to="/login">
+                                                    <Button className="dropdown-item">{t('Log In')}</Button>
+                                                </Link>
                                             </div>
                                         )}
                                     </div>
                                 )}
-                                
                             </div>
                         </nav>
                     </div>
                 </div>
             </div>
             {/* Navbar End */}
-
         </>
-    );
-};
+    )
+}
 
 export default Header;
