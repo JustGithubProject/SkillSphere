@@ -60,7 +60,7 @@ SMTP_PORT = os.getenv("SMTP_PORT")  #
 ###################################################
 
 ###################################################
-PAYPAL_BASE_URL = "https://api-m.sandbox.paypal.com"
+PAYPAL_BASE_URL = "https://api-m.paypal.com"
 PAYPAL_CLIENT_ID = os.getenv("PAYPAL_CLIENT_ID")
 PAYPAL_SECRET_KEY = os.getenv("PAYPAL_SECRET_KEY")
 ########################################################
