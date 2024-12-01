@@ -25,6 +25,8 @@ services:
       - "3000:3000"
     volumes:
       - shared_data:/shared_data 
+    environment:
+      - NODE_ENV=production
     depends_on:
       - skillsphere_app
     networks:
@@ -43,7 +45,7 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - "8080:80"
+      - "80:80"
     depends_on:
       - skillsphere_app
       - frontend
