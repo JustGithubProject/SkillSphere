@@ -90,7 +90,8 @@ origins = [
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://31.131.18.75:3000",
-    "http://vaua0078539.online-vm.com:3000"
+    "http://hqua0348217.online-vm.com:3000",
+    "http://hqua0348217.online-vm.com"
 ]
 
 # To allow access from frontend to backend routers
