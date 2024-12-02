@@ -16,5 +16,3 @@ Welcome to the **Online Education Platform** project! This platform allows users
 - **Backend**: FastAPI, PostgreSQL, Docker
 - **Frontend**: React, Axios, Styled-components
 - **Deployment**: Nginx, Kubernetes
-
-## 📦 Setup
